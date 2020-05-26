@@ -1,0 +1,36 @@
+---
+name: "jaeger-consulting-website"
+navbar:
+  title: "<img id=\"logo\" style=\"position:absolute; top:5px; height: 60px;\" src=\"images/logo.png\"/>"
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "About Us"
+      href: about_us.html
+      menu:
+        - text: "Our People"
+          href: our_people.html
+        - text: "Culture"
+          href: culture.html
+    - text: "Services"
+      href: services.html
+      menu:
+        - text: "Strategic Consulting"
+          href: strategic_consulting.html
+        - text: "Bayesian Approach"
+          href: bayesian_approach.html
+        - text: "Adaptive Design"
+          href: adaptive_design.html
+        - text: "Biostatistics Services"
+          href: biostatistics_services.html
+    - text: "Blog"
+      href: blog.html
+    - text: "Contact"
+      href: contact.html
+output:
+  html_document:
+    include:
+      before_body: header.html
+      after_body: footer.html
+    css: bootstrap.css
+---

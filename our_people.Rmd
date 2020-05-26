@@ -2,4 +2,5 @@
 pagetitle: "Our People"
 ---
 
-Here is the list of people working in the company
+# Jonathan Jaeger
+## Founder of Jaeger Consulting & Statistical Scientist
