@@ -1,0 +1,5 @@
+---
+pagetitle: "Adaptive Design"
+---
+
+After Bayesian, the second pilar is adaptive.

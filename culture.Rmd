@@ -1,0 +1,5 @@
+---
+pagetitle: "Culture"
+---
+
+Some information about the culture of the company...

@@ -1,0 +1,5 @@
+---
+pagetitle: "Bayesian Approach"
+---
+
+Bayesian is the basis!
