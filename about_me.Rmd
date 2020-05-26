@@ -1,0 +1,25 @@
+---
+pagetitle: "About Me"
+bibliography: references.bib
+---
+
+# Jonathan Jaeger
+## Founder of Jaeger Consulting & Statistical Scientist
+
+<div style= "float:left; position:relative;">
+<img src = "images/profile_picture_jonathan_jaeger.png" id="coco" style="height: 220px; margin-right:10px;">
+</div>
+
+I'm a statistician with 10 years of experience in academia and the pharmaceutical industry. I specialized myself in applying optimal Bayesian and adaptive statistical designs & strategies.
+
+Early in my career, while under a PhD program, I developed a Bayesian penalized smoothing approach for solving differential equations with application to pharmacokinetic and recovery studies [see @Jaeger2013; @Jaeger2014; @Frasso2016; @Frasso2016a]
+During this program I have also provided statistical consulting services at the Université Catholique de Louvain, helping researchers in applying appropriate statistical methodologies. I have also provided statistical training for statisticians and non-statisticians.
+
+In 2014, I joined the food industry where I have contributed, in a fully in-house model, to the clinical development and operations in the area of preterm and neonate nutrition products.
+In 2016, I moved to the pharmaceutical industry where I had the chance to serve as lead statistician in support of phase I-III drug development in multiple therapeutic areas (haemato-oncology, oncology and infection) and novel therapeutic products (CAR T cells, checkpoint inhibitors, radiotherapeutics, antibody drug conjugates, ...).
+
+Jonathan provides a rigorous scientific approach to problem solving together with a client-oriented perspective enabling him to maneuver seamlessly between statistical considerations, clinical development needs and operational challenges.
+
+I'm always trying new stuff linke a citation to [see @fenner2012a]
+
+<br>

@@ -9,8 +9,8 @@ navbar:
     - text: "About Us"
       href: about_us.html
       menu:
-        - text: "Our People"
-          href: our_people.html
+        - text: "About Me"
+          href: about_me.html
         - text: "Culture"
           href: culture.html
     - text: "Services"
