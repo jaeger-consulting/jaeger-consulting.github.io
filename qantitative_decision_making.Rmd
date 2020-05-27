@@ -1,5 +1,5 @@
 ---
-pagetitle: "Strategic Consulting"
+pagetitle: "Quantitative Decision-Making"
 ---
 
 Strategic consulting is part of the company services

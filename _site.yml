@@ -16,12 +16,12 @@ navbar:
     - text: "Services"
       href: services.html
       menu:
-        - text: "Strategic Consulting"
-          href: strategic_consulting.html
         - text: "Bayesian Approach"
           href: bayesian_approach.html
         - text: "Adaptive Design"
           href: adaptive_design.html
+        - text: "Quantitative Decision-Making"
+          href: qantitative_decision_making.html
         - text: "Biostatistics Services"
           href: biostatistics_services.html
     - text: "Blog"
@@ -30,8 +30,9 @@ navbar:
       href: contact.html
 output:
   html_document:
-    include:
-      before_body: header.html
+    includes:
+      in_header: header.html
+      before_body: beforebody.html
       after_body: footer.html
     css: bootstrap.css
 ---
