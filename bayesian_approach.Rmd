@@ -2,4 +2,9 @@
 pagetitle: "Bayesian Approach"
 ---
 
-Bayesian is the basis!
+Bayesian inference consists to combine prior information and about a quantity of interest and 
+
+Dose finding and PK studies
+
+proof of concept
+

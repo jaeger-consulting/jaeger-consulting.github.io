@@ -3,3 +3,11 @@ pagetitle: "Adaptive Design"
 ---
 
 After Bayesian, the second pilar is adaptive.
+
+Statistical efficiency
+
+Ethical considerations
+
+Improved understanding of the drug effect
+
+Acceptability to stakeholders

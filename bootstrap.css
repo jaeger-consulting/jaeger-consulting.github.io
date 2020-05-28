@@ -78,11 +78,11 @@ mark {
   color: #000;
 }
 small {
-  font-size: 80%;
+  font-size: 70%;
 }
 sub,
 sup {
-  font-size: 75%;
+  font-size: 70%;
   line-height: 0;
   position: relative;
   vertical-align: baseline;
@@ -1080,7 +1080,7 @@ body {
   font-family: "Courier New", "Courier New", "Courier New", "Courier New", monospace;
   font-size: 18px;
   line-height: 1.42857143;
-  color: #888888;
+  color: #ffffff;
   background-color: #060606;
 }
 input,

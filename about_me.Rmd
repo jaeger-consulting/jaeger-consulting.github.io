@@ -3,16 +3,16 @@ pagetitle: "About Me"
 bibliography: references.bib
 ---
 
-# Jonathan Jaeger <a href="https://www.linkedin.com/in/jonathanjaeger"><img src="images/linkedin_logo.png" style="height: 20px; margin-top: -5px"></a>
+# Jonathan Jaeger <a href="https://www.linkedin.com/in/jonathanjaeger" target="_blank"><img src="images/linkedin_logo.png" style="height: 20px; margin-top: -5px"></a>
 ## Founder of Jaeger Consulting & Statistical Scientist
 
-<div style= "float:left; position:relative;">
-<img src="images/profile_picture_jonathan_jaeger.png" style="height: 220px; margin-right: 25px;">
+<div style= "float:left;">
+<img src="images/profile_picture_jonathan_jaeger.png" style="height: 220px; margin-right: 25px; margin-top: 10px;">
 </div>
 
 I'm a statistician with 10 years of experience in academia and the pharmaceutical industry. I specialized myself in applying Bayesian and adaptive statistical designs & strategies.
 
-Early in my career, while I was under a PhD program, I developed a Bayesian penalized smoothing approach for solving differential equations with application to pharmacokinetic and recovery studies [see @Jaeger2013; @Jaeger2014; @Frasso2016; @Frasso2016a]. In addition, during this period, I have provided statistical consulting services at the Université Catholique de Louvain, helping researchers in applying appropriate statistical methodologies. I had also the opportunity to give statistical trainings for statisticians and non-statisticians.
+Early in my career, while I was under a PhD program, I developed a Bayesian penalized smoothing approach for solving differential equations with application to pharmacokinetic and recovery studies [see @Jaeger2013; @Jaeger2014; @Frasso2016; @Frasso2016a]. In addition, during this period, I have provided statistical consulting services, helping researchers in applying appropriate statistical methodologies. I had also the opportunity to give statistical trainings for statisticians and non-statisticians.
 
 I joined the food industry in 2014 where I have contributed, in a fully in-house model, to the clinical development and clinical operations in the area of preterm nutrition [@Rigo2017] and other nutrition solutions [@Binia2015].
 
@@ -25,3 +25,6 @@ I have created Jaeger Consulting in 2020 with the goal to nurture early and late
 ---
 
 <br>
+
+# References
+<small>

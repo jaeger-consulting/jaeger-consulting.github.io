@@ -1,5 +1,0 @@
----
-pagetitle: "About Us"
----
-
-More about this website.

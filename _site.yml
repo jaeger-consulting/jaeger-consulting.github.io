@@ -6,13 +6,6 @@ navbar:
   right:
     - text: "Home"
       href: index.html
-    - text: "About Us"
-      href: about_us.html
-      menu:
-        - text: "About Me"
-          href: about_me.html
-        - text: "Culture"
-          href: culture.html
     - text: "Services"
       href: services.html
       menu:
@@ -21,11 +14,13 @@ navbar:
         - text: "Adaptive Design"
           href: adaptive_design.html
         - text: "Quantitative Decision-Making"
-          href: qantitative_decision_making.html
-        - text: "Biostatistics Services"
-          href: biostatistics_services.html
+          href: quantitative_decision_making.html
+        - text: "Biometrics Services"
+          href: biometrics_services.html
     - text: "Blog"
       href: blog.html
+    - text: "About Me"
+      href: about_me.html
     - text: "Contact"
       href: contact.html
 output:

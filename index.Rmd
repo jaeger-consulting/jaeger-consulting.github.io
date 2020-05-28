@@ -2,4 +2,46 @@
 pagetitle: "Home"
 ---
 
-Hello, Website!
+Jaeger Consulting proposes consulting services bringing seamlessly statistical innovation in early and late clinical development.
+
+---
+
+
+# Bayesian Approaches
+
+<div style= "float:left;">
+<img src="images/bayesian.png" style="height: 125px;">
+</div>
+
+<em>More on <a href="bayesian_approach.html">Bayesian Approaches</a></em>
+
+---
+
+# Adaptive Designs
+
+<div style= "float:right;">
+<img src="images/adaptive.png" style="height: 125px;">
+</div>
+
+<em>More on <a href="adaptive_design.html">Adaptive Designs</a></em>
+
+---
+
+# Quantitative Decision Making
+
+<div style= "float:left;">
+<img src="images/quantitative.png" style="height: 125px;">
+</div>
+
+<em>More on <a href="quantitative_decision_making.html">Quantitative Decision Making</a></em>
+
+---
+
+# Biometrics Services
+
+<div style= "float:right;">
+<img src="images/biometrics_services.png" style="height: 125px;">
+</div>
+
+<em>More on <a href="biometrics_services.html">Biometrics Services</a></em>
+
