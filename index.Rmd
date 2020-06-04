@@ -4,44 +4,47 @@ pagetitle: "Home"
 
 Jaeger Consulting proposes consulting services bringing seamlessly statistical innovation in early and late clinical development.
 
+<br>
+
 ---
 
+<br>
 
 # Bayesian Approaches
 
 <div style= "float:left;">
-<img src="images/bayesian.png" style="height: 125px;">
+<img src="images/bayesian.png" style="height: 125px; margin-right: 25px;">
 </div>
+The Bayesian framework is an endless learning process where prior believes about a set of quantities of interest are combined with a new set of information, leading to a posterior believes about this same set of quantity of interest. This framework has been first formalized by Thomas Bayes in the 18s century, but its use in clinical development is quite recent, mainly due to computational challenges. All phases of the development can introduce Bayesian component and it is perfectly suited for being combined in adaptive designs setting.
 
 <em>More on <a href="bayesian_approach.html">Bayesian Approaches</a></em>
 
+<br>
+
 ---
+
+<br>
 
 # Adaptive Designs
 
 <div style= "float:right;">
-<img src="images/adaptive.png" style="height: 125px;">
+<img src="images/adaptive.png" style="height: 125px; margin-left: 25px;">
 </div>
+Per the 2019 FDA guidance on adaptive desings for clinical trials of drugs and biologics, an adaptive design is defined as <em>"a clinical trial design that allows for prospectively planned modifications to one or more aspects of the design based on accumulating data from subjects in the trial"</em>. Adaptive designs requires to put in place statistical and operational safeguards in order to maintain the validity and the integrity of the trial.
 
 <em>More on <a href="adaptive_design.html">Adaptive Designs</a></em>
 
+<br>
+
 ---
+
+<br>
 
 # Quantitative Decision Making
 
 <div style= "float:left;">
-<img src="images/quantitative.png" style="height: 125px;">
+<img src="images/quantitative.png" style="height: 125px; margin-right: 25px;">
 </div>
+The inescapable need for decision making at indication, program or portfolio levels requires the aid of effective statistical approaches. Quantitative decision making provides appropriate and transparent tools to decision maker for ruling continuation of a clinical trial or program and supports potential investments decisions.
 
 <em>More on <a href="quantitative_decision_making.html">Quantitative Decision Making</a></em>
-
----
-
-# Biometrics Services
-
-<div style= "float:right;">
-<img src="images/biometrics_services.png" style="height: 125px;">
-</div>
-
-<em>More on <a href="biometrics_services.html">Biometrics Services</a></em>
-
