@@ -2,9 +2,5 @@
 pagetitle: "Bayesian Approach"
 ---
 
-Bayesian inference consists to combine prior information and about a quantity of interest and 
-
-Dose finding and PK studies
-
-proof of concept
+Under construction
 

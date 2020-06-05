@@ -7,7 +7,6 @@ navbar:
     - text: "Home"
       href: index.html
     - text: "Services"
-      href: services.html
       menu:
         - text: "Bayesian Approach"
           href: bayesian_approach.html

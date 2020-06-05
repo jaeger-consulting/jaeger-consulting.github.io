@@ -1,5 +1,0 @@
----
-pagetitle: "Services"
----
-
-More about the services
