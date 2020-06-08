@@ -2,4 +2,7 @@
 pagetitle: "Quantitative Decision-Making"
 ---
 
-Under construction
+<div style= "float:left;">
+<img src="images/quantitative.png" style="height: 125px; margin-right: 25px;">
+</div>
+The inescapable need for decision making at indication, program or portfolio levels requires the aid of effective statistical approaches. Quantitative decision making provides appropriate and transparent tools to decision maker for ruling continuation of a clinical trial or program and supports potential investments decisions.

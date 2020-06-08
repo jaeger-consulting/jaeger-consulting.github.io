@@ -2,5 +2,9 @@
 pagetitle: "Bayesian Approach"
 ---
 
-Under construction
+<div style= "float:left;">
+<img src="images/bayesian.png" style="height: 125px; margin-right: 25px;">
+</div>
+The Bayesian framework is an endless learning process where prior believes about a set of quantities of interest are combined with a new set of information, leading to a posterior believes about this same set of quantity of interest. This framework has been first formalized by Thomas Bayes in the 18s century, but its use in clinical development is quite recent, mainly due to computational challenges.
 
+All phases of the development can introduce Bayesian component and it is perfectly suited for being combined in adaptive designs setting.
