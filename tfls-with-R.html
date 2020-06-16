@@ -11,7 +11,7 @@
 
 
 
-<title>Tables, figures and listings with R (2020-MM-DD)</title>
+<title>Tables, figures and listings with R</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -308,7 +308,7 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="tfls_with_r.html">Tables, figures and listings with R (2020-MM-DD)</a>
+      <a href="tfls-with-r.html">Tables, figures and listings with R</a>
     </li>
   </ul>
 </li>
@@ -332,26 +332,35 @@ $(document).ready(function () {
 </div>
 
 
+<div id="tables-figures-and-listings-with-r" class="section level1">
+<h1>Tables, figures and listings with R</h1>
 <p>R, combined with R Markdown <span class="citation">(Xie, Allaire, and Grolemund 2018; Allaire et al. 2020)</span> and other packages, is an alternative for creating end-text tables, figures and listings for Section 14 and Section 16 of clinical study reports.</p>
 <p><br></p>
-<div id="setting-up-the-project-folder" class="section level1">
-<h1>Setting up the project folder</h1>
-<div id="project-folder" class="section level2">
-<h2>Project folder</h2>
+<div id="setting-up-the-project-folder" class="section level2">
+<h2>1. Setting up the project folder</h2>
+<div id="project-folder" class="section level3">
+<h3>1.1. Project folder</h3>
 <p>Before being able to produce any output, it is recommended to set up the project folder. In my case, I’m creating the project folder using RStudio. Version control is ensured using a git repository.</p>
 <p><br></p>
 </div>
-<div id="connect-your-local-repository-with-github" class="section level2">
-<h2>Connect your local repository with GitHub</h2>
+<div id="connect-your-local-repository-with-github" class="section level3">
+<h3>1.2. Connect your local repository with GitHub</h3>
 <p>If it is needed, the local repository can simply be connected with GitHub. Just create a personal token under <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> and the function use_github from the package usethis.</p>
 <p><br></p>
 </div>
 </div>
-<div id="template-for-the-table-figure-or-listing" class="section level1">
-<h1>Template for the table, figure or listing</h1>
-<p>The template called in the YAML metadata is the backbone of the table, figure or listing output. Both the formatting and the content will play a key role in the production of the output.</p>
-<p>First of all, the header, footer and main text zone of the template is to be chosen. In my case, the font is set at Courier New, style regular and size at 8pt. In addition, the spacing is set at 0 pt before and after each paragraph and with single line spacing within a paragraph.</p>
-<p>The next important part is to specify fields that will contain the relevant information needed in the header and the footer. In my case, I like to have the followings in the header: protocol name, company name, analysis name, page numbering and the title of the output. For the footer, I usually have the footnotes, the program path, the data source, the run datetime, the database extraction date and the database cutoff date.</p>
+<div id="template-for-the-table-figure-or-listing" class="section level2">
+<h2>2. Template for the table, figure or listing</h2>
+<p>The template called in the YAML metadata is the backbone of the table, figure or listing output. Both the formatting and the fields will play a key role in the production of the output.</p>
+<p><br></p>
+<div id="formating-of-the-template" class="section level3">
+<h3>2.1. Formating of the template</h3>
+<p>First of all, the formatting for the header, footer and main text zone of the template is to be chosen. In my case, the font is set at Courier New, style regular and size at 8pt. In addition, the spacing is set at 0 pt before and after each paragraph and with single line spacing within a paragraph.</p>
+<p><br></p>
+</div>
+<div id="fields" class="section level3">
+<h3>2.2. Fields</h3>
+<p>The next important part is to specify fields that will contain the relevant information needed in the header and the footer. The followings is present in the header: protocol name, company name, analysis name, page numbering and the title of the output. For the footer, the followings is present: the footnotes, the program path, the data source, the run datetime, the database extraction date and the database cutoff date.</p>
 <p>In the template, each of those information is a field. When the R Markdown will be knited, information from the YAML metadata will be used. In the image below, the text “Protocol Number Missing” is in fact the following field { IF “{ DOCPROPERTY ProtocolNumber }” = “Error! Unknown document property name.” “Protocol Number Missing” “{ DOCPROPERTY ProtocolNumber }” }.</p>
 <center>
 <div>
@@ -360,9 +369,12 @@ $(document).ready(function () {
 </center>
 <p><br></p>
 </div>
-<div id="creating-the-output-using-an-r-markdown-file" class="section level1">
-<h1>Creating the output using an R Markdown file</h1>
-<p>An R Markdown file, with default output set at Word document can now be created. The YAML metadata will inform the document properties of the output. In the below, the first 9 elements will be used for the header and the footer of the output. The last 3 elements are specifying the the output will be a Word document with a reference document that is is simply the link to the template just created.</p>
+</div>
+<div id="creating-the-output-using-an-r-markdown-file" class="section level2">
+<h2>3. Creating the output using an R Markdown file</h2>
+<div id="setting-up-the-yaml-metadata" class="section level3">
+<h3>3.1 Setting up the YAML metadata</h3>
+<p>An R Markdown file, with default output set at Word document can now be created. The YAML metadata will inform the document properties of the output. In the below, the first 9 elements will be used for the header and the footer of the output. The last 3 elements are specifying that the output will be a Word document with the reference document being the template just created.</p>
 <pre class="r"><code>---
 ProtocolNumber: &quot;Wonderfull 1234&quot;
 CompanyName: &quot;Jaeger Consulting&quot;
@@ -378,8 +390,33 @@ output:
        reference_docx: &#39;./002_Appendix/Format/reference_styles_appendix.docx&#39;
 ---</code></pre>
 <p><br></p>
+</div>
+<div id="working-on-the-content-of-the-ouput" class="section level3">
+<h3>3.2 Working on the content of the ouput</h3>
+<p>The next steps are quite easy. It will just consists to create the R code to create the table, figure or listing of interest. Working with R Markdown will then ensure that the main content is within the body of the document.</p>
+<p>In my case, I have was interested in creating a summary table for the treatment emergent adverse events by treatment and total, per the system organ class and preferred term. To do so, I have:</p>
+<ul>
+<li>downloaded the datasets adsl.xpt and adae.xpt available on the free repository <a href=https://bitbucket.cdisc.org/>https://bitbucket.cdisc.org/</a>;</li>
+<li>imported it in the environment of my R project using the function sasxport.get from the package Hmisc;</li>
+<li>worked on creating summary information (number of subjects with at least one event, percentage of subjects with at least one event and number of events) with standard ordering for adverse events summary tables;</li>
+<li>reported the table using the function flextable from the package flextable.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="knit-to-word" class="section level3">
+<h3>3.3 Knit to Word</h3>
+<p>Once the R Markdown file is ready, you can simply knit it using the shortcut Ctrl+Shift+K. In case the output is not expected to be created in the same folder than the R Markdown file, the function render from the package rmarkdown can be used.</p>
+<p>The image below is a printscreen of the output created.</p>
+<center>
+<div>
+<p><img src="images/t_14_03_01_03_printscreen.png" alt = "Template with fields hidden" style = "margin-top: 10px; margin-bottom: 10px;"></p>
+</div>
+</center>
+<p><br></p>
 <hr />
 <p><br></p>
+</div>
+</div>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>

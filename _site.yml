@@ -19,8 +19,8 @@ navbar:
           href: biometrics_services.html
     - text: "Blog"
       menu:
-        - text: "Tables, figures and listings with R (2020-MM-DD)"
-          href: tfls_with_r.html
+        - text: "Tables, figures and listings with R"
+          href: tfls-with-r.html
     - text: "About Me"
       href: about_me.html
     - text: "Contact"

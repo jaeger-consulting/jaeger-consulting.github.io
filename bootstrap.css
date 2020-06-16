@@ -1263,6 +1263,7 @@ h1,
 h2,
 .h2 {
   font-size: 21px;
+  font-weight: bold;
 }
 h3,
 .h3 {
