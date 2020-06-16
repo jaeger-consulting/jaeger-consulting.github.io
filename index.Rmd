@@ -2,4 +2,18 @@
 pagetitle: "Home"
 ---
 
-Jaeger Consulting proposes consulting services bringing seamlessly statistical innovation in early and late clinical development.
+<center>
+
+Jaeger Consulting proposes consulting services bringing **seamlessly statistical innovation** in early and late clinical development.
+
+<br>
+<br>
+
+**Bayesian** approaches, **adaptive** designs and **quantitative** decision-making are the backbone of the proposed solutions.
+
+<br>
+<br>
+
+Visit the **blog** to have access to open and specialized contents.
+
+</center>

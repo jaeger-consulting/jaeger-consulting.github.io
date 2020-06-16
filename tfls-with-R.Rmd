@@ -43,7 +43,7 @@ In the template, each of those information is a field. When the R Markdown will 
 
 <center>
 <div>
-<img src="images/template_fields_hidden.png" alt = "Template with fields hidden" style = "margin-top: 10px; margin-bottom: 10px;">
+<img src="images/template_fields.png" alt = "Template with fields" style = "margin-top: 10px; margin-bottom: 10px;">
 </div>
 </center>
 
@@ -54,6 +54,7 @@ In the template, each of those information is a field. When the R Markdown will 
 ### 3.1 Setting up the YAML metadata
 
 An R Markdown file, with default output set at Word document can now be created. The YAML metadata will inform the document properties of the output. In the below, the first 9 elements will be used for the header and the footer of the output. The last 3 elements are specifying that the output will be a Word document with the reference document being the template just created.
+
 ```{r eval=FALSE}
 ---
 ProtocolNumber: "Wonderfull 1234"
@@ -94,10 +95,9 @@ The image below is a printscreen of the output created.
 
 <center>
 <div>
-<img src="images/t_14_03_01_03_printscreen.png" alt = "Template with fields hidden" style = "margin-top: 10px; margin-bottom: 10px;">
+<img src="images/t_14_03_01_03_printscreen.png" alt = "Output Table 14.3.1.3" style = "margin-top: 10px; margin-bottom: 10px;">
 </div>
 </center>
-
 
 <br>
 
