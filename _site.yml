@@ -1,7 +1,6 @@
 ---
 name: "jaeger-consulting-website"
 google_analytics: "UA-167561397-1"
-output_dir: "."
 navbar:
   title: "<img id=\"logo\" style=\"position:absolute; top:5px; height: 60px;\" src=\"images/logo.png\"/>"
   right:
@@ -18,7 +17,9 @@ navbar:
         - text: "Biometrics Services"
           href: biometrics_services.html
     - text: "Blog"
-      href: blog.html
+      menu:
+        - text: "Tables, figures and listings with R (2020-MM-DD)"
+          href: tfls_with_r.html
     - text: "About Me"
       href: about_me.html
     - text: "Contact"

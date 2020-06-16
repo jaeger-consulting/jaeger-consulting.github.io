@@ -4,6 +4,7 @@ bibliography: references.bib
 ---
 
 # Jonathan Jaeger <a href="https://www.linkedin.com/in/jonathanjaeger" target="_blank"><img src="images/linkedin_logo.png" style="height: 20px; margin-top: -5px"></a>
+
 ## Founder of Jaeger Consulting & Statistical Scientist
 
 <div style= "float:left;">

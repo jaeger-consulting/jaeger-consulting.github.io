@@ -11,7 +11,7 @@
 
 
 
-<title>Home</title>
+<title>Tables, figures and listings with R (2020-MM-DD)</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -300,8 +300,17 @@ $(document).ready(function () {
     </li>
   </ul>
 </li>
-<li>
-  <a href="blog.html">Blog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Blog
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="tfls_with_r.html">Tables, figures and listings with R (2020-MM-DD)</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="about_me.html">About Me</a>
@@ -323,7 +332,67 @@ $(document).ready(function () {
 </div>
 
 
-<p>Jaeger Consulting proposes consulting services bringing seamlessly statistical innovation in early and late clinical development.</p>
+<p>R, combined with R Markdown <span class="citation">(Xie, Allaire, and Grolemund 2018; Allaire et al. 2020)</span> and other packages, is an alternative for creating end-text tables, figures and listings for Section 14 and Section 16 of clinical study reports.</p>
+<p><br></p>
+<div id="setting-up-the-project-folder" class="section level1">
+<h1>Setting up the project folder</h1>
+<div id="project-folder" class="section level2">
+<h2>Project folder</h2>
+<p>Before being able to produce any output, it is recommended to set up the project folder. In my case, I’m creating the project folder using RStudio. Version control is ensured using a git repository.</p>
+<p><br></p>
+</div>
+<div id="connect-your-local-repository-with-github" class="section level2">
+<h2>Connect your local repository with GitHub</h2>
+<p>If it is needed, the local repository can simply be connected with GitHub. Just create a personal token under <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> and the function use_github from the package usethis.</p>
+<p><br></p>
+</div>
+</div>
+<div id="template-for-the-table-figure-or-listing" class="section level1">
+<h1>Template for the table, figure or listing</h1>
+<p>The template called in the YAML metadata is the backbone of the table, figure or listing output. Both the formatting and the content will play a key role in the production of the output.</p>
+<p>First of all, the header, footer and main text zone of the template is to be chosen. In my case, the font is set at Courier New, style regular and size at 8pt. In addition, the spacing is set at 0 pt before and after each paragraph and with single line spacing within a paragraph.</p>
+<p>The next important part is to specify fields that will contain the relevant information needed in the header and the footer. In my case, I like to have the followings in the header: protocol name, company name, analysis name, page numbering and the title of the output. For the footer, I usually have the footnotes, the program path, the data source, the run datetime, the database extraction date and the database cutoff date.</p>
+<p>In the template, each of those information is a field. When the R Markdown will be knited, information from the YAML metadata will be used. In the image below, the text “Protocol Number Missing” is in fact the following field { IF “{ DOCPROPERTY ProtocolNumber }” = “Error! Unknown document property name.” “Protocol Number Missing” “{ DOCPROPERTY ProtocolNumber }” }.</p>
+<center>
+<div>
+<p><img src="images/template_fields_hidden.png" alt = "Template with fields hidden" style = "margin-top: 10px; margin-bottom: 10px;"></p>
+</div>
+</center>
+<p><br></p>
+</div>
+<div id="creating-the-output-using-an-r-markdown-file" class="section level1">
+<h1>Creating the output using an R Markdown file</h1>
+<p>An R Markdown file, with default output set at Word document can now be created. The YAML metadata will inform the document properties of the output. In the below, the first 9 elements will be used for the header and the footer of the output.</p>
+<pre class="r"><code>---
+ProtocolNumber: &quot;Wonderfull 1234&quot;
+CompanyName: &quot;Jaeger Consulting&quot;
+AnalysisName: &quot;Fake Analysis&quot;
+OutputTitle: &quot;Table 14.3.1.3 Treatment-emergent Adverse Events (TEAEs) by Treatment and Total, per System Organ Class and Preferred Term (Safety Population)&quot;
+ProgramPath: &quot;...//t_14_03_01_03.R&quot;
+DataSource: &quot;ADSL, ADAE&quot;
+RunDatetime: &quot;`r format(Sys.time(), &#39;%Y-%m-%dT%H:%M&#39;)`&quot;
+DatabaseExtractionDate: &quot;2020-04-23&quot;
+DatabaseCutoffDate: &quot;2020-04-23&quot;
+output:
+   word_document:
+       reference_docx: &#39;./002_Appendix/Format/reference_styles_appendix.docx&#39;
+---</code></pre>
+<p><br></p>
+<hr />
+<p><br></p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p><small></p>
+<div id="refs" class="references">
+<div id="ref-Allaire2020">
+<p>Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and Richard Iannone. 2020. <em>Rmarkdown: Dynamic Documents for R</em>. <a href="https://github.com/rstudio/rmarkdown">https://github.com/rstudio/rmarkdown</a>.</p>
+</div>
+<div id="ref-Xie2018">
+<p>Xie, Yihui, J. J. Allaire, and Garrett Grolemund. 2018. <em>R Markdown: The Definitive Guide</em>. Boca Raton, Florida: Chapman; Hall/CRC. <a href="https://bookdown.org/yihui/rmarkdown">https://bookdown.org/yihui/rmarkdown</a>.</p>
+</div>
+</div>
+</div>
 
 <p><br><br><br></p>
 <p style="text-align:center;">

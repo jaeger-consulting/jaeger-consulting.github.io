@@ -1,0 +1,70 @@
+---
+pagetitle: "Tables, figures and listings with R (2020-MM-DD)"
+bibliography: references.bib
+---
+
+R, combined with R Markdown [@Xie2018; @Allaire2020] and other packages, is an alternative for creating end-text tables, figures and listings for Section 14 and Section 16 of clinical study reports.
+
+<br>
+
+# Setting up the project folder
+
+## Project folder
+
+Before being able to produce any output, it is recommended to set up the project folder. In my case, I'm creating the project folder using RStudio. Version control is ensured using a git repository.
+
+<br>
+
+## Connect your local repository with GitHub
+
+If it is needed, the local repository can simply be connected with GitHub. Just create a personal token under <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> and the function use_github from the package usethis.
+
+<br>
+
+# Template for the table, figure or listing
+
+The template called in the YAML metadata is the backbone of the table, figure or listing output. Both the formatting and the content will play a key role in the production of the output.
+
+First of all, the header, footer and main text zone of the template is to be chosen. In my case, the font is set at Courier New, style regular and size at 8pt. In addition, the spacing is set at 0 pt before and after each paragraph and with single line spacing within a paragraph.
+
+The next important part is to specify fields that will contain the relevant information needed in the header and the footer. In my case, I like to have the followings in the header: protocol name, company name, analysis name, page numbering and the title of the output. For the footer, I usually have the footnotes, the program path, the data source, the run datetime, the database extraction date and the database cutoff date.
+
+In the template, each of those information is a field. When the R Markdown will be knited, information from the YAML metadata will be used. In the image below, the text "Protocol Number Missing" is in fact the following field { IF "{ DOCPROPERTY ProtocolNumber }" = "Error! Unknown document property name." "Protocol Number Missing" "{ DOCPROPERTY ProtocolNumber }" }.
+
+<center>
+<div>
+<img src="images/template_fields_hidden.png" alt = "Template with fields hidden" style = "margin-top: 10px; margin-bottom: 10px;">
+</div>
+</center>
+
+<br>
+
+# Creating the output using an R Markdown file
+
+An R Markdown file, with default output set at Word document can now be created. The YAML metadata will inform the document properties of the output. In the below, the first 9 elements will be used for the header and the footer of the output. The last 3 elements are specifying the the output will be a Word document with a reference document that is is simply the link to the template just created.
+```{r eval=FALSE}
+---
+ProtocolNumber: "Wonderfull 1234"
+CompanyName: "Jaeger Consulting"
+AnalysisName: "Fake Analysis"
+OutputTitle: "Table 14.3.1.3 Treatment-emergent Adverse Events (TEAEs) by Treatment and Total, per System Organ Class and Preferred Term (Safety Population)"
+ProgramPath: "...//t_14_03_01_03.R"
+DataSource: "ADSL, ADAE"
+RunDatetime: "`r format(Sys.time(), '%Y-%m-%dT%H:%M')`"
+DatabaseExtractionDate: "2020-04-23"
+DatabaseCutoffDate: "2020-04-23"
+output:
+   word_document:
+       reference_docx: './002_Appendix/Format/reference_styles_appendix.docx'
+---
+```
+
+
+<br>
+
+---
+
+<br>
+
+# References
+<small>
