@@ -20,7 +20,7 @@ navbar:
     - text: "Blog"
       menu:
         - text: "Tables, figures and listings with R"
-          href: tfls-with-r.html
+          href: tfls_with_R.html
     - text: "About Me"
       href: about_me.html
     - text: "Contact"
