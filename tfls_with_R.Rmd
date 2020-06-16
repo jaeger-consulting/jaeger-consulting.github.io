@@ -29,15 +29,15 @@ The template called in the YAML metadata is the backbone of the table, figure or
 
 <br>
 
-### 2.1. Formating of the template
+### 2.1. Formatting of the template
 
-First of all, the formatting for the header, footer and main text zone of the template is to be chosen. In my case, the font is set at Courier New, style regular and size at 8pt. In addition, the spacing is set at 0 pt before and after each paragraph and with single line spacing within a paragraph.
+First, the formatting for the header, footer and main text zone of the template is to be chosen. In my case, the font is set at Courier New, style regular and size at 8pt. In addition, the spacing is set at 0 pt before and after each paragraph and with single line spacing within a paragraph.
 
 <br>
 
 ### 2.2. Fields
 
-The next important part is to specify fields that will contain the relevant information needed in the header and the footer. The followings is present in the header: protocol name, company name, analysis name, page numbering and the title of the output. For the footer, the followings is present: the footnotes, the program path, the data source, the run datetime, the database extraction date and the database cutoff date.
+The next important part is to specify fields that will contain the relevant information needed in the header and the footer. The followings are present in the header: protocol name, company name, analysis name, page numbering and the title of the output. For the footer, the followings are present: the footnotes, the program path, the data source, the run datetime, the database extraction date and the database cutoff date.
 
 In the template, each of those information is a field. When the R Markdown will be knited, information from the YAML metadata will be used. In the image below, the text "Protocol Number Missing" is in fact the following field { IF "{ DOCPROPERTY ProtocolNumber }" = "Error! Unknown document property name." "Protocol Number Missing" "{ DOCPROPERTY ProtocolNumber }" }.
 
@@ -76,9 +76,9 @@ output:
 
 ### 3.2 Working on the content of the output
 
-The next steps are quite easy. It will just consists to create the R code to create the table, figure or listing of interest. Working with R Markdown will then ensure that the main content is within the body of the document.
+The next steps are quite easy. It will just consist to create the R code to create the table, figure or listing of interest. Working with R Markdown will then ensure that the main content is within the body of the document.
 
-In my case, I have was interested in creating a summary table for the treatment emergent adverse events by treatment and total, per the system organ class and preferred term. To do so, I have:
+In my case, I was interested in creating a summary table for the treatment emergent adverse events by treatment and total, per the system organ class and preferred term. To do so, I have:
 
 * downloaded the datasets adsl.xpt and adae.xpt available on the free repository <a href=https://bitbucket.cdisc.org/>https://bitbucket.cdisc.org/</a>;
 * imported it in the environment of my R project using the function sasxport.get from the package Hmisc;
@@ -100,6 +100,8 @@ The image below is a printscreen of the output created.
 </center>
 
 <br>
+
+<small>*Post created on 2020-06-16. Last update on 2020-06-16.*</small>
 
 ---
 
