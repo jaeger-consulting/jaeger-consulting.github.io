@@ -74,7 +74,7 @@ output:
 
 <br>
 
-### 3.2 Working on the content of the ouput
+### 3.2 Working on the content of the output
 
 The next steps are quite easy. It will just consists to create the R code to create the table, figure or listing of interest. Working with R Markdown will then ensure that the main content is within the body of the document.
 
@@ -87,7 +87,7 @@ In my case, I have was interested in creating a summary table for the treatment 
 
 <br>
 
-### 3.3 Knit to Word
+### 3.3 Knit
 
 Once the R Markdown file is ready, you can simply knit it using the shortcut Ctrl+Shift+K. In case the output is not expected to be created in the same folder than the R Markdown file, the function render from the package rmarkdown can be used.
 
