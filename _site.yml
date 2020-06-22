@@ -1,6 +1,5 @@
 ---
 name: "jaeger-consulting-website"
-google_analytics: "UA-167561397-1"
 output_dir: "."
 navbar:
   title: "<img id=\"logo\" style=\"position:absolute; top:5px; height: 60px;\" src=\"images/logo.png\"/>"
