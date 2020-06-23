@@ -355,7 +355,7 @@ $(document).ready(function () {
 </div>
 <div id="connect-your-local-repository-with-github" class="section level3">
 <h3>1.2. Connect your local repository with GitHub</h3>
-<p>If it is needed, the local repository can simply be connected with GitHub. Just create a personal token under <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> and the function use_github from the package usethis.</p>
+<p>If it is needed, the local repository can simply be connected with GitHub. Just create a personal token under <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> and the function use_github from the package <a href="https://cran.r-project.org/web/packages/usethis/">usethis</a>.</p>
 <p><br></p>
 </div>
 </div>
@@ -370,8 +370,8 @@ $(document).ready(function () {
 </div>
 <div id="fields" class="section level3">
 <h3>2.2. Fields</h3>
-<p>The next important part is to specify fields that will contain the relevant information needed in the header and the footer. The followings are present in the header: protocol name, company name, analysis name, page numbering and the title of the output. For the footer, the followings are present: the footnotes, the program path, the data source, the run datetime, the database extraction date and the database cutoff date.</p>
-<p>In the template, each of those information is a field. When the R Markdown will be knited, information from the YAML metadata will be used. In the image below, the text “Protocol Number Missing” is in fact the following field { IF “{ DOCPROPERTY ProtocolNumber }” = “Error! Unknown document property name.” “Protocol Number Missing” “{ DOCPROPERTY ProtocolNumber }” }.</p>
+<p>The next important part is to specify fields that will contain the relevant information needed in the header and the footer. It is extremely important to liaise with the medical writers to ensure that all relevant information needed for the clinical study report is present in the template. Usually for the end-text outputs, the followings are present in the header: protocol name, company name, analysis name, page numbering and the title of the output. For the footer, the followings are present: the footnotes, the program path, the data source, the run datetime, the database extraction date and the database cut-off date. For in-text outputs, information might slightly differ.</p>
+<p>In the template, each information is a field. When the R Markdown will be knitted, information from the YAML metadata will be used. In the image below, the text “Protocol Number Missing” is in fact the following field { IF “{ DOCPROPERTY ProtocolNumber }” = “Error! Unknown document property name.” “Protocol Number Missing” “{ DOCPROPERTY ProtocolNumber }” }.</p>
 <center>
 <div>
 <p><img src="images/template_fields.png" alt = "Template with fields" style = "margin-top: 10px; margin-bottom: 10px;"></p>
@@ -386,10 +386,10 @@ $(document).ready(function () {
 <h3>3.1 Setting up the YAML metadata</h3>
 <p>An R Markdown file, with default output set at Word document can now be created. The YAML metadata will inform the document properties of the output. In the below, the first 9 elements will be used for the header and the footer of the output. The last 3 elements are specifying that the output will be a Word document with the reference document being the template just created.</p>
 <pre class="r"><code>---
-ProtocolNumber: &quot;Wonderfull 1234&quot;
+ProtocolNumber: &quot;Wonderful 1234&quot;
 CompanyName: &quot;Jaeger Consulting&quot;
 AnalysisName: &quot;Fake Analysis&quot;
-OutputTitle: &quot;Table 14.3.1.3 Treatment-emergent Adverse Events (TEAEs) by Treatment and Total, per System Organ Class and Preferred Term (Safety Population)&quot;
+OutputTitle: &quot;Table 14.3.1.3 Treatment Emergent Adverse Events (TEAEs) by Treatment and Total, per System Organ Class and Preferred Term (Safety Population)&quot;
 ProgramPath: &quot;...//t_14_03_01_03.R&quot;
 DataSource: &quot;ADSL, ADAE&quot;
 RunDatetime: &quot;`r format(Sys.time(), &#39;%Y-%m-%dT%H:%M&#39;)`&quot;
@@ -404,18 +404,18 @@ output:
 <div id="working-on-the-content-of-the-output" class="section level3">
 <h3>3.2 Working on the content of the output</h3>
 <p>The next steps are quite easy. It will just consist to create the R code to create the table, figure or listing of interest. Working with R Markdown will then ensure that the main content is within the body of the document.</p>
-<p>In my case, I was interested in creating a summary table for the treatment emergent adverse events by treatment and total, per the system organ class and preferred term. To do so, I have:</p>
+<p>In my case, I was interested in creating a summary table for the treatment emergent adverse events by treatment and in total, per the system organ class and preferred term. To do so, I have:</p>
 <ul>
 <li>downloaded the datasets adsl.xpt and adae.xpt available on the free repository <a href=https://bitbucket.cdisc.org/>https://bitbucket.cdisc.org/</a>;</li>
-<li>imported it in the environment of my R project using the function sasxport.get from the package Hmisc;</li>
+<li>imported it in the environment of my R project using the function sasxport.get from the package <a href="https://cran.r-project.org/web/packages/Hmisc/">Hmisc</a>;</li>
 <li>worked on creating summary information (number of subjects with at least one event, percentage of subjects with at least one event and number of events) with standard ordering for adverse events summary tables;</li>
-<li>reported the table using the function flextable from the package flextable.</li>
+<li>reported the table using the function flextable from the package <a href="https://cran.r-project.org/web/packages/flextable/">flextable</a>.</li>
 </ul>
 <p><br></p>
 </div>
 <div id="knit" class="section level3">
 <h3>3.3 Knit</h3>
-<p>Once the R Markdown file is ready, you can simply knit it using the shortcut Ctrl+Shift+K. In case the output is not expected to be created in the same folder than the R Markdown file, the function render from the package rmarkdown can be used.</p>
+<p>Once the R Markdown file is ready, you can simply knit it using the shortcut Ctrl+Shift+K. In case the output is not expected to be created in the same folder than the R Markdown file, the function render from the package <a href="https://cran.r-project.org/web/packages/rmarkdown/">rmarkdown</a> can be used.</p>
 <p>The image below is a printscreen of the output created.</p>
 <center>
 <div>
@@ -423,7 +423,7 @@ output:
 </div>
 </center>
 <p><br></p>
-<p><small><em>Post created on 2020-06-16. Last update on 2020-06-17.</em></small></p>
+<p><small><em>Post created on 2020-06-16. Last update on 2020-06-23.</em></small></p>
 <hr />
 <p><br></p>
 </div>

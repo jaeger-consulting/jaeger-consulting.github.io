@@ -5,6 +5,6 @@ pagetitle: "Adaptive Design"
 <div style= "float:right;">
 <img src="images/adaptive.png" style="height: 125px; margin-left: 25px;">
 </div>
-Per the 2019 FDA guidance on adaptive desings for clinical trials of drugs and biologics, an adaptive design is defined as <em>"a clinical trial design that allows for prospectively planned modifications to one or more aspects of the design based on accumulating data from subjects in the trial"</em>.
+Per the 2019 FDA guidance on adaptive designs for clinical trials of drugs and biologics, an adaptive design is defined as <em>"a clinical trial design that allows for prospectively planned modifications to one or more aspects of the design based on accumulating data from subjects in the trial"</em>.
 
-Adaptive designs requires to put in place statistical and operational safeguards in order to maintain the validity and the integrity of the trial.
+Adaptive designs require to put in place statistical and operational safeguards in order to maintain the validity and the integrity of the trial.
