@@ -31,6 +31,4 @@ output:
       before_body: beforebody.html
       after_body: footer.html
     css: bootstrap.css
-plugins:
-  - jekyll-sitemap
 ---
