@@ -2,4 +2,26 @@
 pagetitle: "Biometrics Services"
 ---
 
-Under construction
+The following biometrics services are proposed:
+
+- <u>**Statistical support for drug development plan**</u>
+- <u>**Clinical trial design & protocol development:**</u>
+  + Setting up **objectives** and **estimands** framework
+  + Clinical trial **modeling and simulation**
+  + **Adaptive** and fixed designs in **Bayesian** and frequentist framework
+  + **Sample size** determination, **power and assurance** calculation
+  + Statistical input for protocol
+- <u>**Randomization**</u>
+- <u>**Statistical analysis plan:**</u>
+  + Description of **statistical analyses and data summaries**
+  + Creation of shells for **out-text and in-text tables, figures and listings**
+- <u>**Peer review of other related clinical trial documents:**</u>
+  + Charters, ICF, IWRS, data management & programming documents, ...
+- <u>**Statistical analysis and reporting:**</u>
+  + Creation of out-text and in-text tables, figures and listings
+  + Statistical input for clinical study report
+  + Statistical support for publications
+- <u>**Interim Analyses**</u>
+  + **Data monitoring committee support** and participation
+  + Production of interim analysis output
+
