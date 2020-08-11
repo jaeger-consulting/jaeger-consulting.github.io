@@ -1,0 +1,5 @@
+---
+pagetitle: "Ressources"
+---
+
+Statistical analysis plan template: <a href="https://www.jaeger-consulting.io/">link</a>
