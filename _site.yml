@@ -22,6 +22,8 @@ navbar:
           href: tfls_with_R.html
     - text: "About Me"
       href: about_me.html
+    - text: "Ressources"
+      href: ressources.html
     - text: "Contact"
       href: contact.html
 output:
