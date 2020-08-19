@@ -18,6 +18,8 @@ navbar:
           href: biometrics_services.html
     - text: "Blog"
       menu:
+        - text: "Reproducible reports with R"
+          href: reproducible_reports_R.html
         - text: "Tables, figures and listings with R"
           href: tfls_with_R.html
     - text: "About Me"

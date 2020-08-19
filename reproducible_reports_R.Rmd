@@ -1,0 +1,199 @@
+---
+pagetitle: "Reproducible reports with R"
+bibliography: references.bib
+---
+
+# Reproducible reports with R
+
+Following the post on the creation of end-text outputs with R for clinical study reports (<a href="https://www.jaeger-consulting.io/tfls_with_R.html">Tables, figures and listings with R</a>), some information, tips and tricks are provided in this post for creating reproducible reports with R (combined with R Markdown [@Xie2018; @Allaire2020] and other packages).
+
+<br>
+
+
+## 1. Setting up the project folder
+
+It is highly advisable to create a project folder before starting any work. In particular, if multiple collaborators (statistician, programmers) are working on it, version control can be ensured using a git repository (see <a href="https://www.jaeger-consulting.io/tfls_with_R.html">Tables, figures and listings with R</a> for detailed descriptions).
+
+<br>
+
+## 2. Template for the report
+
+As for end-text outputs, the template that is called in the YAML metadata is the backbone of the formatting of the report to be produced.
+
+Creating the template is quite easy. It is just requiring few steps and some editing of the docx style information. Step by step descriptions for creating a template are provided on <a href="https://rmarkdown.rstudio.com/articles_docx.html">Happy collaboration with Rmd to docx</a>.
+
+<br>
+
+
+## 3. Creating the (reproducible) report using an R Markdown file
+
+
+### 3.1 Setting up the YAML metadata
+
+An R Markdown file, with default output set at docx document can now be created. The YAML metadata will inform the document properties of the output.
+
+```{r eval=FALSE}
+---
+title: 'Title'
+author: 'Author'
+date: 'Date'
+output:
+   word_document:
+       reference_docx: './reference_styles.docx'
+---
+```
+
+<br>
+
+
+### 3.2. Utilities
+
+Being able to have inline formatting or section breaks with orientation changes require to create some utilities. Those are based on Office Open XML (OpenXML) chunks of codes. Information about the Office Open XML file formats is available under <a href=" https://www.ecma-international.org/publications/standards/Ecma-376.htm">Standard ECMA-376</a>.
+
+<br>
+
+
+#### 3.2.1 Inline text formatting
+
+When working with RMarkdown, only limited formatting options are available for docx documents (italic and bold, see <a href="https://rmarkdown.rstudio.com/authoring_basics.html">Markdown Basics</a>). One might need to have more formatting options, like underline or change in color. The proposed utility function allows to combine multiple formatting characteristics (italic, bold, underline, hidden/vanish status (text not be printed), size and/or color) and to apply it to an input text within a paragraph.
+
+The function simply creates a run (embed within `<w:r>` and `</w:r>`), in which the properties of the run (embed within `<w:rPr>` and `</w:rPr>`) integrates all the required formatting. Please note that the color is to be specified in HEX codes and that font size is in half-points (1/144 of an inch). 
+
+Applying the desired formatting on a particular string is easy. The inline R code `` `r "\u0060r inline_fontstyle(italic = TRUE, hex_color = 'FF8000', text = 'my sample text')\u0060"` `` will result in having in italic and orange the text <i><span style="color:#ff8000;">my sample text</span></i> in the word document.
+
+```{r eval=FALSE}
+#------------------------------------- xml function for inline font style -------------------------------------#
+
+   inline_fontstyle <- function(italic = FALSE,
+                                bold = FALSE,
+                                underline = FALSE,
+                                hidden = FALSE,
+                                size = FALSE,
+                                hex_color = FALSE,
+                                text)
+   {
+      output_text <- "<w:r><w:rPr>"
+      if(!(italic %in% FALSE))
+      {
+         output_text <- paste(output_text,
+                              "<w:i/>",
+                              sep = "")
+      }
+      if(!(bold %in% FALSE))
+      {
+         output_text <- paste(output_text,
+                              "<w:b/>",
+                              sep = "")
+      }
+      if(!(underline %in% FALSE))
+      {
+         output_text <- paste(output_text,
+                              "<w:u w:val=\"single\"/>",
+                              sep = "")
+      }
+      if(!(hidden %in% FALSE))
+      {
+         output_text <- paste(output_text,
+                              "<w:vanish/>",
+                              sep = "")
+      }
+      if(!(size %in% FALSE))
+      {
+         output_text <- paste(output_text,
+                              "<w:sz w:val=\"", size, "\"/>",
+                              sep = "")
+      }
+      if(!(hex_color %in% FALSE))
+      {
+         output_text <- paste(output_text,
+                              "<w:color w:val=\"", hex_color, "\"/>",
+                              sep = "")
+      }
+      output_text <- paste(output_text,
+                           "</w:rPr><w:t xml:space=\"preserve\">",
+                           text,
+                           "</w:t></w:r>",
+                           sep = "")
+      knit_print(asis_output(paste("`",
+                                   output_text,
+                                   "`{=openxml}",
+                                   sep = "")))
+   }
+```
+
+<br>
+
+
+#### 3.2.2 Section breaks with orientation changes.
+
+Section breaks are by default not available when knitting a Rmd document to a docx document.
+
+Utility functions can be created in order to insert section break with changes in orientation. The function `landscape_start` provides all the information for the section page size, orientation (portrait) and margin information to be applied in between the previous section break and this new section break. The function `landscape_end` provides all the information for the section page size, orientation (landscape) and margin information to be applied before the previous section break and this new section break. Please note that the docx document will always have the section properties of the template in the last section.
+
+Each function simply creates a paragraph (embed within `<w:p>` and `</w:p>`), in which the properties of the paragraph (embed within `<w:pPr>` and `</w:pPr>`) are specified. Note that only the properties of the section (embed within `<w:sectPr>` and `</w:sectPr>`) are mentioned for the paragraph's properties:
+
+- page height and width (in twentieths of a point) and orientation (portrait or landscape);
+- page margins information (top, bottom, left and right distance and header/footer distance all in twentieths of a point).
+
+Please note that if the template have non-empty header and footer, those will not be in the docx document before the last call of `landscape_end` except if the section properties contain information of header/footer to be associated within the section (via id attributes to be specified in headerReference and footerReference elements, see <a href=" https://www.ecma-international.org/publications/standards/Ecma-376.htm">Standard ECMA-376</a>). In order to identify which id attributes to be specified, "simply" search for it with the template document.
+
+```{r eval=FALSE}
+#------------------------------------- xml to start landscape orientation -------------------------------------#
+
+   landscape_start <- function()
+   {
+      knit_print(asis_output(paste("```{=openxml}",
+                                      "<w:p>",
+                                         "<w:pPr>",
+                                            "<w:sectPr>",
+                                               "<w:pgSz w:orient = \"portrait\" w:w = \"11906\" w:h = \"16838\"/>",
+                                               "<w:pgMar w:bottom = \"1282\" w:top = \"1282\" w:right = \"1138\" w:left = \"1138\" w:header = \"576\" w:footer = \"576\"/>",
+                                            "</w:sectPr>",
+                                         "</w:pPr>",
+                                      "</w:p>",
+                                   "```",
+                                   sep = "\n")))
+   }
+
+
+#------------------------------------- xml to end landscape orientation --------------------------------------#
+
+   landscape_end <- function()
+   {
+      knit_print(asis_output(paste("```{=openxml}",
+                                      "<w:p>",
+                                         "<w:pPr>",
+                                            "<w:sectPr>",
+                                               "<w:pgSz w:orient = \"landscape\" w:w = \"16838\" w:h = \"11906\"/>",
+                                               "<w:pgMar w:bottom = \"1282\" w:top = \"1282\" w:right = \"1138\" w:left = \"1138\" w:header = \"576\" w:footer = \"576\"/>",
+                                            "</w:sectPr>",
+                                         "</w:pPr>",
+                                      "</w:p>",
+                                   "```",
+                                   sep = "\n")))
+   }
+```
+
+<br>
+
+
+### 3.3 Working on the content of the report
+
+The next steps consist "just" to provide the content of the report... It is definitely the most interesting part of the work, but also the most difficult one...
+
+<br>
+
+### 3.4 Knit
+
+Once the R Markdown file is ready, you can simply knit it using the shortcut Ctrl+Shift+K. In case the output is not expected to be created in the same folder than the R Markdown file, the function render from the package <a href="https://cran.r-project.org/web/packages/rmarkdown/">rmarkdown</a> can be used.
+
+<br>
+
+<small>*Post created on 2020-08-19. Last update on 2020-08-19.*</small>
+
+---
+
+<br>
+
+# References
+<small>

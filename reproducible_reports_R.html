@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Reproducible reports with R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link rel="shortcut icon" type="image/png" href="images/favicon.png">
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-167561397-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-167561397-1');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="bootstrap.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"><img id="logo" style="position:absolute; top:5px; height: 60px;" src="images/logo.png"/></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Services
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="bayesian_approach.html">Bayesian Approach</a>
+    </li>
+    <li>
+      <a href="adaptive_design.html">Adaptive Design</a>
+    </li>
+    <li>
+      <a href="quantitative_decision_making.html">Quantitative Decision-Making</a>
+    </li>
+    <li>
+      <a href="biometrics_services.html">Biometrics Services</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Blog
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="reproducible_reports_R.html">Reproducible reports with R</a>
+    </li>
+    <li>
+      <a href="tfls_with_R.html">Tables, figures and listings with R</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="about_me.html">About Me</a>
+</li>
+<li>
+  <a href="ressources.html">Ressources</a>
+</li>
+<li>
+  <a href="contact.html">Contact</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+<p><br><br></p>
+
+<div class="fluid-row" id="header">
+
+
+
+
+</div>
+
+
+<div id="reproducible-reports-with-r" class="section level1">
+<h1>Reproducible reports with R</h1>
+<p>Following the post on the creation of end-text outputs with R for clinical study reports (<a href="https://www.jaeger-consulting.io/tfls_with_R.html">Tables, figures and listings with R</a>), some information, tips and tricks are provided in this post for creating reproducible reports with R (combined with R Markdown <span class="citation">(Xie, Allaire, and Grolemund 2018; Allaire et al. 2020)</span> and other packages).</p>
+<p><br></p>
+<div id="setting-up-the-project-folder" class="section level2">
+<h2>1. Setting up the project folder</h2>
+<p>It is highly advisable to create a project folder before starting any work. In particular, if multiple collaborators (statistician, programmers) are working on it, version control can be ensured using a git repository (see <a href="https://www.jaeger-consulting.io/tfls_with_R.html">Tables, figures and listings with R</a> for detailed descriptions).</p>
+<p><br></p>
+</div>
+<div id="template-for-the-report" class="section level2">
+<h2>2. Template for the report</h2>
+<p>As for end-text outputs, the template that is called in the YAML metadata is the backbone of the formatting of the report to be produced.</p>
+<p>Creating the template is quite easy. It is just requiring few steps and some editing of the docx style information. Step by step descriptions for creating a template are provided on <a href="https://rmarkdown.rstudio.com/articles_docx.html">Happy collaboration with Rmd to docx</a>.</p>
+<p><br></p>
+</div>
+<div id="creating-the-reproducible-report-using-an-r-markdown-file" class="section level2">
+<h2>3. Creating the (reproducible) report using an R Markdown file</h2>
+<div id="setting-up-the-yaml-metadata" class="section level3">
+<h3>3.1 Setting up the YAML metadata</h3>
+<p>An R Markdown file, with default output set at docx document can now be created. The YAML metadata will inform the document properties of the output.</p>
+<pre class="r"><code>---
+title: &#39;Title&#39;
+author: &#39;Author&#39;
+date: &#39;Date&#39;
+output:
+   word_document:
+       reference_docx: &#39;./reference_styles.docx&#39;
+---</code></pre>
+<p><br></p>
+</div>
+<div id="utilities" class="section level3">
+<h3>3.2. Utilities</h3>
+<p>Being able to have inline formatting or section breaks with orientation changes require to create some utilities. Those are based on Office Open XML (OpenXML) chunks of codes. Information about the Office Open XML file formats is available under <a href=" https://www.ecma-international.org/publications/standards/Ecma-376.htm">Standard ECMA-376</a>.</p>
+<p><br></p>
+<div id="inline-text-formatting" class="section level4">
+<h4>3.2.1 Inline text formatting</h4>
+<p>When working with RMarkdown, only limited formatting options are available for docx documents (italic and bold, see <a href="https://rmarkdown.rstudio.com/authoring_basics.html">Markdown Basics</a>). One might need to have more formatting options, like underline or change in color. The proposed utility function allows to combine multiple formatting characteristics (italic, bold, underline, hidden/vanish status (text not be printed), size and/or color) and to apply it to an input text within a paragraph.</p>
+<p>The function simply creates a run (embed within <code>&lt;w:r&gt;</code> and <code>&lt;/w:r&gt;</code>), in which the properties of the run (embed within <code>&lt;w:rPr&gt;</code> and <code>&lt;/w:rPr&gt;</code>) integrates all the required formatting. Please note that the color is to be specified in HEX codes and that font size is in half-points (1/144 of an inch).</p>
+<p>Applying the desired formatting on a particular string is easy. The inline R code <code>`r inline_fontstyle(italic = TRUE, hex_color = 'FF8000', text = 'my sample text')`</code> will result in having in italic and orange the text <i><span style="color:#ff8000;">my sample text</span></i> in the word document.</p>
+<pre class="r"><code>#------------------------------------- xml function for inline font style -------------------------------------#
+
+   inline_fontstyle &lt;- function(italic = FALSE,
+                                bold = FALSE,
+                                underline = FALSE,
+                                hidden = FALSE,
+                                size = FALSE,
+                                hex_color = FALSE,
+                                text)
+   {
+      output_text &lt;- &quot;&lt;w:r&gt;&lt;w:rPr&gt;&quot;
+      if(!(italic %in% FALSE))
+      {
+         output_text &lt;- paste(output_text,
+                              &quot;&lt;w:i/&gt;&quot;,
+                              sep = &quot;&quot;)
+      }
+      if(!(bold %in% FALSE))
+      {
+         output_text &lt;- paste(output_text,
+                              &quot;&lt;w:b/&gt;&quot;,
+                              sep = &quot;&quot;)
+      }
+      if(!(underline %in% FALSE))
+      {
+         output_text &lt;- paste(output_text,
+                              &quot;&lt;w:u w:val=\&quot;single\&quot;/&gt;&quot;,
+                              sep = &quot;&quot;)
+      }
+      if(!(hidden %in% FALSE))
+      {
+         output_text &lt;- paste(output_text,
+                              &quot;&lt;w:vanish/&gt;&quot;,
+                              sep = &quot;&quot;)
+      }
+      if(!(size %in% FALSE))
+      {
+         output_text &lt;- paste(output_text,
+                              &quot;&lt;w:sz w:val=\&quot;&quot;, size, &quot;\&quot;/&gt;&quot;,
+                              sep = &quot;&quot;)
+      }
+      if(!(hex_color %in% FALSE))
+      {
+         output_text &lt;- paste(output_text,
+                              &quot;&lt;w:color w:val=\&quot;&quot;, hex_color, &quot;\&quot;/&gt;&quot;,
+                              sep = &quot;&quot;)
+      }
+      output_text &lt;- paste(output_text,
+                           &quot;&lt;/w:rPr&gt;&lt;w:t xml:space=\&quot;preserve\&quot;&gt;&quot;,
+                           text,
+                           &quot;&lt;/w:t&gt;&lt;/w:r&gt;&quot;,
+                           sep = &quot;&quot;)
+      knit_print(asis_output(paste(&quot;`&quot;,
+                                   output_text,
+                                   &quot;`{=openxml}&quot;,
+                                   sep = &quot;&quot;)))
+   }</code></pre>
+<p><br></p>
+</div>
+<div id="section-breaks-with-orientation-changes." class="section level4">
+<h4>3.2.2 Section breaks with orientation changes.</h4>
+<p>Section breaks are by default not available when knitting a Rmd document to a docx document.</p>
+<p>Utility functions can be created in order to insert section break with changes in orientation. The function <code>landscape_start</code> provides all the information for the section page size, orientation (portrait) and margin information to be applied in between the previous section break and this new section break. The function <code>landscape_end</code> provides all the information for the section page size, orientation (landscape) and margin information to be applied before the previous section break and this new section break. Please note that the docx document will always have the section properties of the template in the last section.</p>
+<p>Each function simply creates a paragraph (embed within <code>&lt;w:p&gt;</code> and <code>&lt;/w:p&gt;</code>), in which the properties of the paragraph (embed within <code>&lt;w:pPr&gt;</code> and <code>&lt;/w:pPr&gt;</code>) are specified. Note that only the properties of the section (embed within <code>&lt;w:sectPr&gt;</code> and <code>&lt;/w:sectPr&gt;</code>) are mentioned for the paragraph’s properties:</p>
+<ul>
+<li>page height and width (in twentieths of a point) and orientation (portrait or landscape);</li>
+<li>page margins information (top, bottom, left and right distance and header/footer distance all in twentieths of a point).</li>
+</ul>
+<p>Please note that if the template have non-empty header and footer, those will not be in the docx document before the last call of <code>landscape_end</code> except if the section properties contain information of header/footer to be associated within the section (via id attributes to be specified in headerReference and footerReference elements, see <a href=" https://www.ecma-international.org/publications/standards/Ecma-376.htm">Standard ECMA-376</a>). In order to identify which id attributes to be specified, “simply” search for it with the template document.</p>
+<pre class="r"><code>#------------------------------------- xml to start landscape orientation -------------------------------------#
+
+   landscape_start &lt;- function()
+   {
+      knit_print(asis_output(paste(&quot;```{=openxml}&quot;,
+                                      &quot;&lt;w:p&gt;&quot;,
+                                         &quot;&lt;w:pPr&gt;&quot;,
+                                            &quot;&lt;w:sectPr&gt;&quot;,
+                                               &quot;&lt;w:pgSz w:orient = \&quot;portrait\&quot; w:w = \&quot;11906\&quot; w:h = \&quot;16838\&quot;/&gt;&quot;,
+                                               &quot;&lt;w:pgMar w:bottom = \&quot;1282\&quot; w:top = \&quot;1282\&quot; w:right = \&quot;1138\&quot; w:left = \&quot;1138\&quot; w:header = \&quot;576\&quot; w:footer = \&quot;576\&quot;/&gt;&quot;,
+                                            &quot;&lt;/w:sectPr&gt;&quot;,
+                                         &quot;&lt;/w:pPr&gt;&quot;,
+                                      &quot;&lt;/w:p&gt;&quot;,
+                                   &quot;```&quot;,
+                                   sep = &quot;\n&quot;)))
+   }
+
+
+#------------------------------------- xml to end landscape orientation --------------------------------------#
+
+   landscape_end &lt;- function()
+   {
+      knit_print(asis_output(paste(&quot;```{=openxml}&quot;,
+                                      &quot;&lt;w:p&gt;&quot;,
+                                         &quot;&lt;w:pPr&gt;&quot;,
+                                            &quot;&lt;w:sectPr&gt;&quot;,
+                                               &quot;&lt;w:pgSz w:orient = \&quot;landscape\&quot; w:w = \&quot;16838\&quot; w:h = \&quot;11906\&quot;/&gt;&quot;,
+                                               &quot;&lt;w:pgMar w:bottom = \&quot;1282\&quot; w:top = \&quot;1282\&quot; w:right = \&quot;1138\&quot; w:left = \&quot;1138\&quot; w:header = \&quot;576\&quot; w:footer = \&quot;576\&quot;/&gt;&quot;,
+                                            &quot;&lt;/w:sectPr&gt;&quot;,
+                                         &quot;&lt;/w:pPr&gt;&quot;,
+                                      &quot;&lt;/w:p&gt;&quot;,
+                                   &quot;```&quot;,
+                                   sep = &quot;\n&quot;)))
+   }</code></pre>
+<p><br></p>
+</div>
+</div>
+<div id="working-on-the-content-of-the-report" class="section level3">
+<h3>3.3 Working on the content of the report</h3>
+<p>The next steps consist “just” to provide the content of the report… It is definitely the most interesting part of the work, but also the most difficult one…</p>
+<p><br></p>
+</div>
+<div id="knit" class="section level3">
+<h3>3.4 Knit</h3>
+<p>Once the R Markdown file is ready, you can simply knit it using the shortcut Ctrl+Shift+K. In case the output is not expected to be created in the same folder than the R Markdown file, the function render from the package <a href="https://cran.r-project.org/web/packages/rmarkdown/">rmarkdown</a> can be used.</p>
+<p><br></p>
+<p><small><em>Post created on 2020-08-19. Last update on 2020-08-19.</em></small></p>
+<hr />
+<p><br></p>
+</div>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p><small></p>
+<div id="refs" class="references">
+<div id="ref-Allaire2020">
+<p>Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and Richard Iannone. 2020. <em>Rmarkdown: Dynamic Documents for R</em>. <a href="https://github.com/rstudio/rmarkdown">https://github.com/rstudio/rmarkdown</a>.</p>
+</div>
+<div id="ref-Xie2018">
+<p>Xie, Yihui, J. J. Allaire, and Garrett Grolemund. 2018. <em>R Markdown: The Definitive Guide</em>. Boca Raton, Florida: Chapman; Hall/CRC. <a href="https://bookdown.org/yihui/rmarkdown">https://bookdown.org/yihui/rmarkdown</a>.</p>
+</div>
+</div>
+</div>
+
+<p><br><br><br></p>
+<p style="text-align:center;">
+<a href="mailto:info@jaeger-consulting.io?subject=Request for information"><img src="images/email.png" style="height: 20px;"></a>
+<a href="https://www.linkedin.com/company/jaeger-consulting" target="_blank"><img src="images/linkedin_logo.png" style="height: 20px;"></a>
+<a href="https://github.com/jaeger-consulting" target="_blank"><img src="images/github_logo.png" style="height: 20px;"></a>
+</p>
+<p style="text-align:center;"><small>Jaeger Consulting &copy 2020</small></p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
