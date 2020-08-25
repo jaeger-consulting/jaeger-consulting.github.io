@@ -1,0 +1,63 @@
+---
+pagetitle: "Delayed treatment effect in time-to-event analyses"
+bibliography: references.bib
+---
+
+# Delayed treatment effect in time-to-event analyses
+
+Immuno-oncology treatment candidates like immune checkpoint inhibitors and T cell therapies are rising fundamental challenges when designing and analyzing clinical trial data.
+
+In the context of analysis of time-to-event endpoints like progression-free survival or overall survival (see definition in @FDA2018 for definitions), manufacturing processes and/or mode of action can induce latency in the exhibition of the treatment effect. This delayed treatment effect phenomenon triggers the violation of the proportional hazard assumption which is a standard assumption when analysis time-to-event data [@Chen2013].
+
+In this blog post, the consequence of delayed treatment effect will be evaluated on the power and other operational characteristics in fixed design and adaptive design with futility stopping rule.
+
+
+<br>
+
+
+## 1. Introduction
+
+```{r echo = TRUE, message = FALSE}
+require(rpact)
+sampleSize1 <- getSampleSizeSurvival(sided = 1,
+                                     alpha = 0.025,
+                                     beta = 0.1,
+                                     median2 = 4,
+                                     hazardRatio = 0.65,
+                                     dropoutRate1 = 0.025,
+                                     dropoutRate2 = 0.025,
+                                     dropoutTime = 12,
+                                     accrualTime = c(0, 1, 2, 3, 4), 
+                                     accrualIntensity = c(2, 4, 8, 16, 32),
+                                     maxNumberOfSubjects = 400)
+summary(sampleSize1)
+```
+
+First, some basic elements will be provided in order to select an appropriate sample size for a superiority trial without interim analysis under the proportional assumptions. This will be put in practive with functions from the <a href=https://cran.r-project.org/web/packages/rpact/index.html>rpact</a> package [@Wassmer2019]. For additional hands-on use of this package, I highly recommend you to visit <a href = https://www.rpact.org/vignettes>https://www.rpact.org/vignettes</a>.
+
+Please remember that in survival analysis setting, it is the number of events that determines the power. The number of subjects to enroll will play an adjustment role in order to target acceptable total duration and minimum follow-up.
+
+<br>
+
+
+## 2. Consequence of delayed treatment in fixed design context
+
+
+<br>
+
+
+## 3. Cosequences of delayed treatment in presence of futility stopping rule
+
+
+<br>
+
+<small>*Based on work started in 2017 with former colleagues from Celgene (Angeliki Zarotiadou, Carl DiCasoli, Alessandro Previtali and Marie-Laure Casadebaig)*</small>
+
+<small>*Post created on 2020-MM-DD. Last update on 2020-MM-DD.*</small>
+
+---
+
+<br>
+
+# References
+<small>

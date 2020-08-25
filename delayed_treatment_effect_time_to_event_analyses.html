@@ -11,7 +11,7 @@
 
 
 
-<title>Quantitative Decision-Making</title>
+<title>Delayed treatment effect in time-to-event analyses</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -351,10 +351,75 @@ $(document).ready(function () {
 </div>
 
 
-<div style="float:left;">
-<p><img src="images/quantitative.png" style="height: 125px; margin-right: 25px;"></p>
+<div id="delayed-treatment-effect-in-time-to-event-analyses" class="section level1">
+<h1>Delayed treatment effect in time-to-event analyses</h1>
+<p>Immuno-oncology treatment candidates like immune checkpoint inhibitors and T cell therapies are rising fundamental challenges when designing and analyzing clinical trial data.</p>
+<p>In the context of analysis of time-to-event endpoints like progression-free survival or overall survival (see definition in <span class="citation">U.S. Food &amp; Drug Administration - Center for Drug Evaluation and Research (2018)</span> for definitions), manufacturing processes and/or mode of action can induce latency in the exhibition of the treatment effect. This delayed treatment effect phenomenon triggers the violation of the proportional hazard assumption which is a standard assumption when analysis time-to-event data <span class="citation">(Chen 2013)</span>.</p>
+<p>In this blog post, the consequence of delayed treatment effect will be evaluated on the power and other operational characteristics in fixed design and adaptive design with futility stopping rule.</p>
+<p><br></p>
+<div id="introduction" class="section level2">
+<h2>1. Introduction</h2>
+<pre class="r"><code>require(rpact)
+sampleSize1 &lt;- getSampleSizeSurvival(sided = 1,
+                                     alpha = 0.025,
+                                     beta = 0.1,
+                                     median2 = 4,
+                                     hazardRatio = 0.65,
+                                     dropoutRate1 = 0.025,
+                                     dropoutRate2 = 0.025,
+                                     dropoutTime = 12,
+                                     accrualTime = c(0, 1, 2, 3, 4), 
+                                     accrualIntensity = c(2, 4, 8, 16, 32),
+                                     maxNumberOfSubjects = 400)
+summary(sampleSize1)</code></pre>
+<pre><code>## Sample size calculation for a survival endpoint
+## 
+## Fixed sample analysis.
+## The sample size was calculated for a two-sample logrank test (one-sided),
+## hazard ratio 0.65, control median (2) = 4, allocation ratio = 1, and power 90%.
+## 
+## Stage                               Fixed 
+## Efficacy boundary (z-value scale)   1.960 
+## Number of subjects                    400 
+## Number of events                    226.5 
+## Analysis time                        16.2 
+## One-sided local significance level 0.0250 
+## Efficacy boundary (t)               0.771 
+## 
+## Legend:
+##   (t): approximate treatment effect scale</code></pre>
+<p>First, some basic elements will be provided in order to select an appropriate sample size for a superiority trial without interim analysis under the proportional assumptions. This will be put in practive with functions from the <a href=https://cran.r-project.org/web/packages/rpact/index.html>rpact</a> package <span class="citation">(Wassmer and Pahlke 2019)</span>. For additional hands-on use of this package, I highly recommend you to visit <a href = https://www.rpact.org/vignettes>https://www.rpact.org/vignettes</a>.</p>
+<p>Please remember that in survival analysis setting, it is the number of events that determines the power. The number of subjects to enroll will play an adjustment role in order to target acceptable total duration and minimum follow-up.</p>
+<p><br></p>
 </div>
-<p>The inescapable need for decision making at indication, program or portfolio levels requires the aid of effective statistical approaches. Quantitative decision making provides appropriate and transparent tools to decision makers for ruling continuation of a clinical trial or program and supports potential investments decisions.</p>
+<div id="consequence-of-delayed-treatment-in-fixed-design-context" class="section level2">
+<h2>2. Consequence of delayed treatment in fixed design context</h2>
+<p><br></p>
+</div>
+<div id="cosequences-of-delayed-treatment-in-presence-of-futility-stopping-rule" class="section level2">
+<h2>3. Cosequences of delayed treatment in presence of futility stopping rule</h2>
+<p><br></p>
+<p><small><em>Based on work started in 2017 with former colleagues from Celgene (Angeliki Zarotiadou, Carl DiCasoli, Alessandro Previtali and Marie-Laure Casadebaig)</em></small></p>
+<p><small><em>Post created on 2020-MM-DD. Last update on 2020-MM-DD.</em></small></p>
+<hr />
+<p><br></p>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p><small></p>
+<div id="refs" class="references">
+<div id="ref-Chen2013">
+<p>Chen, Tai-Tsang. 2013. “Statistical Issues and Challenges in Immuno-Oncology.” <em>Journal for Immunotherapy of Cancer</em> 1 (1): 18. <a href="https://doi.org/10.1186/2051-1426-1-18">https://doi.org/10.1186/2051-1426-1-18</a>.</p>
+</div>
+<div id="ref-FDA2018">
+<p>U.S. Food &amp; Drug Administration - Center for Drug Evaluation and Research. 2018. “Clinical Trial Endpoints for the Approval of Cancer Drugs and Biologics.” <a href="https://www.fda.gov/media/71195/download">https://www.fda.gov/media/71195/download</a>.</p>
+</div>
+<div id="ref-Wassmer2019">
+<p>Wassmer, Gernot, and Friedrich Pahlke. 2019. “rpact: Confirmatory Adaptive Clinical Trial Design andAnalysis.” <a href="https://cran.r-project.org/package=rpact">https://cran.r-project.org/package=rpact</a>.</p>
+</div>
+</div>
+</div>
 
 <p><br><br><br></p>
 <p style="text-align:center;">
