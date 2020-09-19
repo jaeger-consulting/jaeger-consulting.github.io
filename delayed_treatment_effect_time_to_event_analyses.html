@@ -11,7 +11,7 @@
 
 
 
-<title>Delayed treatment effect in time-to-event analyses</title>
+<title>Delayed treatment effect in time-to-event endpoint</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -318,7 +318,7 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="delayed_treatment_effect_time_to_event_analyses.html">Delayed treatment effect in time-to-event analyses</a>
+      <a href="delayed_treatment_effect_time_to_event_analyses.html">Delayed treatment effect in time-to-event endpoint</a>
     </li>
     <li>
       <a href="reproducible_reports_R.html">Reproducible reports with R</a>
@@ -351,56 +351,81 @@ $(document).ready(function () {
 </div>
 
 
-<div id="delayed-treatment-effect-in-time-to-event-analyses" class="section level1">
-<h1>Delayed treatment effect in time-to-event analyses</h1>
+<div id="delayed-treatment-effect-in-time-to-event-endpoint" class="section level1">
+<h1>Delayed treatment effect in time-to-event endpoint</h1>
 <p>Immuno-oncology treatment candidates like immune checkpoint inhibitors and T cell therapies are rising fundamental challenges when designing and analyzing clinical trial data.</p>
-<p>In the context of analysis of time-to-event endpoints like progression-free survival or overall survival (see definition in <span class="citation">U.S. Food &amp; Drug Administration - Center for Drug Evaluation and Research (2018)</span> for definitions), manufacturing processes and/or mode of action can induce latency in the exhibition of the treatment effect. This delayed treatment effect phenomenon triggers the violation of the proportional hazard assumption which is a standard assumption when analysis time-to-event data <span class="citation">(Chen 2013)</span>.</p>
-<p>In this blog post, the consequence of delayed treatment effect will be evaluated on the power and other operational characteristics in fixed design and adaptive design with futility stopping rule.</p>
+<p>In the context of analysis of time-to-event endpoints like progression-free survival or overall survival (see definition in <span class="citation">U.S. Food &amp; Drug Administration - Center for Drug Evaluation and Research (2018)</span> for definitions), manufacturing processes and/or mode of action can induce latency in the exhibition of the treatment effect. This delayed treatment effect phenomenon triggers the violation of the proportional hazard <span class="citation">(Chen 2013)</span> which is a standard assumption when analyzing time-to-event data.</p>
+<p>In this blog post, the consequence of delayed treatment effect will be evaluated on the power and other operational characteristics in a fixed design and in presence of a futility analysis. Note that this post will not cover approaches in order to deal with delayed treatment effect.</p>
 <p><br></p>
-<div id="introduction" class="section level2">
+<div id="sec:Introduction" class="section level2">
 <h2>1. Introduction</h2>
-<pre class="r"><code>require(rpact)
-sampleSize1 &lt;- getSampleSizeSurvival(sided = 1,
-                                     alpha = 0.025,
-                                     beta = 0.1,
-                                     median2 = 4,
-                                     hazardRatio = 0.65,
-                                     dropoutRate1 = 0.025,
-                                     dropoutRate2 = 0.025,
-                                     dropoutTime = 12,
-                                     accrualTime = c(0, 1, 2, 3, 4), 
-                                     accrualIntensity = c(2, 4, 8, 16, 32),
-                                     maxNumberOfSubjects = 400)
-summary(sampleSize1)</code></pre>
-<pre><code>## Sample size calculation for a survival endpoint
-## 
-## Fixed sample analysis.
-## The sample size was calculated for a two-sample logrank test (one-sided),
-## hazard ratio 0.65, control median (2) = 4, allocation ratio = 1, and power 90%.
-## 
-## Stage                               Fixed 
-## Efficacy boundary (z-value scale)   1.960 
-## Number of subjects                    400 
-## Number of events                    226.5 
-## Analysis time                        16.2 
-## One-sided local significance level 0.0250 
-## Efficacy boundary (t)               0.771 
-## 
-## Legend:
-##   (t): approximate treatment effect scale</code></pre>
-<p>First, some basic elements will be provided in order to select an appropriate sample size for a superiority trial without interim analysis under the proportional assumptions. This will be put in practive with functions from the <a href=https://cran.r-project.org/web/packages/rpact/index.html>rpact</a> package <span class="citation">(Wassmer and Pahlke 2019)</span>. For additional hands-on use of this package, I highly recommend you to visit <a href = https://www.rpact.org/vignettes>https://www.rpact.org/vignettes</a>.</p>
-<p>Please remember that in survival analysis setting, it is the number of events that determines the power. The number of subjects to enroll will play an adjustment role in order to target acceptable total duration and minimum follow-up.</p>
+<p>First, some basic elements will be provided in order to select an appropriate sample size for a superiority trial without interim analysis under the proportional hazard assumption. This will be put in practice with functions from the <a href=https://cran.r-project.org/web/packages/rpact/index.html>rpact</a> package <span class="citation">(Wassmer and Pahlke 2019)</span>. For additional hands-on use of this package, do not hesitate to visit <a href = https://www.rpact.org/vignettes>https://www.rpact.org/vignettes</a>.</p>
+<p>Please remember that in survival analysis setting, it is the number of events that determines the power. The number of subjects to enroll will play an adjustment role in order to target an acceptable total study duration, an acceptable minimum follow-up and an appropriate sample size.</p>
+<p>As a basis for comparison through this post, let consider the following assumptions:</p>
+<ul>
+<li>Time-to-event endpoint is progression-free survival (PFS) with:
+<ul>
+<li>PFS distributed according to an exponential distribution;</li>
+<li>median of 4 months in control group;</li>
+<li>hazard ratio experimental to control group at 0.65 (leading to a median of around 6.2 months in the experimental group);</li>
+</ul></li>
+<li>Target power of 90% and one-sided 2.5%-significance level for the log-rank test;</li>
+<li>Annual drop-out rate of 2.5% in both the experimental and the control group;</li>
+<li>Randomization ratio 1:1 for experimental:control;</li>
+<li>Recruitment rate of 2, 4, 8 and 16 subjects during month 1, 2, 3 and 4 and 32 subjects per month on month 5 and after:</li>
+<li>Maximum number of subject ranging from 250 to 450.</li>
+</ul>
+<p>The above assumptions will lead to require a total of 227 PFS events to trigger the (final) analysis. The figure below shows the enrollment duration and the study duration with respect to the predefined number of subjects to be enrolled. Given the shape of the enrollment and study duration curves, targeting 350 subjects is reasonable and would lead to an enrollment duration of around 14 months and a study duration of around 16.8 months.</p>
+<p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/unnamed-chunk-2-1.png" width="960" /></p>
 <p><br></p>
 </div>
 <div id="consequence-of-delayed-treatment-in-fixed-design-context" class="section level2">
 <h2>2. Consequence of delayed treatment in fixed design context</h2>
+<div id="sec:fixed_absolute_benefit" class="section level3">
+<h3>2.1 Absolute clinical benefit on median PFS maintained</h3>
+<p>Delayed treatment effect can be seen on the PFS curve as the time until separation of the PFS curve between the control and the experimental groups. The figure below shows for delayed treatment effects ranging from 0 month to 3 months by 0.5 month both the PFS curves (control in red and experimental in green) and hazard ratio (in dotted blue) when targeting the same absolute clinical benefit in median PFS. As clinical benefit is maintained despite the delayed treatment effect, the hazard ratio post the delayed treatment effect becomes smaller and smaller.</p>
+<p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/unnamed-chunk-4-1.png" width="960" /></p>
+<p>In order to evaluate the impact of this delayed treatment effect using a standard log rank test while maintaining the clinical benefit, the function getSimulationSurvival from the <a href=https://cran.r-project.org/web/packages/rpact/index.html>rpact</a> package can be used. Out of it the estimated power and the median study duration can be extracted.</p>
+<p>On the figure below, when maintaining the absolute clinical benefit on median PFS, one can see that larger value of the delayed treatment effect is associated with marginally longer study duration. The power has a U shape, first going down up to around 2 months for the delayed treatment effect and then increasing back. This could be explained by the hazard ratio post delayed treatment starting to compensate the delayed treatment effect.</p>
+<p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/unnamed-chunk-6-1.png" width="960" /></p>
 <p><br></p>
 </div>
-<div id="cosequences-of-delayed-treatment-in-presence-of-futility-stopping-rule" class="section level2">
-<h2>3. Cosequences of delayed treatment in presence of futility stopping rule</h2>
+<div id="benefit-on-hazard-maintained-post-delayed-treatment-effect" class="section level3">
+<h3>2.2 Benefit on hazard maintained post delayed treatment effect</h3>
+<p>The figure below shows for delayed treatment effects ranging from 0 month to 3 months by 0.5 month both the PFS curves (control in red and experimental in green) and hazard ratio (in dotted blue) when the hazard ratio post the delayed treatment effect is maintained to 0.65 (the one used in <a href="#sec:Introduction">Section 1</a>). In this situation, the absolute clinical benefit in term of improvement in median PFS from the control to the experimental is decreasing with increasing delayed treatment effect.</p>
+<p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/unnamed-chunk-8-1.png" width="960" /></p>
+<p>The impact of the delayed treatment effect when maintaining the hazard ratio benefit post delayed treatment effect will be again evaluated using the function getSimulationSurvival from the <a href=https://cran.r-project.org/web/packages/rpact/index.html>rpact</a> package.</p>
+<p>On the figure below, when maintaining the hazard ratio benefit post delayed treatment effect, one can see that both the power and the study duration is decreasing with increasing delayed treatment effect. This can easily be explained by increasing delayed treatment effect not compensated by decreasing hazard ratio (that were observed in previous subsection). In this setting, the impact of delayed treatment effect is dramatic and will lead to underpowered trials.</p>
+<p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/unnamed-chunk-10-1.png" width="960" /></p>
 <p><br></p>
-<p><small><em>Based on work started in 2017 with former colleagues from Celgene (Angeliki Zarotiadou, Carl DiCasoli, Alessandro Previtali and Marie-Laure Casadebaig)</em></small></p>
-<p><small><em>Post created on 2020-MM-DD. Last update on 2020-MM-DD.</em></small></p>
+</div>
+</div>
+<div id="consequences-of-delayed-treatment-in-presence-of-futility-stopping-rule" class="section level2">
+<h2>3. Consequences of delayed treatment in presence of futility stopping rule</h2>
+<div id="number-of-pfs-events-required" class="section level3">
+<h3>3.1 Number of PFS events required</h3>
+<p>In order to compute the number of PFS events required, one should first use the function getDesignGroupSequential to obtain the adjusted boundaries for the group sequential design. As only a futility stopping rule is to be considered (no stopping for efficacy), one should introduce a user defined alpha spending function. For the futility analysis, it will be done at 60% of the information rate with an O’Brien &amp; Fleming type <span class="math inline">\(\beta\)</span>-spending function. With this choice of spending function, very weak signal would lead to futility at the interim (Z-score threshold at 0.8847). Given those assumptions, 141 PFS events are required at the futility analysis and 235 PFS events are required for triggering the final analysis.</p>
+<p><br></p>
+</div>
+<div id="absolute-clinical-benefit-on-median-pfs-maintained" class="section level3">
+<h3>3.2 Absolute clinical benefit on median PFS maintained</h3>
+<p>The figure below shows out of the simulations the estimated probability to stop for futility and the estimated power with respect to delayed treatment effect when maintaining the absolute clinical benefit on median PFS. Versus <a href="#sec:fixed_absolute_benefit">Section 2.1</a>, one can see that the power is only decreasing when the delayed treatment effect is increasing. This is most probably due to the futility met while all events are already observed before being able to benefit from smaller hazard ratio post delayed treatment effect.</p>
+<p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/unnamed-chunk-13-1.png" width="960" /></p>
+<p><br></p>
+</div>
+<div id="benefit-on-hazard-maintained-post-delayed-treatment-effect-1" class="section level3">
+<h3>3.3 Benefit on hazard maintained post delayed treatment effect</h3>
+<p>The figure below shows out of the simulations the estimated probability to stop for futility and the estimated power with respect to delayed treatment effect when maintaining the hazard ratio benefit post delayed treatment effect at 0.65. In this setting, the consequences of delayed treatment effect are dramatic, even for small delayed treatment effect. This is due to a combination of both the interim analysis leading to high probability to stop for futility and a hazard ratio post delayed treatment effect not compensating latency in the separation of the PFS curves.</p>
+<p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/unnamed-chunk-15-1.png" width="960" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>4. Conclusion</h2>
+<p>When considering standard analysis methods for time-to-event data (log-rank like approach), delayed treatment effect can lead to underpowered trial. In some situation, impact on power could technically be considered marginal, but it has to be put in perspective of a phase 3 setting where the intent is to maximize the chance of detecting an effective drug when it is the case. Drop in power can easily be dramatic, especially in situation where futility analyses are considered. If mode of action and/or manufacturing processes can potentially induce delayed treatment effect, it is mandatory to consider it when designing a clinical trial with time-to-event endpoint.</p>
+<p><br></p>
+<p><small><em>Based on work started in 2017 with former colleagues from Celgene</em></small></p>
+<p><small><em>Post created on 2020-09-18. Last update on 2020-09-18.</em></small></p>
 <hr />
 <p><br></p>
 </div>

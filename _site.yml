@@ -18,7 +18,7 @@ navbar:
           href: biometrics_services.html
     - text: "Blog"
       menu:
-        - text: "Delayed treatment effect in time-to-event analyses"
+        - text: "Delayed treatment effect in time-to-event endpoint"
           href: delayed_treatment_effect_time_to_event_analyses.html
         - text: "Reproducible reports with R"
           href: reproducible_reports_R.html
