@@ -4,8 +4,9 @@ https://www.jaeger-consulting.io/bayesian_approach.html
 https://www.jaeger-consulting.io/adaptive_design.html
 https://www.jaeger-consulting.io/quantitative_decision_making.html
 https://www.jaeger-consulting.io/biometrics_services.html
-https://www.jaeger-consulting.io/tfls_with_R.html
+https://www.jaeger-consulting.io/delayed_treatment_effect_time_to_event_analyses.html
 https://www.jaeger-consulting.io/reproducible_reports_R.html
+https://www.jaeger-consulting.io/tfls_with_R.html
 https://www.jaeger-consulting.io/about_me.html
 https://www.jaeger-consulting.io/ressources.html
 https://www.jaeger-consulting.io/contact.html
