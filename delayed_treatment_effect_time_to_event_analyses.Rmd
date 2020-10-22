@@ -3,6 +3,10 @@ pagetitle: "Delayed treatment effect in time-to-event endpoint"
 bibliography: references.bib
 ---
 
+```{r setup, echo = FALSE}
+R_code_to_run <- 0 # if 1, run all simulations; 0 if not to run all simulations
+```
+
 # Delayed treatment effect in time-to-event endpoint
 
 Immuno-oncology treatment candidates like immune checkpoint inhibitors and T cell therapies are rising fundamental challenges when designing and analyzing clinical trial data.
@@ -16,34 +20,40 @@ In this blog post, the consequence of delayed treatment effect will be evaluated
 
 ## 1. Introduction {#sec:Introduction}
 
-```{r echo = FALSE, message = FALSE, warning = FALSE}
+```{r introduction, echo = FALSE, message = FALSE, warning = FALSE}
 require(rpact)
-
-sampleSizeDuration <- data.frame(maxNumberOfSubjects = seq(from = 250,
-                                                           to = 450,
-                                                           by = 5),
-                                 accrualTime = NA,
-                                 studyDuration = NA,
-                                 numberOfEvents = NA)
-
-for (i in 1:dim(sampleSizeDuration)[1])
+if (R_code_to_run %in% 1)
 {
-   sampleSize <- getSampleSizeSurvival(sided = 1,
-                                       alpha = 0.025,
-                                       beta = 0.1,
-                                       median2 = 4,
-                                       hazardRatio = 0.65,
-                                       dropoutRate1 = 0.025,
-                                       dropoutRate2 = 0.025,
-                                       dropoutTime = 12,
-                                       accrualTime = c(0, 1, 2, 3, 4), 
-                                       accrualIntensity = c(2, 4, 8, 16, 32),
-                                       maxNumberOfSubjects = sampleSizeDuration $ maxNumberOfSubjects[i])
-   sampleSizeDuration $ accrualTime[i] <- sampleSize $ totalAccrualTime
-   sampleSizeDuration $ studyDuration[i] <- sampleSize $ maxStudyDuration
-   sampleSizeDuration $ numberOfEvents[i] <- sampleSize $ maxNumberOfEvents
-}
 
+   sampleSizeDuration <- data.frame(maxNumberOfSubjects = seq(from = 250,
+                                                              to = 450,
+                                                              by = 5),
+                                    accrualTime = NA,
+                                    studyDuration = NA,
+                                    numberOfEvents = NA)
+
+   for (i in 1:dim(sampleSizeDuration)[1])
+   {
+      sampleSize <- getSampleSizeSurvival(sided = 1,
+                                          alpha = 0.025,
+                                          beta = 0.1,
+                                          median2 = 4,
+                                          hazardRatio = 0.65,
+                                          dropoutRate1 = 0.025,
+                                          dropoutRate2 = 0.025,
+                                          dropoutTime = 12,
+                                          accrualTime = c(0, 1, 2, 3, 4), 
+                                          accrualIntensity = c(2, 4, 8, 16, 32),
+                                          maxNumberOfSubjects = sampleSizeDuration $ maxNumberOfSubjects[i])
+      sampleSizeDuration $ accrualTime[i] <- sampleSize $ totalAccrualTime
+      sampleSizeDuration $ studyDuration[i] <- sampleSize $ maxStudyDuration
+      sampleSizeDuration $ numberOfEvents[i] <- sampleSize $ maxNumberOfEvents
+   }
+} else
+{
+   load(file = 'G:/03_Projects/001_Website/jaeger-consulting.github.io/documents/delayed_treatment_effect_time_to_event_analyses.RData')
+   R_code_to_run <- 0
+}
 ```
 
 First, some basic elements will be provided in order to select an appropriate sample size for a superiority trial without interim analysis under the proportional hazard assumption. This will be put in practice with functions from the <a href=https://cran.r-project.org/web/packages/rpact/index.html>rpact</a> package [@Wassmer2019]. For additional hands-on use of this package, do not hesitate to visit <a href = https://www.rpact.org/vignettes>https://www.rpact.org/vignettes</a>.
@@ -64,13 +74,13 @@ As a basis for comparison through this post, let consider the following assumpti
 
 The above assumptions will lead to require a total of `r  ceiling(unique(sampleSizeDuration $ numberOfEvents))` PFS events to trigger the (final) analysis. The figure below shows the enrollment duration and the study duration with respect to the predefined number of subjects to be enrolled. Given the shape of the enrollment and study duration curves, targeting 350 subjects is reasonable and would lead to an enrollment duration of around `r round(x = sampleSizeDuration[sampleSizeDuration $maxNumberOfSubjects %in% 350, 'accrualTime'], digits = 1)` months and a study duration of around `r round(x = sampleSizeDuration[sampleSizeDuration $maxNumberOfSubjects %in% 350, 'studyDuration'], digits = 1)` months.
 
-```{r echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 5}
+```{r study_duration, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 5}
 require(ggplot2)
 require(tidyverse)
-data_int <- sampleSizeDuration[, c('maxNumberOfSubjects', 'accrualTime', 'studyDuration')] %>%
-               pivot_longer(!maxNumberOfSubjects, names_to = "Variable", values_to = "Duration") %>%
-               mutate(Variable = ifelse(Variable %in% 'accrualTime', 'Enrollment Duration', 'Study Duration'))
-p <- ggplot(data = data_int,
+data_study_duration <- sampleSizeDuration[, c('maxNumberOfSubjects', 'accrualTime', 'studyDuration')] %>%
+                          pivot_longer(!maxNumberOfSubjects, names_to = "Variable", values_to = "Duration") %>%
+                          mutate(Variable = ifelse(Variable %in% 'accrualTime', 'Enrollment Duration', 'Study Duration'))
+p <- ggplot(data = data_study_duration,
             mapping = aes(x = maxNumberOfSubjects,
                           y = Duration,
                           group = Variable)) +
@@ -79,7 +89,7 @@ p <- ggplot(data = data_int,
      xlab(label = 'Number of Subjects') +
      ylab(label = 'Duration (months)') +
      theme(legend.title = element_blank(),
-	        legend.position = c(0.9, 0.95),
+           legend.position = c(0.9, 0.95),
            legend.key = element_blank(),
            legend.background = element_blank())
 p
@@ -94,32 +104,35 @@ p
 
 Delayed treatment effect can be seen on the PFS curve as the time until separation of the PFS curve between the control and the experimental groups. The figure below shows for delayed treatment effects ranging from 0 month to 3 months by 0.5 month both the PFS curves (control in red and experimental in green) and hazard ratio (in dotted blue) when targeting the same absolute clinical benefit in median PFS. As clinical benefit is maintained despite the delayed treatment effect, the hazard ratio post the delayed treatment effect becomes smaller and smaller.
 
-```{r, echo = FALSE}
-median2 <- 4
-hr <- 0.65
-median1 <- median2 / hr
-lambda2 <- log(2) / median2
-T <- seq(from = 0, to = 3, by = 0.5)
-lambda1 <- (log(2) - lambda2 * T) /
-           (median1 - T)
-t_seq <- seq(from = 0,
-             to = round(x = sampleSizeDuration[sampleSizeDuration $maxNumberOfSubjects %in% 350, 'studyDuration'], digits = 1),
-             length.out = 10000)
-data_int <- NULL
-for (i in 1:length(T))
+```{r data_surv_abs_ben_maint, echo = FALSE}
+if (R_code_to_run %in% 1)
 {
-   data_int <- rbind(data_int,
-                     data.frame(dte = T[i],
-                                time = t_seq,
-                                hr = ifelse(test = (t_seq < T[i]), yes = 1, no = lambda1[i] / lambda2),
-                                control = exp(- lambda2 * t_seq),
-                                experimental = ifelse(test = (t_seq < T[i]),
-                                                      yes = exp(- lambda2 * t_seq),
-                                                      no = exp(- lambda2 * T[i] - lambda1[i] * (t_seq - T[i])))))
+   median2 <- 4
+   hr <- 0.65
+   median1 <- median2 / hr
+   lambda2 <- log(2) / median2
+   T <- seq(from = 0, to = 3, by = 0.5)
+   lambda1 <- (log(2) - lambda2 * T) /
+              (median1 - T)
+   t_seq <- seq(from = 0,
+                to = round(x = sampleSizeDuration[sampleSizeDuration $maxNumberOfSubjects %in% 350, 'studyDuration'], digits = 1),
+                length.out = 10000)
+   data_surv_abs_ben_maint <- NULL
+   for (i in 1:length(T))
+   {
+      data_surv_abs_ben_maint <- rbind(data_surv_abs_ben_maint,
+                                       data.frame(dte = T[i],
+                                       time = t_seq,
+                                       hr = ifelse(test = (t_seq < T[i]), yes = 1, no = lambda1[i] / lambda2),
+                                       control = exp(- lambda2 * t_seq),
+                                       experimental = ifelse(test = (t_seq < T[i]),
+                                                             yes = exp(- lambda2 * t_seq),
+                                                             no = exp(- lambda2 * T[i] - lambda1[i] * (t_seq - T[i])))))
+   }
 }
 ```
-```{r, echo = FALSE, fig.width = 10, fig.height = 12}
-p <- ggplot(data = data_int,
+```{r plot_surv_abs_ben_maint, echo = FALSE, fig.width = 10, fig.height = 12}
+p <- ggplot(data = data_surv_abs_ben_maint,
             mapping = aes(x = time,
                           y = control)) +
      geom_line(mapping = aes(x = time,
@@ -145,65 +158,69 @@ In order to evaluate the impact of this delayed treatment effect using a standar
 
 On the figure below, when maintaining the absolute clinical benefit on median PFS, one can see that larger value of the delayed treatment effect is associated with marginally longer study duration. The power has a U shape, first going down up to around 2 months for the delayed treatment effect and then increasing back. This could be explained by the hazard ratio post delayed treatment starting to compensate the delayed treatment effect.
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE, }
-maxNumberOfIterations <- 2e5
 
-median2 <- 4
-hr <- 0.65
-median1 <- median2 / hr
-lambda2 <- log(2) / median2
-T <- seq(from = 0, to = 3, by = 0.125)
-lambda1 <- (log(2) - lambda2 * T) /
-           (median1 - T)
-
-data_int <- NULL
-for (i in 1:length(T))
+```{r data_sim_surv_abs_ben_maint, echo = FALSE, message = FALSE, warning = FALSE}
+if (R_code_to_run %in% 1)
 {
-   if (i > 1)
+   maxNumberOfIterations <- 3e5
+
+   median2 <- 4
+   hr <- 0.65
+   median1 <- median2 / hr
+   lambda2 <- log(2) / median2
+   T <- seq(from = 0, to = 3, by = 0.125)
+   lambda1 <- (log(2) - lambda2 * T) /
+              (median1 - T)
+
+   data_sim_surv_abs_ben_maint <- NULL
+   for (i in 1:length(T))
    {
-      simulation_result_int <- getSimulationSurvival(sided = 1,
-                                                     alpha = 0.025,
-                                                     piecewiseSurvivalTime = c(0, T[i]),
-                                                     lambda1 = c(lambda2, lambda1[i]),
-                                                     lambda2 = c(lambda2, lambda2),
-                                                     dropoutRate1 = 0.025,
-                                                     dropoutRate2 = 0.025,
-                                                     dropoutTime = 12,
-                                                     accrualTime = c(0, 1, 2, 3, 4), 
-                                                     accrualIntensity = c(2, 4, 8, 16, 32),
-                                                     plannedEvents = ceiling(unique(sampleSizeDuration $ numberOfEvents)),
-                                                     directionUpper = FALSE,
-                                                     maxNumberOfSubjects = 350,
-                                                     maxNumberOfIterations = maxNumberOfIterations,
-                                                     longTimeSimulationAllowed = TRUE)
-   } else
-   {
-      simulation_result_int <- getSimulationSurvival(sided = 1,
-                                                     alpha = 0.025,
-                                                     lambda1 = lambda1[i],
-                                                     lambda2 = lambda2,
-                                                     dropoutRate1 = 0.025,
-                                                     dropoutRate2 = 0.025,
-                                                     dropoutTime = 12,
-                                                     accrualTime = c(0, 1, 2, 3, 4), 
-                                                     accrualIntensity = c(2, 4, 8, 16, 32),
-                                                     plannedEvents = ceiling(unique(sampleSizeDuration $ numberOfEvents)),
-                                                     directionUpper = FALSE,
-                                                     maxNumberOfSubjects = 350,
-                                                     maxNumberOfIterations = maxNumberOfIterations,
-                                                     longTimeSimulationAllowed = TRUE)
+      if (i > 1)
+      {
+         simulation_result_int <- getSimulationSurvival(sided = 1,
+                                                        alpha = 0.025,
+                                                        piecewiseSurvivalTime = c(0, T[i]),
+                                                        lambda1 = c(lambda2, lambda1[i]),
+                                                        lambda2 = c(lambda2, lambda2),
+                                                        dropoutRate1 = 0.025,
+                                                        dropoutRate2 = 0.025,
+                                                        dropoutTime = 12,
+                                                        accrualTime = c(0, 1, 2, 3, 4), 
+                                                        accrualIntensity = c(2, 4, 8, 16, 32),
+                                                        plannedEvents = ceiling(unique(sampleSizeDuration $ numberOfEvents)),
+                                                        directionUpper = FALSE,
+                                                        maxNumberOfSubjects = 350,
+                                                        maxNumberOfIterations = maxNumberOfIterations,
+                                                        longTimeSimulationAllowed = TRUE)
+      } else
+      {
+         simulation_result_int <- getSimulationSurvival(sided = 1,
+                                                        alpha = 0.025,
+                                                        lambda1 = lambda1[i],
+                                                        lambda2 = lambda2,
+                                                        dropoutRate1 = 0.025,
+                                                        dropoutRate2 = 0.025,
+                                                        dropoutTime = 12,
+                                                        accrualTime = c(0, 1, 2, 3, 4), 
+                                                        accrualIntensity = c(2, 4, 8, 16, 32),
+                                                        plannedEvents = ceiling(unique(sampleSizeDuration $ numberOfEvents)),
+                                                        directionUpper = FALSE,
+                                                        maxNumberOfSubjects = 350,
+                                                        maxNumberOfIterations = maxNumberOfIterations,
+                                                        longTimeSimulationAllowed = TRUE)
+      }
+      data_sim_surv_abs_ben_maint <- rbind(data_sim_surv_abs_ben_maint,
+                                           data.frame(dte = T[i],
+                                                      power = simulation_result_int $ overallReject,
+                                                      analysisTime = simulation_result_int $ analysisTime))
    }
-   data_int <- rbind(data_int,
-                     data.frame(dte = T[i],
-                                power = simulation_result_int $ overallReject,
-                                analysisTime = simulation_result_int $ analysisTime))
+   data_sim_surv_abs_ben_maint <- data_sim_surv_abs_ben_maint %>%
+                                     pivot_longer(!dte, names_to = 'variable', values_to = 'value') %>%
+                                     mutate(variable = ifelse(variable %in% 'power', 'Power', 'Study Duration'))
 }
-data_int <- data_int %>%
-               pivot_longer(!dte, names_to = 'variable', values_to = 'value') %>%
-               mutate(variable = ifelse(variable %in% 'power', 'Power', 'Study Duration'))
 ```
-```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 5}
-p <- ggplot(data = data_int,
+```{r plot_sim_surv_abs_ben_maint, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 5}
+p <- ggplot(data = data_sim_surv_abs_ben_maint,
             mapping = aes(x = dte,
                           y = value,
                           color = variable,
@@ -223,30 +240,33 @@ p
 
 The figure below shows for delayed treatment effects ranging from 0 month to 3 months by 0.5 month both the PFS curves (control in red and experimental in green) and hazard ratio (in dotted blue) when the hazard ratio post the delayed treatment effect is maintained to 0.65 (the one used in [Section 1](#sec:Introduction)). In this situation, the absolute clinical benefit in term of improvement in median PFS from the control to the experimental is decreasing with increasing delayed treatment effect.
 
-```{r, echo = FALSE}
-median2 <- 4
-lambda2 <- log(2) / median2
-hr <- 0.65
-lambda1 <- hr * lambda2
-T <- seq(from = 0, to = 3, by = 0.5)
-t_seq <- seq(from = 0,
-             to = round(x = sampleSizeDuration[sampleSizeDuration $maxNumberOfSubjects %in% 350, 'studyDuration'], digits = 1),
-             length.out = 10000)
-data_int <- NULL
-for (i in 1:length(T))
+```{r data_surv_hr_ben_maint, echo = FALSE}
+if (R_code_to_run %in% 1)
 {
-   data_int <- rbind(data_int,
-                     data.frame(dte = T[i],
-                                time = t_seq,
-                                hr = ifelse(test = (t_seq < T[i]), yes = 1, no = hr),
-                                control = exp(- lambda2 * t_seq),
-                                experimental = ifelse(test = (t_seq < T[i]),
-                                                      yes = exp(- lambda2 * t_seq),
-                                                      no = exp(- lambda2 * T[i] - lambda1 * (t_seq - T[i])))))
+   median2 <- 4
+   lambda2 <- log(2) / median2
+   hr <- 0.65
+   lambda1 <- hr * lambda2
+   T <- seq(from = 0, to = 3, by = 0.5)
+   t_seq <- seq(from = 0,
+                to = round(x = sampleSizeDuration[sampleSizeDuration $maxNumberOfSubjects %in% 350, 'studyDuration'], digits = 1),
+                length.out = 10000)
+   data_surv_hr_ben_maint <- NULL
+   for (i in 1:length(T))
+   {
+      data_surv_hr_ben_maint <- rbind(data_surv_hr_ben_maint,
+                                      data.frame(dte = T[i],
+                                                 time = t_seq,
+                                                 hr = ifelse(test = (t_seq < T[i]), yes = 1, no = hr),
+                                                 control = exp(- lambda2 * t_seq),
+                                                 experimental = ifelse(test = (t_seq < T[i]),
+                                                                       yes = exp(- lambda2 * t_seq),
+                                                                       no = exp(- lambda2 * T[i] - lambda1 * (t_seq - T[i])))))
+   }
 }
 ```
-```{r, echo = FALSE, fig.width = 10, fig.height = 12}
-p <- ggplot(data = data_int,
+```{r plot_surv_hr_ben_maint, echo = FALSE, fig.width = 10, fig.height = 12}
+p <- ggplot(data = data_surv_hr_ben_maint,
             mapping = aes(x = time,
                           y = control)) +
      geom_line(mapping = aes(x = time,
@@ -272,61 +292,64 @@ The impact of the delayed treatment effect when maintaining the hazard ratio ben
 
 On the figure below, when maintaining the hazard ratio benefit post delayed treatment effect, one can see that both the power and the study duration is decreasing with increasing delayed treatment effect. This can easily be explained by increasing delayed treatment effect not compensated by decreasing hazard ratio (that were observed in previous subsection). In this setting, the impact of delayed treatment effect is dramatic and will lead to underpowered trials.
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-median2 <- 4
-lambda2 <- log(2) / median2
-hr <- 0.65
-lambda1 <- hr * lambda2
-T <- seq(from = 0, to = 3, by = 0.125)
-
-data_int <- NULL
-for (i in 1:length(T))
+```{r data_sim_surv_hr_ben_maint, echo = FALSE, message = FALSE, warning = FALSE}
+if (R_code_to_run %in% 1)
 {
-   if (i > 1)
+   median2 <- 4
+   lambda2 <- log(2) / median2
+   hr <- 0.65
+   lambda1 <- hr * lambda2
+   T <- seq(from = 0, to = 3, by = 0.125)
+
+   data_sim_surv_hr_ben_maint <- NULL
+   for (i in 1:length(T))
    {
-      simulation_result_int <- getSimulationSurvival(sided = 1,
-                                                     alpha = 0.025,
-                                                     piecewiseSurvivalTime = c(0, T[i]),
-                                                     lambda1 = c(lambda2, lambda1),
-                                                     lambda2 = c(lambda2, lambda2),
-                                                     dropoutRate1 = 0.025,
-                                                     dropoutRate2 = 0.025,
-                                                     dropoutTime = 12,
-                                                     accrualTime = c(0, 1, 2, 3, 4), 
-                                                     accrualIntensity = c(2, 4, 8, 16, 32),
-                                                     plannedEvents = ceiling(unique(sampleSizeDuration $ numberOfEvents)),
-                                                     directionUpper = FALSE,
-                                                     maxNumberOfSubjects = 350,
-                                                     maxNumberOfIterations = maxNumberOfIterations,
-                                                     longTimeSimulationAllowed = TRUE)
-   } else
-   {
-      simulation_result_int <- getSimulationSurvival(sided = 1,
-                                                     alpha = 0.025,
-                                                     lambda1 = lambda1,
-                                                     lambda2 = lambda2,
-                                                     dropoutRate1 = 0.025,
-                                                     dropoutRate2 = 0.025,
-                                                     dropoutTime = 12,
-                                                     accrualTime = c(0, 1, 2, 3, 4), 
-                                                     accrualIntensity = c(2, 4, 8, 16, 32),
-                                                     plannedEvents = ceiling(unique(sampleSizeDuration $ numberOfEvents)),
-                                                     directionUpper = FALSE,
-                                                     maxNumberOfSubjects = 350,
-                                                     maxNumberOfIterations = maxNumberOfIterations,
-                                                     longTimeSimulationAllowed = TRUE)
+      if (i > 1)
+      {
+         simulation_result_int <- getSimulationSurvival(sided = 1,
+                                                        alpha = 0.025,
+                                                        piecewiseSurvivalTime = c(0, T[i]),
+                                                        lambda1 = c(lambda2, lambda1),
+                                                        lambda2 = c(lambda2, lambda2),
+                                                        dropoutRate1 = 0.025,
+                                                        dropoutRate2 = 0.025,
+                                                        dropoutTime = 12,
+                                                        accrualTime = c(0, 1, 2, 3, 4), 
+                                                        accrualIntensity = c(2, 4, 8, 16, 32),
+                                                        plannedEvents = ceiling(unique(sampleSizeDuration $ numberOfEvents)),
+                                                        directionUpper = FALSE,
+                                                        maxNumberOfSubjects = 350,
+                                                        maxNumberOfIterations = maxNumberOfIterations,
+                                                        longTimeSimulationAllowed = TRUE)
+      } else
+      {
+         simulation_result_int <- getSimulationSurvival(sided = 1,
+                                                        alpha = 0.025,
+                                                        lambda1 = lambda1,
+                                                        lambda2 = lambda2,
+                                                        dropoutRate1 = 0.025,
+                                                        dropoutRate2 = 0.025,
+                                                        dropoutTime = 12,
+                                                        accrualTime = c(0, 1, 2, 3, 4), 
+                                                        accrualIntensity = c(2, 4, 8, 16, 32),
+                                                        plannedEvents = ceiling(unique(sampleSizeDuration $ numberOfEvents)),
+                                                        directionUpper = FALSE,
+                                                        maxNumberOfSubjects = 350,
+                                                        maxNumberOfIterations = maxNumberOfIterations,
+                                                        longTimeSimulationAllowed = TRUE)
+      }
+      data_sim_surv_hr_ben_maint <- rbind(data_sim_surv_hr_ben_maint,
+                                          data.frame(dte = T[i],
+                                                     power = simulation_result_int $ overallReject,
+                                                     analysisTime = simulation_result_int $ analysisTime))
    }
-   data_int <- rbind(data_int,
-                     data.frame(dte = T[i],
-                                power = simulation_result_int $ overallReject,
-                                analysisTime = simulation_result_int $ analysisTime))
+   data_sim_surv_hr_ben_maint <- data_sim_surv_hr_ben_maint %>%
+                                    pivot_longer(!dte, names_to = 'variable', values_to = 'value') %>%
+                                    mutate(variable = ifelse(variable %in% 'power', 'Power', 'Study Duration'))
 }
-data_int <- data_int %>%
-               pivot_longer(!dte, names_to = 'variable', values_to = 'value') %>%
-               mutate(variable = ifelse(variable %in% 'power', 'Power', 'Study Duration'))
 ```
-```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 5}
-p <- ggplot(data = data_int,
+```{r plot_sim_surv_hr_ben_maint, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 5}
+p <- ggplot(data = data_sim_surv_hr_ben_maint,
             mapping = aes(x = dte,
                           y = value,
                           color = variable,
@@ -346,7 +369,7 @@ p
 
 ### 3.1 Number of PFS events required
 
-```{r, echo = FALSE}
+```{r gsd, echo = FALSE}
 design <- getDesignGroupSequential(sided = 1,
                                    alpha = 0.025,
                                    beta = 0.1,
@@ -373,69 +396,72 @@ In order to compute the number of PFS events required, one should first use the 
 
 The figure below shows out of the simulations the estimated probability to stop for futility and the estimated power with respect to delayed treatment effect when maintaining the absolute clinical benefit on median PFS. Versus [Section 2.1](#sec:fixed_absolute_benefit), one can see that the power is only decreasing when the delayed treatment effect is increasing. This is most probably due to the futility met while all events are already observed before being able to benefit from smaller hazard ratio post delayed treatment effect.
 
-```{r, echo = FALSE}
-median2 <- 4
-hr <- 0.65
-median1 <- median2 / hr
-lambda2 <- log(2) / median2
-T <- seq(from = 0, to = 3, by = 0.125)
-lambda1 <- (log(2) - lambda2 * T) /
-           (median1 - T)
-
-data_int <- NULL
-for (i in 1:length(T))
+```{r data_sim_surv_abs_ben_maint_gsd, echo = FALSE}
+if (R_code_to_run %in% 1)
 {
-   if (i > 1)
+   median2 <- 4
+   hr <- 0.65
+   median1 <- median2 / hr
+   lambda2 <- log(2) / median2
+   T <- seq(from = 0, to = 3, by = 0.125)
+   lambda1 <- (log(2) - lambda2 * T) /
+              (median1 - T)
+
+   data_sim_surv_abs_ben_maint_gsd <- NULL
+   for (i in 1:length(T))
    {
-      simulation_result_int <- getSimulationSurvival(design = design,
-                                                     piecewiseSurvivalTime = c(0, T[i]),
-                                                     lambda1 = c(lambda2, lambda1[i]),
-                                                     lambda2 = c(lambda2, lambda2),
-                                                     dropoutRate1 = 0.025,
-                                                     dropoutRate2 = 0.025,
-                                                     dropoutTime = 12,
-                                                     accrualTime = c(0, 1, 2, 3, 4), 
-                                                     accrualIntensity = c(2, 4, 8, 16, 32),
-                                                     plannedEvents = c(ceiling(sampleSize $ eventsPerStage)),
-                                                     directionUpper = FALSE,
-                                                     maxNumberOfSubjects = 350,
-                                                     maxNumberOfIterations = maxNumberOfIterations,
-                                                     longTimeSimulationAllowed = TRUE)
-   } else
-   {
-      simulation_result_int <- getSimulationSurvival(design = design,
-                                                     lambda1 = lambda1[i],
-                                                     lambda2 = lambda2,
-                                                     dropoutRate1 = 0.025,
-                                                     dropoutRate2 = 0.025,
-                                                     dropoutTime = 12,
-                                                     accrualTime = c(0, 1, 2, 3, 4), 
-                                                     accrualIntensity = c(2, 4, 8, 16, 32),
-                                                     plannedEvents = c(ceiling(sampleSize $ eventsPerStage)),
-                                                     directionUpper = FALSE,
-                                                     maxNumberOfSubjects = 350,
-                                                     maxNumberOfIterations = maxNumberOfIterations,
-                                                     longTimeSimulationAllowed = TRUE)
+      if (i > 1)
+      {
+         simulation_result_int <- getSimulationSurvival(design = design,
+                                                        piecewiseSurvivalTime = c(0, T[i]),
+                                                        lambda1 = c(lambda2, lambda1[i]),
+                                                        lambda2 = c(lambda2, lambda2),
+                                                        dropoutRate1 = 0.025,
+                                                        dropoutRate2 = 0.025,
+                                                        dropoutTime = 12,
+                                                        accrualTime = c(0, 1, 2, 3, 4), 
+                                                        accrualIntensity = c(2, 4, 8, 16, 32),
+                                                        plannedEvents = c(ceiling(sampleSize $ eventsPerStage)),
+                                                        directionUpper = FALSE,
+                                                        maxNumberOfSubjects = 350,
+                                                        maxNumberOfIterations = maxNumberOfIterations,
+                                                        longTimeSimulationAllowed = TRUE)
+      } else
+      {
+         simulation_result_int <- getSimulationSurvival(design = design,
+                                                        lambda1 = lambda1[i],
+                                                        lambda2 = lambda2,
+                                                        dropoutRate1 = 0.025,
+                                                        dropoutRate2 = 0.025,
+                                                        dropoutTime = 12,
+                                                        accrualTime = c(0, 1, 2, 3, 4), 
+                                                        accrualIntensity = c(2, 4, 8, 16, 32),
+                                                        plannedEvents = c(ceiling(sampleSize $ eventsPerStage)),
+                                                        directionUpper = FALSE,
+                                                        maxNumberOfSubjects = 350,
+                                                        maxNumberOfIterations = maxNumberOfIterations,
+                                                        longTimeSimulationAllowed = TRUE)
+      }
+      data_sim_surv_abs_ben_maint_gsd <- rbind(data_sim_surv_abs_ben_maint_gsd,
+                                               data.frame(dte = T[i],
+                                                          futilityStop = simulation_result_int $ futilityStop,
+                                                          power = simulation_result_int $ overallReject,
+                                                          analysisTimeInterim = simulation_result_int $ analysisTime[1, 1],
+                                                          analysisTimeFinal = simulation_result_int $ analysisTime[2, 1]))
    }
-   data_int <- rbind(data_int,
-                     data.frame(dte = T[i],
-                                futilityStop = simulation_result_int $ futilityStop,
-                                power = simulation_result_int $ overallReject,
-                                analysisTimeInterim = simulation_result_int $ analysisTime[1, 1],
-                                analysisTimeFinal = simulation_result_int $ analysisTime[2, 1]))
+   data_sim_surv_abs_ben_maint_gsd <- data_sim_surv_abs_ben_maint_gsd %>%
+                                         pivot_longer(!dte, names_to = 'variable', values_to = 'value') %>%
+                                         mutate(variable = ifelse(variable %in% 'power',
+                                                                  'Power',
+                                                                  ifelse(variable %in% 'analysisTimeInterim',
+                                                                         'Interim Timing',
+                                                                         ifelse(variable %in% 'analysisTimeFinal',
+                                                                                'Study Duration',
+                                                                                'Futility'))))
 }
-data_int <- data_int %>%
-               pivot_longer(!dte, names_to = 'variable', values_to = 'value') %>%
-               mutate(variable = ifelse(variable %in% 'power',
-                                        'Power',
-                                        ifelse(variable %in% 'analysisTimeInterim',
-                                               'Interim Timing',
-                                               ifelse(variable %in% 'analysisTimeFinal',
-                                                      'Study Duration',
-                                                      'Futility'))))
 ```
-```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 5}
-p <- ggplot(data = data_int[data_int $ variable %in% c('Futility', 'Power'), ],
+```{r plot_sim_surv_abs_ben_maint_gsd, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 5}
+p <- ggplot(data = data_sim_surv_abs_ben_maint_gsd[data_sim_surv_abs_ben_maint_gsd $ variable %in% c('Futility', 'Power'), ],
             mapping = aes(x = dte,
                           y = value,
                           color = variable,
@@ -455,67 +481,70 @@ p
 
 The figure below shows out of the simulations the estimated probability to stop for futility and the estimated power with respect to delayed treatment effect when maintaining the hazard ratio benefit post delayed treatment effect at 0.65. In this setting, the consequences of delayed treatment effect are dramatic, even for small delayed treatment effect. This is due to a combination of both the interim analysis leading to high probability to stop for futility and a hazard ratio post delayed treatment effect not compensating latency in the separation of the PFS curves.
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-median2 <- 4
-lambda2 <- log(2) / median2
-hr <- 0.65
-lambda1 <- hr * lambda2
-T <- seq(from = 0, to = 3, by = 0.125)
-
-data_int <- NULL
-for (i in 1:length(T))
+```{r data_sim_surv_hr_ben_maint_gsd, echo = FALSE, message = FALSE, warning = FALSE}
+if (R_code_to_run %in% 1)
 {
-   if (i > 1)
+   median2 <- 4
+   lambda2 <- log(2) / median2
+   hr <- 0.65
+   lambda1 <- hr * lambda2
+   T <- seq(from = 0, to = 3, by = 0.125)
+
+   data_sim_surv_hr_ben_maint_gsd <- NULL
+   for (i in 1:length(T))
    {
-      simulation_result_int <- getSimulationSurvival(design = design,
-                                                     piecewiseSurvivalTime = c(0, T[i]),
-                                                     lambda1 = c(lambda2, lambda1),
-                                                     lambda2 = c(lambda2, lambda2),
-                                                     dropoutRate1 = 0.025,
-                                                     dropoutRate2 = 0.025,
-                                                     dropoutTime = 12,
-                                                     accrualTime = c(0, 1, 2, 3, 4), 
-                                                     accrualIntensity = c(2, 4, 8, 16, 32),
-                                                     plannedEvents = c(ceiling(sampleSize $ eventsPerStage)),
-                                                     directionUpper = FALSE,
-                                                     maxNumberOfSubjects = 350,
-                                                     maxNumberOfIterations = maxNumberOfIterations,
-                                                     longTimeSimulationAllowed = TRUE)
-   } else
-   {
-      simulation_result_int <- getSimulationSurvival(design = design,
-                                                     lambda1 = lambda1,
-                                                     lambda2 = lambda2,
-                                                     dropoutRate1 = 0.025,
-                                                     dropoutRate2 = 0.025,
-                                                     dropoutTime = 12,
-                                                     accrualTime = c(0, 1, 2, 3, 4), 
-                                                     accrualIntensity = c(2, 4, 8, 16, 32),
-                                                     plannedEvents = c(ceiling(sampleSize $ eventsPerStage)),
-                                                     directionUpper = FALSE,
-                                                     maxNumberOfSubjects = 350,
-                                                     maxNumberOfIterations = maxNumberOfIterations,
-                                                     longTimeSimulationAllowed = TRUE)
+      if (i > 1)
+      {
+         simulation_result_int <- getSimulationSurvival(design = design,
+                                                        piecewiseSurvivalTime = c(0, T[i]),
+                                                        lambda1 = c(lambda2, lambda1),
+                                                        lambda2 = c(lambda2, lambda2),
+                                                        dropoutRate1 = 0.025,
+                                                        dropoutRate2 = 0.025,
+                                                        dropoutTime = 12,
+                                                        accrualTime = c(0, 1, 2, 3, 4), 
+                                                        accrualIntensity = c(2, 4, 8, 16, 32),
+                                                        plannedEvents = c(ceiling(sampleSize $ eventsPerStage)),
+                                                        directionUpper = FALSE,
+                                                        maxNumberOfSubjects = 350,
+                                                        maxNumberOfIterations = maxNumberOfIterations,
+                                                        longTimeSimulationAllowed = TRUE)
+      } else
+      {
+         simulation_result_int <- getSimulationSurvival(design = design,
+                                                        lambda1 = lambda1,
+                                                        lambda2 = lambda2,
+                                                        dropoutRate1 = 0.025,
+                                                        dropoutRate2 = 0.025,
+                                                        dropoutTime = 12,
+                                                        accrualTime = c(0, 1, 2, 3, 4), 
+                                                        accrualIntensity = c(2, 4, 8, 16, 32),
+                                                        plannedEvents = c(ceiling(sampleSize $ eventsPerStage)),
+                                                        directionUpper = FALSE,
+                                                        maxNumberOfSubjects = 350,
+                                                        maxNumberOfIterations = maxNumberOfIterations,
+                                                        longTimeSimulationAllowed = TRUE)
+      }
+      data_sim_surv_hr_ben_maint_gsd <- rbind(data_sim_surv_hr_ben_maint_gsd,
+                                              data.frame(dte = T[i],
+                                                         futilityStop = simulation_result_int $ futilityStop,
+                                                         power = simulation_result_int $ overallReject,
+                                                         analysisTimeInterim = simulation_result_int $ analysisTime[1, 1],
+                                                         analysisTimeFinal = simulation_result_int $ analysisTime[2, 1]))
    }
-   data_int <- rbind(data_int,
-                     data.frame(dte = T[i],
-                                futilityStop = simulation_result_int $ futilityStop,
-                                power = simulation_result_int $ overallReject,
-                                analysisTimeInterim = simulation_result_int $ analysisTime[1, 1],
-                                analysisTimeFinal = simulation_result_int $ analysisTime[2, 1]))
+   data_sim_surv_hr_ben_maint_gsd <- data_sim_surv_hr_ben_maint_gsd %>%
+                                        pivot_longer(!dte, names_to = 'variable', values_to = 'value') %>%
+                                        mutate(variable = ifelse(variable %in% 'power',
+                                                                 'Power',
+                                                                 ifelse(variable %in% 'analysisTimeInterim',
+                                                                        'Interim Timing',
+                                                                        ifelse(variable %in% 'analysisTimeFinal',
+                                                                               'Study Duration',
+                                                                               'Futility'))))
 }
-data_int <- data_int %>%
-               pivot_longer(!dte, names_to = 'variable', values_to = 'value') %>%
-               mutate(variable = ifelse(variable %in% 'power',
-                                        'Power',
-                                        ifelse(variable %in% 'analysisTimeInterim',
-                                               'Interim Timing',
-                                               ifelse(variable %in% 'analysisTimeFinal',
-                                                      'Study Duration',
-                                                      'Futility'))))
 ```
-```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 5}
-p <- ggplot(data = data_int[data_int $ variable %in% c('Futility', 'Power'), ],
+```{r plot_sim_surv_hr_ben_maint_gsd, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 5}
+p <- ggplot(data = data_sim_surv_hr_ben_maint_gsd[data_sim_surv_hr_ben_maint_gsd $ variable %in% c('Futility', 'Power'), ],
             mapping = aes(x = dte,
                           y = value,
                           color = variable,
@@ -528,8 +557,14 @@ p <- ggplot(data = data_int[data_int $ variable %in% c('Futility', 'Power'), ],
 p
 ```
 
-<br>
+```{r save, echo = FALSE}
+if (R_code_to_run %in% 1)
+{
+   save.image('G:/03_Projects/001_Website/jaeger-consulting.github.io/documents/delayed_treatment_effect_time_to_event_analyses.RData')
+}
+```
 
+<br>
 
 ## 4. Conclusion
 
