@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Sample size, allocation ratio and prior information</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link rel="shortcut icon" type="image/png" href="images/favicon.png">
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-167561397-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-167561397-1');
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="bootstrap.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"><img id="logo" style="position:absolute; top:5px; height: 60px;" src="images/logo.png"/></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Services
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="bayesian_approach.html">Bayesian Approach</a>
+    </li>
+    <li>
+      <a href="adaptive_design.html">Adaptive Design</a>
+    </li>
+    <li>
+      <a href="quantitative_decision_making.html">Quantitative Decision-Making</a>
+    </li>
+    <li>
+      <a href="biometrics_services.html">Biometrics Services</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Blog
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="sample_size_allocation_ratio_prior_information.html">Sample size, allocation ratio and prior information</a>
+    </li>
+    <li>
+      <a href="delayed_treatment_effect_time_to_event_analyses.html">Delayed treatment effect in time-to-event endpoint</a>
+    </li>
+    <li>
+      <a href="reproducible_reports_R.html">Reproducible reports with R</a>
+    </li>
+    <li>
+      <a href="tfls_with_R.html">Tables, figures and listings with R</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="about_me.html">About Me</a>
+</li>
+<li>
+  <a href="ressources.html">Ressources</a>
+</li>
+<li>
+  <a href="contact.html">Contact</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+<p><br><br></p>
+
+<div class="fluid-row" id="header">
+
+
+
+
+</div>
+
+
+<div id="sample-size-allocation-ratio-and-prior-information" class="section level1">
+<h1>Sample size, allocation ratio and prior information</h1>
+<p>Goal of this blog post is to illustrate on the normal context the impact of prior information on the optimal sample size and allocation ratio between a control and an experimental arm to target specific set of operational characteristics in a superiority setting.</p>
+<p>The blog post will be structured as followed. First, sample size in a weakly informative setting with equal allocation will be presented in order to target some operational characteristics. Then, under the same overall sample size, varying allocation ratio between the control and the experimental arm will be evaluated in the same weakly informative setting and in presence of prior information for the control arm mean. Finally, overall sample size and allocation ratio will be optimized in presence of the same informative prior for the control arm mean.</p>
+<p>This blog post will not cover the concept of Bayesian assurance nor stress out techniques to handle potential data-prior conflict.</p>
+<p><br></p>
+<div id="introduction" class="section level2">
+<h2>1. Introduction</h2>
+<div id="general-setting" class="section level3">
+<h3>1.1. General setting</h3>
+<p>Let’s assumed that we are interested in evaluating the benefit of being under an experimental product versus a control product on a normally distributed endpoint <span class="math inline">\(y\)</span>. To do so, participants will be randomized and assigned to receive either the control or the experimental product.</p>
+<p>In order to quantitatively evaluate the benefit of receiving the experimental product versus the control product, let’s consider the following model:</p>
+<p><span class="math display">\[
+\begin{eqnarray}
+y_{ij} | \mu_{i},\tau_{i} &amp;\sim&amp; \mathcal{N}\left(\mu_{i}, \tau_{i}^{-1}\right) \\
+\mu_{i} &amp;\sim&amp; \mathcal{N}\left(m_{i},p_{i}^{-1}\right) \\
+\tau_{i} &amp;\sim&amp; \mathcal{Ga}\left(a_{i}, b_{i}\right)
+\end{eqnarray}
+\]</span> where:</p>
+<ul>
+<li><span class="math inline">\(y_{ij}\)</span> is the <span class="math inline">\(j\)</span>-th observation in the <span class="math inline">\(i\)</span>-th arm of the variable of interest, <span class="math inline">\(i=1\)</span> is for experimental arm and <span class="math inline">\(i=2\)</span> for the control arm, with <span class="math inline">\(j=1, ..., n_{i}\)</span> where <span class="math inline">\(n_{i}\)</span> is the number of observations in the <span class="math inline">\(i\)</span>-th arm;</li>
+<li><span class="math inline">\(\mu_{i}\)</span> and <span class="math inline">\(\tau_{i}\)</span> are the mean and precision (inverse-variance) in the <span class="math inline">\(i\)</span>-th arm of the normally distributed variable of interest;</li>
+<li><span class="math inline">\(m_{i}\)</span> and <span class="math inline">\(p_{i}\)</span> are the mean and precision of the normal prior distribution for the mean <span class="math inline">\(\mu_{i}\)</span>;</li>
+<li><span class="math inline">\(a_{i}\)</span> and <span class="math inline">\(b_{i}\)</span> are the shape and rate of the gamma prior distribution for the precision <span class="math inline">\(\tau_{i}\)</span>.</li>
+</ul>
+<p>The choice of the prior distribution for the mean parameters <span class="math inline">\(\mu_{i}\)</span> and the precision parameters <span class="math inline">\(\tau_{i}\)</span> will not be discussed in this blog post. Values for those parameters will be set in each subsequent section.</p>
+<p>The posterior probability <span class="math inline">\(P\left(\delta = \mu_{1} - \mu_{2} \gt 0 | \mathcal{D}\right)\)</span> indicates the level of evidence that the mean parameter in the experimental arm is larger than the mean parameter in the control arm given the observed set of data <span class="math inline">\(\mathcal{D}\)</span>.</p>
+<p><br></p>
+</div>
+<div id="sec:assumptions_target_operational_characteristics" class="section level3">
+<h3>1.2. Assumptions and target operational characteristics</h3>
+<p>Sample size and power calculation will be done via simulations. The following assumptions and target operational characteristics will be considered through the subsequent section:</p>
+<ul>
+<li>A total of 20000 datasets will be generated for each simulation scenario;</li>
+<li>Normal data will be generated using the <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/Normal.html">rnorm</a> function, with:
+<ul>
+<li>mean set to 7 in the experimental arm and 5 in the control arm;</li>
+<li>standard deviation set to 2 in the experimental arm and 2 in the control arm;</li>
+</ul></li>
+<li>For a given simulated dataset, experimental arm will be stated as superior to the control arm if <span class="math inline">\(P\left(\delta = \mu_{1} - \mu_{2} \gt 0 | \mathcal{D}\right)\)</span> is larger than 0.975;</li>
+<li>For a given sample size, power will be computed as the proportion over the 20000 simulated datasets for which superiority of the experimental arm over the control arm can be stated;</li>
+<li>When sample size is to be calculated for a target power (e.g. 80 %), it will represent the smallest sample size out of a search grid for which the power is above this target.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="sec:sample_size_equal_allocation_ratio" class="section level3">
+<h3>1.3. Sample size with equal allocation ratio with weakly informative priors</h3>
+<p>As mentioned in <a href="#sec:assumptions_target_operational_characteristics">Section 1.2</a>, sample size calculation is based on a search grid. With respect to the prior distribution for <span class="math inline">\(\mu_{i}\)</span> and <span class="math inline">\(\tau_{i}\)</span>, the following parameters are considered:</p>
+<ul>
+<li><span class="math inline">\(m_{i} = 0\)</span> and <span class="math inline">\(p_{i} = 10^{-6}\)</span>, leading to a very flat normal prior for the mean parameter in the control and experimental arm;</li>
+<li><span class="math inline">\(a_{i} = b_{i} = 10^{-6}\)</span>, leading to a prior for the precision parameter with mean 1 and variance 10<sup>6</sup> in the control and experimental arm.</li>
+</ul>
+<p>Those parameters will lead to a weakly informative setting close to the Jeffreys priors.</p>
+<p>Given those assumptions and parameters, 18 subjects in the control arm and 18 subjects in the experimental arm corresponds to the smallest overall sample size in a 1:1 allocation ratio for which the estimated power is above the target of 80 %.</p>
+<p><br></p>
+</div>
+<div id="software" class="section level3">
+<h3>1.4. Software</h3>
+<p>Sample of the posterior distribution for the mean parameters have been obtained using package <a href="https://cran.r-project.org/web/packages/rstan/index.html">rstan</a> (Version 2.21.2, <span class="citation">Stan Development Team (2018)</span>).</p>
+<p><br></p>
+</div>
+</div>
+<div id="sec:impact_allocation_ratio" class="section level2">
+<h2>2. Impact of allocation ratio with weakly informative and informative priors</h2>
+<p>In order to evaluate the impact of the allocation ratio, the overall sample size will be set to 36 subjects, but sample size in each arm will vary between 10 and 26 subjects.</p>
+<p>With respect to prior information, the followings will be considered:</p>
+<ul>
+<li>Weakly informative prior:
+<ul>
+<li><span class="math inline">\(m_{i} = 0\)</span> and <span class="math inline">\(p_{i} = 10^{-6}\)</span>, leading to a very flat normal prior for the mean parameter in the control and experimental arm;</li>
+<li><span class="math inline">\(a_{i} = b_{i} = 10^{-6}\)</span>, leading to a prior for the precision parameter with mean 1 and variance 10<sup>6</sup> in the control and experimental arm;</li>
+</ul></li>
+<li>Informative prior;
+<ul>
+<li><span class="math inline">\(m_{1} = 0\)</span> and <span class="math inline">\(p_{i} = 10^{-6}\)</span> for the prior distribution of the mean in the experimental arm;</li>
+<li><span class="math inline">\(m_{2} = 5\)</span> and <span class="math inline">\(p_{i} = 1.0\)</span> for the prior distribution of the mean in the control arm;</li>
+<li><span class="math inline">\(a_{i} = b_{i} = 10^{-6}\)</span>, leading to a prior for the precision parameter with mean 1 and variance 10<sup>6</sup> in the control and experimental arm.</li>
+</ul></li>
+</ul>
+<p>Figure below shows for a fixed sample size of 36 subjects the power estimated via simulation against the number of subjects in the control and experimental arm.</p>
+<p><br></p>
+<p><img src="sample_size_allocation_ratio_prior_information_files/figure-html/unnamed-chunk-1-1.png" width="960" /></p>
+<p><br></p>
+<p>In the weakly informative setting, the power curve increases until the control to experimental allocation probability is at 0.5 and then decreases back in a symmetrical shape. This is a known feature in standard frequentist sample size calculation where optimal sample size is achieved with a 1:1 allocation ratio.</p>
+<p>In the informative setting, the power curve is always above the power curve of the weakly informative setting. This shows that the informative prior for the mean parameter in the control arm allows to increase the chance to state that the experimental arm is superior to the control arm. This can be explained by the prior for the mean parameter in the control arm being aligned with the data generation process. In addition, the power curve is no more centered around the 0.5 allocation probability. Maximum power is attained with 15 and 21 subjects in the control and experimental arm. This illustrates the “data augmentation” that benefits directly to the control arm (via a narrower credible interval for the mean parameter) and then indirectly for the comparison against the experimental arm.</p>
+<p><br></p>
+</div>
+<div id="optimal-sample-size-and-allocation-ratio-with-informative-priors" class="section level2">
+<h2>3. Optimal sample size and allocation ratio with informative priors</h2>
+<p><a href="#sec:impact_allocation_ratio">Section 2</a> has shown that overpowered situation occurred in presence of the informative prior for the mean parameter in the control arm. In this section, the sample size will be proposed while targeting a power of 80 % with the same informative prior than the one used in the previous section.</p>
+<p>Figure below shows the power curve when overall sample size is set at 29 subjects against the number of subjects in the control and experimental arm.</p>
+<p><br></p>
+<p><img src="sample_size_allocation_ratio_prior_information_files/figure-html/unnamed-chunk-3-1.png" width="960" /></p>
+<p><br></p>
+<p>Versus overall sample size proposed in <a href="#sec:sample_size_equal_allocation_ratio">Section 1.3</a>, a decrease of 7 subjects can be obtained when integrating the prior information for the mean parameter in the control arm while still having the same target power. This represent a 19.4 % reduction in overall sample size. With 10 subjects in the control arm and 19 subjects in the experimental arm, power is maximal.</p>
+<p><br></p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>4. Conclusion</h2>
+<p>In this blog post, we evaluated the impact of including prior information in the control arm on optimal overall sample size and allocation ratio in a superiority setting for normally distributed data. In absence of prior-data conflict, the introduction of prior information allows either to increase the power versus alternative approaches not considering this prior information or to decrease the overall sample size while still maintaining the same target power.</p>
+<p><br></p>
+<p><small><em>Post created on 2020-10-29. Last update on 2020-10-29.</em></small></p>
+<hr />
+<p><br></p>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p><small></p>
+<div id="refs" class="references">
+<div id="ref-sdt2018">
+<p>Stan Development Team. 2018. “RStan: The R Interface to Stan.” 2018. <a href="http://mc-stan.org">http://mc-stan.org</a>.</p>
+</div>
+</div>
+</div>
+
+<p><br><br><br></p>
+<p style="text-align:center;">
+<a href="mailto:info@jaeger-consulting.io?subject=Request for information"><img src="images/email.png" style="height: 20px;"></a>
+<a href="https://www.linkedin.com/company/jaeger-consulting" target="_blank"><img src="images/linkedin_logo.png" style="height: 20px;"></a>
+<a href="https://github.com/jaeger-consulting" target="_blank"><img src="images/github_logo.png" style="height: 20px;"></a>
+</p>
+<p style="text-align:center;"><small>Jaeger Consulting &copy 2020</small></p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

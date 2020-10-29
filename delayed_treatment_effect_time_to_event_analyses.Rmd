@@ -74,6 +74,8 @@ As a basis for comparison through this post, let consider the following assumpti
 
 The above assumptions will lead to require a total of `r  ceiling(unique(sampleSizeDuration $ numberOfEvents))` PFS events to trigger the (final) analysis. The figure below shows the enrollment duration and the study duration with respect to the predefined number of subjects to be enrolled. Given the shape of the enrollment and study duration curves, targeting 350 subjects is reasonable and would lead to an enrollment duration of around `r round(x = sampleSizeDuration[sampleSizeDuration $maxNumberOfSubjects %in% 350, 'accrualTime'], digits = 1)` months and a study duration of around `r round(x = sampleSizeDuration[sampleSizeDuration $maxNumberOfSubjects %in% 350, 'studyDuration'], digits = 1)` months.
 
+<br>
+
 ```{r study_duration, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 5}
 require(ggplot2)
 require(tidyverse)
@@ -103,6 +105,8 @@ p
 ### 2.1 Absolute clinical benefit on median PFS maintained {#sec:fixed_absolute_benefit}
 
 Delayed treatment effect can be seen on the PFS curve as the time until separation of the PFS curve between the control and the experimental groups. The figure below shows for delayed treatment effects ranging from 0 month to 3 months by 0.5 month both the PFS curves (control in red and experimental in green) and hazard ratio (in dotted blue) when targeting the same absolute clinical benefit in median PFS. As clinical benefit is maintained despite the delayed treatment effect, the hazard ratio post the delayed treatment effect becomes smaller and smaller.
+
+<br>
 
 ```{r data_surv_abs_ben_maint, echo = FALSE}
 if (R_code_to_run %in% 1)
@@ -154,10 +158,13 @@ p <- ggplot(data = data_surv_abs_ben_maint,
 p
 ```
 
+<br>
+
 In order to evaluate the impact of this delayed treatment effect using a standard log rank test while maintaining the clinical benefit, the function getSimulationSurvival from the <a href=https://cran.r-project.org/web/packages/rpact/index.html>rpact</a> package can be used. Out of it the estimated power and the median study duration can be extracted.
 
 On the figure below, when maintaining the absolute clinical benefit on median PFS, one can see that larger value of the delayed treatment effect is associated with marginally longer study duration. The power has a U shape, first going down up to around 2 months for the delayed treatment effect and then increasing back. This could be explained by the hazard ratio post delayed treatment starting to compensate the delayed treatment effect.
 
+<br>
 
 ```{r data_sim_surv_abs_ben_maint, echo = FALSE, message = FALSE, warning = FALSE}
 if (R_code_to_run %in% 1)
@@ -240,6 +247,8 @@ p
 
 The figure below shows for delayed treatment effects ranging from 0 month to 3 months by 0.5 month both the PFS curves (control in red and experimental in green) and hazard ratio (in dotted blue) when the hazard ratio post the delayed treatment effect is maintained to 0.65 (the one used in [Section 1](#sec:Introduction)). In this situation, the absolute clinical benefit in term of improvement in median PFS from the control to the experimental is decreasing with increasing delayed treatment effect.
 
+<br>
+
 ```{r data_surv_hr_ben_maint, echo = FALSE}
 if (R_code_to_run %in% 1)
 {
@@ -288,9 +297,13 @@ p <- ggplot(data = data_surv_hr_ben_maint,
 p
 ```
 
+<br>
+
 The impact of the delayed treatment effect when maintaining the hazard ratio benefit post delayed treatment effect will be again evaluated using the function getSimulationSurvival from the <a href=https://cran.r-project.org/web/packages/rpact/index.html>rpact</a> package.
 
 On the figure below, when maintaining the hazard ratio benefit post delayed treatment effect, one can see that both the power and the study duration is decreasing with increasing delayed treatment effect. This can easily be explained by increasing delayed treatment effect not compensated by decreasing hazard ratio (that were observed in previous subsection). In this setting, the impact of delayed treatment effect is dramatic and will lead to underpowered trials.
+
+<br>
 
 ```{r data_sim_surv_hr_ben_maint, echo = FALSE, message = FALSE, warning = FALSE}
 if (R_code_to_run %in% 1)
@@ -396,6 +409,8 @@ In order to compute the number of PFS events required, one should first use the 
 
 The figure below shows out of the simulations the estimated probability to stop for futility and the estimated power with respect to delayed treatment effect when maintaining the absolute clinical benefit on median PFS. Versus [Section 2.1](#sec:fixed_absolute_benefit), one can see that the power is only decreasing when the delayed treatment effect is increasing. This is most probably due to the futility met while all events are already observed before being able to benefit from smaller hazard ratio post delayed treatment effect.
 
+<br>
+
 ```{r data_sim_surv_abs_ben_maint_gsd, echo = FALSE}
 if (R_code_to_run %in% 1)
 {
@@ -481,6 +496,8 @@ p
 
 The figure below shows out of the simulations the estimated probability to stop for futility and the estimated power with respect to delayed treatment effect when maintaining the hazard ratio benefit post delayed treatment effect at 0.65. In this setting, the consequences of delayed treatment effect are dramatic, even for small delayed treatment effect. This is due to a combination of both the interim analysis leading to high probability to stop for futility and a hazard ratio post delayed treatment effect not compensating latency in the separation of the PFS curves.
 
+<br>
+
 ```{r data_sim_surv_hr_ben_maint_gsd, echo = FALSE, message = FALSE, warning = FALSE}
 if (R_code_to_run %in% 1)
 {
@@ -556,7 +573,6 @@ p <- ggplot(data = data_sim_surv_hr_ben_maint_gsd[data_sim_surv_hr_ben_maint_gsd
      theme(legend.position = 'none')
 p
 ```
-
 ```{r save, echo = FALSE}
 if (R_code_to_run %in% 1)
 {

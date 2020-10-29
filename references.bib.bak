@@ -108,7 +108,7 @@
 }
 
 @Misc{Wassmer2019,
-  author = {Gernot Wassmer and Friedrich Pahlke},
+  author = {Wassmer, Gernot and Pahlke, Friedrich},
   title  = {{rpact}: Confirmatory Adaptive Clinical Trial Design andAnalysis},
   year   = {2019},
   url    = {https://cran.r-project.org/package=rpact},

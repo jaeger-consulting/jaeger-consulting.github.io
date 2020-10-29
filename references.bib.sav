@@ -114,4 +114,11 @@
   url    = {https://cran.r-project.org/package=rpact},
 }
 
+@Electronic{sdt2018,
+  author = {{Stan Development Team}},
+  title  = {RStan: the R interface to Stan},
+  url    = {http://mc-stan.org},
+  year   = {2018},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

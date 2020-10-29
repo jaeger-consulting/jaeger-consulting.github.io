@@ -22,8 +22,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link rel="shortcut icon" type="image/png" href="images/favicon.png">
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -329,6 +327,9 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="sample_size_allocation_ratio_prior_information.html">Sample size, allocation ratio and prior information</a>
+    </li>
+    <li>
       <a href="delayed_treatment_effect_time_to_event_analyses.html">Delayed treatment effect in time-to-event endpoint</a>
     </li>
     <li>
@@ -387,6 +388,7 @@ $(document).ready(function () {
 <li>Maximum number of subject ranging from 250 to 450.</li>
 </ul>
 <p>The above assumptions will lead to require a total of 227 PFS events to trigger the (final) analysis. The figure below shows the enrollment duration and the study duration with respect to the predefined number of subjects to be enrolled. Given the shape of the enrollment and study duration curves, targeting 350 subjects is reasonable and would lead to an enrollment duration of around 14 months and a study duration of around 16.8 months.</p>
+<p><br></p>
 <p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/study_duration-1.png" width="960" /></p>
 <p><br></p>
 </div>
@@ -395,18 +397,24 @@ $(document).ready(function () {
 <div id="sec:fixed_absolute_benefit" class="section level3">
 <h3>2.1 Absolute clinical benefit on median PFS maintained</h3>
 <p>Delayed treatment effect can be seen on the PFS curve as the time until separation of the PFS curve between the control and the experimental groups. The figure below shows for delayed treatment effects ranging from 0 month to 3 months by 0.5 month both the PFS curves (control in red and experimental in green) and hazard ratio (in dotted blue) when targeting the same absolute clinical benefit in median PFS. As clinical benefit is maintained despite the delayed treatment effect, the hazard ratio post the delayed treatment effect becomes smaller and smaller.</p>
+<p><br></p>
 <p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/plot_surv_abs_ben_maint-1.png" width="960" /></p>
+<p><br></p>
 <p>In order to evaluate the impact of this delayed treatment effect using a standard log rank test while maintaining the clinical benefit, the function getSimulationSurvival from the <a href=https://cran.r-project.org/web/packages/rpact/index.html>rpact</a> package can be used. Out of it the estimated power and the median study duration can be extracted.</p>
 <p>On the figure below, when maintaining the absolute clinical benefit on median PFS, one can see that larger value of the delayed treatment effect is associated with marginally longer study duration. The power has a U shape, first going down up to around 2 months for the delayed treatment effect and then increasing back. This could be explained by the hazard ratio post delayed treatment starting to compensate the delayed treatment effect.</p>
+<p><br></p>
 <p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/plot_sim_surv_abs_ben_maint-1.png" width="960" /></p>
 <p><br></p>
 </div>
 <div id="benefit-on-hazard-maintained-post-delayed-treatment-effect" class="section level3">
 <h3>2.2 Benefit on hazard maintained post delayed treatment effect</h3>
 <p>The figure below shows for delayed treatment effects ranging from 0 month to 3 months by 0.5 month both the PFS curves (control in red and experimental in green) and hazard ratio (in dotted blue) when the hazard ratio post the delayed treatment effect is maintained to 0.65 (the one used in <a href="#sec:Introduction">Section 1</a>). In this situation, the absolute clinical benefit in term of improvement in median PFS from the control to the experimental is decreasing with increasing delayed treatment effect.</p>
+<p><br></p>
 <p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/plot_surv_hr_ben_maint-1.png" width="960" /></p>
+<p><br></p>
 <p>The impact of the delayed treatment effect when maintaining the hazard ratio benefit post delayed treatment effect will be again evaluated using the function getSimulationSurvival from the <a href=https://cran.r-project.org/web/packages/rpact/index.html>rpact</a> package.</p>
 <p>On the figure below, when maintaining the hazard ratio benefit post delayed treatment effect, one can see that both the power and the study duration is decreasing with increasing delayed treatment effect. This can easily be explained by increasing delayed treatment effect not compensated by decreasing hazard ratio (that were observed in previous subsection). In this setting, the impact of delayed treatment effect is dramatic and will lead to underpowered trials.</p>
+<p><br></p>
 <p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/plot_sim_surv_hr_ben_maint-1.png" width="960" /></p>
 <p><br></p>
 </div>
@@ -421,12 +429,14 @@ $(document).ready(function () {
 <div id="absolute-clinical-benefit-on-median-pfs-maintained" class="section level3">
 <h3>3.2 Absolute clinical benefit on median PFS maintained</h3>
 <p>The figure below shows out of the simulations the estimated probability to stop for futility and the estimated power with respect to delayed treatment effect when maintaining the absolute clinical benefit on median PFS. Versus <a href="#sec:fixed_absolute_benefit">Section 2.1</a>, one can see that the power is only decreasing when the delayed treatment effect is increasing. This is most probably due to the futility met while all events are already observed before being able to benefit from smaller hazard ratio post delayed treatment effect.</p>
+<p><br></p>
 <p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/plot_sim_surv_abs_ben_maint_gsd-1.png" width="960" /></p>
 <p><br></p>
 </div>
 <div id="benefit-on-hazard-maintained-post-delayed-treatment-effect-1" class="section level3">
 <h3>3.3 Benefit on hazard maintained post delayed treatment effect</h3>
 <p>The figure below shows out of the simulations the estimated probability to stop for futility and the estimated power with respect to delayed treatment effect when maintaining the hazard ratio benefit post delayed treatment effect at 0.65. In this setting, the consequences of delayed treatment effect are dramatic, even for small delayed treatment effect. This is due to a combination of both the interim analysis leading to high probability to stop for futility and a hazard ratio post delayed treatment effect not compensating latency in the separation of the PFS curves.</p>
+<p><br></p>
 <p><img src="delayed_treatment_effect_time_to_event_analyses_files/figure-html/plot_sim_surv_hr_ben_maint_gsd-1.png" width="960" /></p>
 <p><br></p>
 </div>

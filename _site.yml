@@ -18,6 +18,8 @@ navbar:
           href: biometrics_services.html
     - text: "Blog"
       menu:
+        - text: "Sample size, allocation ratio and prior information"
+          href: sample_size_allocation_ratio_prior_information.html
         - text: "Delayed treatment effect in time-to-event endpoint"
           href: delayed_treatment_effect_time_to_event_analyses.html
         - text: "Reproducible reports with R"
@@ -32,6 +34,7 @@ navbar:
       href: contact.html
 output:
   html_document:
+    anchor_sections: FALSE
     includes:
       in_header: header.html
       before_body: beforebody.html
