@@ -11,7 +11,7 @@
 
 
 
-<title>Tables, figures and listings with R</title>
+<title>About Me</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -306,16 +306,16 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="bayesian_approach.html">Bayesian Approach</a>
+      <a href="01_01_bayesian_approach.html">Bayesian Approach</a>
     </li>
     <li>
-      <a href="adaptive_design.html">Adaptive Design</a>
+      <a href="01_02_adaptive_design.html">Adaptive Design</a>
     </li>
     <li>
-      <a href="quantitative_decision_making.html">Quantitative Decision-Making</a>
+      <a href="01_03_quantitative_decision_making.html">Quantitative Decision-Making</a>
     </li>
     <li>
-      <a href="biometrics_services.html">Biometrics Services</a>
+      <a href="01_04_biometrics_services.html">Biometrics Services</a>
     </li>
   </ul>
 </li>
@@ -327,27 +327,27 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="sample_size_allocation_ratio_prior_information.html">Sample size, allocation ratio and prior information</a>
+      <a href="02_04_sample_size_allocation_ratio_prior_information.html">Sample size, allocation ratio and prior information</a>
     </li>
     <li>
-      <a href="delayed_treatment_effect_time_to_event_analyses.html">Delayed treatment effect in time-to-event endpoint</a>
+      <a href="02_03_delayed_treatment_effect_time_to_event_analyses.html">Delayed treatment effect in time-to-event endpoint</a>
     </li>
     <li>
-      <a href="reproducible_reports_R.html">Reproducible reports with R</a>
+      <a href="02_02_reproducible_reports_R.html">Reproducible reports with R</a>
     </li>
     <li>
-      <a href="tfls_with_R.html">Tables, figures and listings with R</a>
+      <a href="02_01_tfls_with_R.html">Tables, figures and listings with R</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="about_me.html">About Me</a>
+  <a href="03_about_me.html">About Me</a>
 </li>
 <li>
-  <a href="ressources.html">Ressources</a>
+  <a href="04_ressources.html">Ressources</a>
 </li>
 <li>
-  <a href="contact.html">Contact</a>
+  <a href="05_contact.html">Contact</a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -363,102 +363,44 @@ $(document).ready(function () {
 </div>
 
 
-<div id="tables-figures-and-listings-with-r" class="section level1">
-<h1>Tables, figures and listings with R</h1>
-<p>R, combined with R Markdown <span class="citation">(Xie, Allaire, and Grolemund 2018; Allaire et al. 2020)</span> and other packages, is an alternative for creating fully traceable end-text tables, figures and listings for Section 14 and Section 16 of clinical study reports. A similar approach can be used to create in-text outputs.</p>
+<div id="jonathan-jaeger" class="section level1">
+<h1>Jonathan Jaeger <a href="https://www.linkedin.com/in/jonathanjaeger" target="_blank"><img src="images/linkedin_logo.png" style="height: 20px; margin-top: -5px"></a></h1>
+<div id="founder-of-jaeger-consulting-statistical-scientist" class="section level2">
+<h2>Founder of Jaeger Consulting &amp; Statistical Scientist</h2>
+<div style="float:left;">
+<p><img src="images/profile_picture_jonathan_jaeger.png" style="height: 220px; margin-right: 25px; margin-top: 10px;"></p>
+</div>
+<p>I’m a statistician with 10 years of experience in academia and the pharmaceutical industry. I specialized myself in applying Bayesian and adaptive statistical designs &amp; strategies.</p>
+<p>Early in my career, while I was under a PhD program, I developed a Bayesian penalized smoothing approach for solving differential equations with application to pharmacokinetic and recovery studies <span class="citation">(see Jaeger and Lambert 2013, 2014; Frasso, Jaeger, and Lambert 2016a, 2016b)</span>. In addition, during this period, I have provided statistical consulting services, helping researchers in applying appropriate statistical methodologies. I had also the opportunity to give statistical trainings for statisticians and non-statisticians.</p>
+<p>I joined the food industry in 2014 where I have contributed, in a fully in-house model, to the clinical development and clinical operations in the area of preterm nutrition <span class="citation">(Rigo et al. 2017)</span> and other nutrition solutions <span class="citation">(Binia et al. 2015)</span>.</p>
+<p>In 2016, I moved to the pharmaceutical industry where I was lead statistician in support of phase I-III drug development in multiple therapeutic areas (haemato-oncology, oncology and infection) and novel therapeutic products (CAR T cells, checkpoint inhibitors, radiotherapeutics, antibody drug conjugates, …). Given the high unmet medical need context and novel therapy setting, rigorous and agile statistical expertise was essential to maneuver the clinical project seamlessly between clinical development needs, regulatory requirements and operational challenges.</p>
+<p>I have created Jaeger Consulting in 2020 with the goal to nurture early and late clinical development with statistical innovation. Bayesian approaches, adaptive design strategies and informed quantitative decision-making tools are the basis elements promoted for impacting and fastering the clinical development.</p>
 <p><br></p>
-<div id="setting-up-the-project-folder" class="section level2">
-<h2>1. Setting up the project folder</h2>
-<div id="project-folder" class="section level3">
-<h3>1.1. Project folder</h3>
-<p>Before being able to produce any output, it is recommended to set up the project folder. In my case, I’m creating the project folder using RStudio. Version control is ensured using a git repository.</p>
-<p><br></p>
-</div>
-<div id="connect-your-local-repository-with-github" class="section level3">
-<h3>1.2. Connect your local repository with GitHub</h3>
-<p>If it is needed, the local repository can simply be connected with GitHub. Just create a personal token under <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> and the function use_github from the package <a href="https://cran.r-project.org/web/packages/usethis/">usethis</a>.</p>
-<p><br></p>
-</div>
-</div>
-<div id="template-for-the-table-figure-or-listing" class="section level2">
-<h2>2. Template for the table, figure or listing</h2>
-<p>The template called in the YAML metadata is the backbone of the table, figure or listing output. Both the formatting and the fields will play a key role in the production of the output.</p>
-<p><br></p>
-<div id="formatting-of-the-template" class="section level3">
-<h3>2.1. Formatting of the template</h3>
-<p>First, the formatting for the header, footer and main text zone of the template is to be chosen. In my case, the font is set at Courier New, style regular and size at 8pt. In addition, the spacing is set at 0 pt before and after each paragraph and with single line spacing within a paragraph.</p>
-<p><br></p>
-</div>
-<div id="fields" class="section level3">
-<h3>2.2. Fields</h3>
-<p>The next important part is to specify fields that will contain the relevant information needed in the header and the footer. It is extremely important to liaise with the medical writers to ensure that all relevant information needed for the clinical study report is present in the template. Usually for the end-text outputs, the followings are present in the header: protocol name, company name, analysis name, page numbering and the title of the output. For the footer, the followings are present: the footnotes, the program path, the data source, the run datetime, the database extraction date and the database cut-off date. For in-text outputs, information might slightly differ.</p>
-<p>In the template, each information is a field. When the R Markdown will be knitted, information from the YAML metadata will be used. In the image below, the text “Protocol Number Missing” is in fact the following field { IF “{ DOCPROPERTY ProtocolNumber }” = “Error! Unknown document property name.” “Protocol Number Missing” “{ DOCPROPERTY ProtocolNumber }” }.</p>
-<center>
-<div>
-<p><img src="images/template_fields.png" alt = "Template with fields" style = "margin-top: 10px; margin-bottom: 10px;"></p>
-</div>
-</center>
-<p><br></p>
-</div>
-</div>
-<div id="creating-the-output-using-an-r-markdown-file" class="section level2">
-<h2>3. Creating the output using an R Markdown file</h2>
-<div id="setting-up-the-yaml-metadata" class="section level3">
-<h3>3.1 Setting up the YAML metadata</h3>
-<p>An R Markdown file, with default output set at Word document can now be created. The YAML metadata will inform the document properties of the output. In the below, the first 9 elements will be used for the header and the footer of the output. The last 3 elements are specifying that the output will be a Word document with the reference document being the template just created.</p>
-<pre class="r"><code>---
-ProtocolNumber: &quot;Wonderful 1234&quot;
-CompanyName: &quot;Jaeger Consulting&quot;
-AnalysisName: &quot;Fake Analysis&quot;
-OutputTitle: &quot;Table 14.3.1.3 Treatment Emergent Adverse Events (TEAEs) by Treatment and Total, per System Organ Class and Preferred Term (Safety Population)&quot;
-ProgramPath: &quot;...//t_14_03_01_03.R&quot;
-DataSource: &quot;ADSL, ADAE&quot;
-RunDatetime: &quot;`r format(Sys.time(), &#39;%Y-%m-%dT%H:%M&#39;)`&quot;
-DatabaseExtractionDate: &quot;2020-04-23&quot;
-DatabaseCutoffDate: &quot;2020-04-23&quot;
-output:
-   word_document:
-       reference_docx: &#39;./002_Appendix/Format/reference_styles_appendix.docx&#39;
----</code></pre>
-<p><br></p>
-</div>
-<div id="working-on-the-content-of-the-output" class="section level3">
-<h3>3.2 Working on the content of the output</h3>
-<p>The next steps are quite easy. It will just consist to create the R code to create the table, figure or listing of interest. Working with R Markdown will then ensure that the main content is within the body of the document.</p>
-<p>In my case, I was interested in creating a summary table for the treatment emergent adverse events by treatment and in total, per the system organ class and preferred term. To do so, I have:</p>
-<ul>
-<li>downloaded the datasets adsl.xpt and adae.xpt available on the free repository <a href=https://bitbucket.cdisc.org/>https://bitbucket.cdisc.org/</a>;</li>
-<li>imported it in the environment of my R project using the function sasxport.get from the package <a href="https://cran.r-project.org/web/packages/Hmisc/">Hmisc</a>;</li>
-<li>worked on creating summary information (number of subjects with at least one event, percentage of subjects with at least one event and number of events) with standard ordering for adverse events summary tables;</li>
-<li>reported the table using the function flextable from the package <a href="https://cran.r-project.org/web/packages/flextable/">flextable</a>.</li>
-</ul>
-<p><br></p>
-</div>
-<div id="knit" class="section level3">
-<h3>3.3 Knit</h3>
-<p>Once the R Markdown file is ready, you can simply knit it using the shortcut Ctrl+Shift+K. In case the output is not expected to be created in the same folder than the R Markdown file, the function render from the package <a href="https://cran.r-project.org/web/packages/rmarkdown/">rmarkdown</a> can be used.</p>
-<p>The image below is a printscreen of the output created.</p>
-<center>
-<div>
-<p><img src="images/t_14_03_01_03_printscreen.png" alt = "Output Table 14.3.1.3" style = "margin-top: 10px; margin-bottom: 10px;"></p>
-</div>
-</center>
-<p><br></p>
-<p><small><em>Post created on 2020-06-16. Last update on 2020-06-23.</em></small></p>
 <hr />
 <p><br></p>
-</div>
 </div>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
 <p><small></p>
 <div id="refs" class="references">
-<div id="ref-Allaire2020">
-<p>Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and Richard Iannone. 2020. <em>Rmarkdown: Dynamic Documents for R</em>. <a href="https://github.com/rstudio/rmarkdown">https://github.com/rstudio/rmarkdown</a>.</p>
+<div id="ref-Binia2015">
+<p>Binia, Aristea, Jonathan Jaeger, Youyou Hu, Anurag Singh, and Diane Zimmermann. 2015. “Daily Potassium Intake and Sodium-to-Potassium Ratio in the Reduction of Blood Pressure: A Meta-Analysis of Randomized Controlled Trials.” <em>Journal of Hypertension</em> 33 (8): 1509–20. <a href="https://doi.org/10.1097/HJH.0000000000000611">https://doi.org/10.1097/HJH.0000000000000611</a>.</p>
 </div>
-<div id="ref-Xie2018">
-<p>Xie, Yihui, J. J. Allaire, and Garrett Grolemund. 2018. <em>R Markdown: The Definitive Guide</em>. Boca Raton, Florida: Chapman; Hall/CRC. <a href="https://bookdown.org/yihui/rmarkdown">https://bookdown.org/yihui/rmarkdown</a>.</p>
+<div id="ref-Frasso2016">
+<p>Frasso, Gianluca, Jonathan Jaeger, and Philippe Lambert. 2016a. “Inference in Dynamic Systems Using B-Splines and Quasilinearized Ode Penalties.” <em>Biometrical Journal</em> 58 (3): 691–714. <a href="https://doi.org/10.1002/bimj.201500082">https://doi.org/10.1002/bimj.201500082</a>.</p>
+</div>
+<div id="ref-Frasso2016a">
+<p>———. 2016b. “Parameter Estimation and Inference in Dynamic Systems Described by Linear Partial Differential Equations.” <em>AStA Advances in Statistical Analysis</em> 100 (3): 259–87. <a href="https://doi.org/10.1007/s10182-015-0257-5">https://doi.org/10.1007/s10182-015-0257-5</a>.</p>
+</div>
+<div id="ref-Jaeger2013">
+<p>Jaeger, Jonathan, and Philippe Lambert. 2013. “Bayesian P-Spline Estimation in Hierarchical Models Specified by Systems of Affine Differential Equations.” <em>Statistical Modelling</em> 13: 3–40. <a href="https://doi.org/10.1177/1471082x12471371">https://doi.org/10.1177/1471082x12471371</a>.</p>
+</div>
+<div id="ref-Jaeger2014">
+<p>———. 2014. “Bayesian Penalized Smoothing Approaches in Models Specified Using Differential Equations with Unknown Error Distributions.” <em>Journal of Applied Statistics</em> 41 (12): 2709–26. <a href="https://doi.org/10.1080/02664763.2014.927839">https://doi.org/10.1080/02664763.2014.927839</a>.</p>
+</div>
+<div id="ref-Rigo2017">
+<p>Rigo, Jacques, Jean-Michel Hascoët, Claude Billeaud, Jean-Charles Picaud, Fabio Mosca, Amandine Rubio, Elie Saliba, et al. 2017. “Growth and Nutritional Biomarkers of Preterm Infants Fed a New Powdered Human Milk Fortifier: A Randomized Trial.” <em>Journal of Pediatric Gastroenterology and Nutrition</em> 65 (4): e83. <a href="https://doi.org/10.1097/MPG.0000000000001686">https://doi.org/10.1097/MPG.0000000000001686</a>.</p>
 </div>
 </div>
 </div>

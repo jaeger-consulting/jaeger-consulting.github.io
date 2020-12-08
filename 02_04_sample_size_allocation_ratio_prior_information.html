@@ -306,16 +306,16 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="bayesian_approach.html">Bayesian Approach</a>
+      <a href="01_01_bayesian_approach.html">Bayesian Approach</a>
     </li>
     <li>
-      <a href="adaptive_design.html">Adaptive Design</a>
+      <a href="01_02_adaptive_design.html">Adaptive Design</a>
     </li>
     <li>
-      <a href="quantitative_decision_making.html">Quantitative Decision-Making</a>
+      <a href="01_03_quantitative_decision_making.html">Quantitative Decision-Making</a>
     </li>
     <li>
-      <a href="biometrics_services.html">Biometrics Services</a>
+      <a href="01_04_biometrics_services.html">Biometrics Services</a>
     </li>
   </ul>
 </li>
@@ -327,27 +327,27 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="sample_size_allocation_ratio_prior_information.html">Sample size, allocation ratio and prior information</a>
+      <a href="02_04_sample_size_allocation_ratio_prior_information.html">Sample size, allocation ratio and prior information</a>
     </li>
     <li>
-      <a href="delayed_treatment_effect_time_to_event_analyses.html">Delayed treatment effect in time-to-event endpoint</a>
+      <a href="02_03_delayed_treatment_effect_time_to_event_analyses.html">Delayed treatment effect in time-to-event endpoint</a>
     </li>
     <li>
-      <a href="reproducible_reports_R.html">Reproducible reports with R</a>
+      <a href="02_02_reproducible_reports_R.html">Reproducible reports with R</a>
     </li>
     <li>
-      <a href="tfls_with_R.html">Tables, figures and listings with R</a>
+      <a href="02_01_tfls_with_R.html">Tables, figures and listings with R</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="about_me.html">About Me</a>
+  <a href="03_about_me.html">About Me</a>
 </li>
 <li>
-  <a href="ressources.html">Ressources</a>
+  <a href="04_ressources.html">Ressources</a>
 </li>
 <li>
-  <a href="contact.html">Contact</a>
+  <a href="05_contact.html">Contact</a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -444,7 +444,7 @@ y_{ij} | \mu_{i},\tau_{i} &amp;\sim&amp; \mathcal{N}\left(\mu_{i}, \tau_{i}^{-1}
 </ul>
 <p>Figure below shows for a fixed sample size of 36 subjects the power estimated via simulation against the number of subjects in the control and experimental arm.</p>
 <p><br></p>
-<p><img src="sample_size_allocation_ratio_prior_information_files/figure-html/unnamed-chunk-1-1.png" width="960" /></p>
+<p><img src="02_04_sample_size_allocation_ratio_prior_information_files/figure-html/unnamed-chunk-1-1.png" width="960" /></p>
 <p><br></p>
 <p>In the weakly informative setting, the power curve increases until the control to experimental allocation probability is at 0.5 and then decreases back in a symmetrical shape. This is a known feature in standard frequentist sample size calculation where optimal sample size is achieved with a 1:1 allocation ratio.</p>
 <p>In the informative setting, the power curve is always above the power curve of the weakly informative setting. This shows that the informative prior for the mean parameter in the control arm allows to increase the chance to state that the experimental arm is superior to the control arm. This can be explained by the prior for the mean parameter in the control arm being aligned with the data generation process. In addition, the power curve is no more centered around the 0.5 allocation probability. Maximum power is attained with 15 and 21 subjects in the control and experimental arm. This illustrates the “data augmentation” that benefits directly to the control arm (via a narrower credible interval for the mean parameter) and then indirectly for the comparison against the experimental arm.</p>
@@ -455,7 +455,7 @@ y_{ij} | \mu_{i},\tau_{i} &amp;\sim&amp; \mathcal{N}\left(\mu_{i}, \tau_{i}^{-1}
 <p><a href="#sec:impact_allocation_ratio">Section 2</a> has shown that overpowered situation occurred in presence of the informative prior for the mean parameter in the control arm. In this section, the sample size will be proposed while targeting a power of 80 % with the same informative prior than the one used in the previous section.</p>
 <p>Figure below shows the power curve when overall sample size is set at 29 subjects against the number of subjects in the control and experimental arm.</p>
 <p><br></p>
-<p><img src="sample_size_allocation_ratio_prior_information_files/figure-html/unnamed-chunk-3-1.png" width="960" /></p>
+<p><img src="02_04_sample_size_allocation_ratio_prior_information_files/figure-html/unnamed-chunk-3-1.png" width="960" /></p>
 <p><br></p>
 <p>Versus overall sample size proposed in <a href="#sec:sample_size_equal_allocation_ratio">Section 1.3</a>, a decrease of 7 subjects can be obtained when integrating the prior information for the mean parameter in the control arm while still having the same target power. This represent a 19.4 % reduction in overall sample size. With 10 subjects in the control arm and 19 subjects in the experimental arm, power is maximal.</p>
 <p><br></p>
