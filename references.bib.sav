@@ -121,4 +121,29 @@
   year   = {2018},
 }
 
+@Misc{FDA2014,
+  author = {{U.S. Food & Drug Administration - Center for Drug Evaluation and Research}},
+  title  = {Bioavailability and bioequivalence studies submitted in {NDAs} or {INDs} - General considerations (Draft)},
+  year   = {2014},
+  url    = {https://www.fda.gov/media/88254/download},
+}
+
+@Misc{FDA2001,
+  author = {{U.S. Food & Drug Administration - Center for Drug Evaluation and Research}},
+  title  = {Statistical approaches to establishing bioequivalence},
+  year   = {2001},
+  url    = {https://www.fda.gov/media/70958/download},
+}
+
+@Article{Neuenschwander2016,
+  author  = {Neuenschwander, Beat and Wandel, Simon and Roychoudhury, Satrajit and Bailey, Stuart},
+  journal = {Pharmaceutical Statistics},
+  title   = {Robust exchangeability designs for early phase clinical trials with multiple strata},
+  year    = {2016},
+  number  = {2},
+  pages   = {123-134},
+  volume  = {15},
+  doi     = {https://doi.org/10.1002/pst.1730},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

@@ -3,8 +3,22 @@ pagetitle: "Delayed treatment effect in time-to-event endpoint"
 bibliography: references.bib
 ---
 
-```{r setup, echo = FALSE}
-R_code_to_run <- 0 # if 1, run all simulations; 0 if not to run all simulations
+```{r setup, echo = FALSE, message = FALSE, warning = FALSE}
+#--------------------------------------- Simulation to be run or RData to be loaded ---------------------------------------#
+
+   R_code_to_run <- 0 # if 1, run all simulations; 0 if not to run all simulations
+
+
+#--------------------------------------------- Theme to be used for the plots ---------------------------------------------#
+
+   require(ggplot2)
+
+   theme <- theme(panel.border = element_blank(),
+                  panel.background = element_blank(),
+                  legend.key = element_blank(),
+                  panel.grid.major = element_line(colour = "grey85"),
+                  panel.grid.minor = element_line(colour = "grey95"))
+
 ```
 
 # Delayed treatment effect in time-to-event endpoint
@@ -51,7 +65,7 @@ if (R_code_to_run %in% 1)
    }
 } else
 {
-   load(file = 'G:/03_Projects/001_Website/jaeger-consulting.github.io/documents/delayed_treatment_effect_time_to_event_analyses.RData')
+   load(file = 'G:/03_Projects/001_Website/jaeger-consulting.github.io/02_03_delayed_treatment_effect_time_to_event_analyses_R_codes/delayed_treatment_effect_time_to_event_analyses.RData')
    R_code_to_run <- 0
 }
 ```
@@ -90,6 +104,7 @@ p <- ggplot(data = data_study_duration,
                size = 1.2) +
      xlab(label = 'Number of Subjects') +
      ylab(label = 'Duration (months)') +
+     theme +
      theme(legend.title = element_blank(),
            legend.position = c(0.9, 0.95),
            legend.key = element_blank(),
@@ -154,7 +169,8 @@ p <- ggplot(data = data_surv_abs_ben_maint,
                size = 1.2) +
      scale_x_continuous(name = 'Time (months)') +
      scale_y_continuous(name = 'Progression-Free Survival\nHazard Ratio') +
-     facet_grid(dte ~ .)
+     facet_grid(dte ~ .) +
+     theme
 p
 ```
 
@@ -236,6 +252,7 @@ p <- ggplot(data = data_sim_surv_abs_ben_maint,
      scale_x_continuous(name = 'Delayed treatment effect (months)') +
      facet_wrap(~ variable,
                 scales = 'free') +
+     theme +
      theme(legend.position = 'none')
 p
 ```
@@ -293,7 +310,8 @@ p <- ggplot(data = data_surv_hr_ben_maint,
                size = 1.2) +
      scale_x_continuous(name = 'Time (months)') +
      scale_y_continuous(name = 'Progression-Free Survival\nHazard Ratio') +
-     facet_grid(dte ~ .)
+     facet_grid(dte ~ .) +
+     theme
 p
 ```
 
@@ -371,6 +389,7 @@ p <- ggplot(data = data_sim_surv_hr_ben_maint,
      scale_x_continuous(name = 'Delayed treatment effect (months)') +
      facet_wrap(~ variable,
                 scales = 'free') +
+     theme +
      theme(legend.position = 'none')
 p
 ```
@@ -485,6 +504,7 @@ p <- ggplot(data = data_sim_surv_abs_ben_maint_gsd[data_sim_surv_abs_ben_maint_g
      scale_x_continuous(name = 'Delayed treatment effect (months)') +
      facet_wrap(~ variable,
                 scales = 'free') +
+     theme +
      theme(legend.position = 'none')
 p
 ```
@@ -570,13 +590,14 @@ p <- ggplot(data = data_sim_surv_hr_ben_maint_gsd[data_sim_surv_hr_ben_maint_gsd
      scale_x_continuous(name = 'Delayed treatment effect (months)') +
      facet_wrap(~ variable,
                 scales = 'free') +
+     theme +
      theme(legend.position = 'none')
 p
 ```
 ```{r save, echo = FALSE}
 if (R_code_to_run %in% 1)
 {
-   save.image('G:/03_Projects/001_Website/jaeger-consulting.github.io/documents/delayed_treatment_effect_time_to_event_analyses.RData')
+   save.image('G:/03_Projects/001_Website/jaeger-consulting.github.io/02_03_delayed_treatment_effect_time_to_event_analyses_R_codes/delayed_treatment_effect_time_to_event_analyses.RData')
 }
 ```
 

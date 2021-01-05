@@ -18,6 +18,8 @@ navbar:
           href: 01_04_biometrics_services.html
     - text: "Blog"
       menu:
+        - text: "Robust exchangeability and bioequivalence studies"
+          href: 02_05_exnex_bioequivalence.html
         - text: "Sample size, allocation ratio and prior information"
           href: 02_04_sample_size_allocation_ratio_prior_information.html
         - text: "Delayed treatment effect in time-to-event endpoint"

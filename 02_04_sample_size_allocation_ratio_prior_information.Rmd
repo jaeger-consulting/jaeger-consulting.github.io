@@ -8,14 +8,22 @@ R_code_to_run <- 0 # if 1, run all simulations; 0 if not to run all simulations
 
 if (R_code_to_run %in% 1)
 {
-   source(file = 'G:/03_Projects/001_Website/jaeger-consulting.github.io/documents/sample_size_allocation_ratio_prior_information.R')
+   source(file = 'G:/03_Projects/001_Website/jaeger-consulting.github.io/02_04_sample_size_allocation_ratio_prior_information_R_codes/sample_size_allocation_ratio_prior_information.R')
 }
 if (R_code_to_run %in% 0)
 {
-   base::load(file = 'G:/03_Projects/001_Website/jaeger-consulting.github.io/documents/sample_size_allocation_ratio_prior_information.RData')
+   base::load(file = 'G:/03_Projects/001_Website/jaeger-consulting.github.io/02_04_sample_size_allocation_ratio_prior_information_R_codes/sample_size_allocation_ratio_prior_information.RData')
 }
 
-require(ggplot2)
+#--------------------------------------------- Theme to be used for the plots ---------------------------------------------#
+
+   require(ggplot2)
+
+   theme <- theme(panel.border = element_blank(),
+                  panel.background = element_blank(),
+                  legend.key = element_blank(),
+                  panel.grid.major = element_line(colour = "grey85"),
+                  panel.grid.minor = element_line(colour = "grey95"))
 ```
 
 # Sample size, allocation ratio and prior information
@@ -137,6 +145,7 @@ p <- ggplot(data = data_int,
      scale_x_continuous(breaks = mean_sim_result_2[1, ],
                         minor_breaks = NULL,
                         label = paste(mean_sim_result_2[1, ], mean_sim_result_2[2, ], sep = ' / ')) +
+     theme +
      theme(legend.title = element_blank(),
            legend.position = c(0.9, 0.95),
            legend.key = element_blank(),
@@ -180,6 +189,7 @@ p <- ggplot(data = data_int,
      scale_x_continuous(breaks = mean_sim_result_4[[which_to_select]][1, ],
                         minor_breaks = NULL,
                         label = paste(mean_sim_result_4[[which_to_select]][1, ], mean_sim_result_4[[which_to_select]][2, ], sep = ' / ')) +
+     theme +
      theme(legend.title = element_blank(),
            legend.position = c(0.9, 0.95),
            legend.key = element_blank(),
