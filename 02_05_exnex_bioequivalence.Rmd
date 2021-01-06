@@ -25,7 +25,7 @@ Due to development constraints, like a modification of the manufacturing of the 
 
 Bioequivalence between the reference drug formulation and the new drug formulation is generally left to the judgment of the sponsor. According to the FDA guidance on bioavailability and bioequivalence for studies submitted in NDAs or INDs, *bioequivalence means the absence of a significant difference in the rate and extent to which the active ingredient or active moiety in pharmaceutical equivalents or pharmaceutical alternatives become available at the site of drug action when administered at the same molar dose under similar conditions in an appropriately designed study* (see definition in see @FDA2014).
 
-This blog post will evaluate the impact of the robust exchangeability approach introduced by @Neuenschwander2016 when evaluating the average bioequivalence in a bioequivalence study. 
+This blog post will assess the impact of the robust exchangeability approach introduced by @Neuenschwander2016 when evaluating the average bioequivalence in a bioequivalence study. 
 
 <br>
 
@@ -36,7 +36,7 @@ This blog post will evaluate the impact of the robust exchangeability approach i
 
 ### 1.1. Average bioequivalence
 
-The most commonly used statistical design for comparing a new drug formulation and a reference drug formulation for average bioequivalence is a crossover design with two sequences and two periods, called standard 2x2 crossover design. In this design, each subject is randomized and assigned to a sequence of formulations. Subjects assigned to reference formulation/new formulation (R/N) will receive R in the first dosing period and N in the second dosing period. Subjects assigned to new formulation/reference formulation (N/R) will receive N in the first dosing period and R in the second dosing period. A sufficiently long washout period is imposed between the two dosing periods.
+The most commonly used statistical design for comparing a new drug formulation and a reference drug formulation for average bioequivalence is a crossover design. At least two sequences and two periods have to be considered (standard 2x2 crossover design). In a standard 2x2 crossover design, each subject is randomized and assigned to a sequence of formulations. Subjects assigned to reference formulation/new formulation (R/N) will receive R in the first dosing period and N in the second dosing period. Subjects assigned to new formulation/reference formulation (N/R) will receive N in the first dosing period and R in the second dosing period. A sufficiently long washout period is to be imposed between the two dosing periods.
 
 <center>
 <div>
@@ -65,7 +65,7 @@ where:
 - $\gamma$ is the carry-over effect;
 - $\delta_{s_{n}}$ is the random effect of the $s_{n}$-th subject, normally distributed with mean 0 and variance $\sigma_{s}^{2}$;
 - $\epsilon_{n}$ is the random error in observing $y_{n}$, normally distributed with mean 0 and variance $\sigma_{\epsilon,f_n}^{2}$;
-- $\delta_{s_{n}}$ and $\epsilon_{n}$ are mutually independent.
+- the random effect and the random error are mutually independent.
 
 The average bioequivalence will be stated if the 90% credible interval for $\alpha_{2} - \alpha_{1}$ is contained in the interval $\left[-\log\left(1.25\right); \log\left(1.25\right)\right]$.
 
@@ -88,7 +88,7 @@ The idea is to adapt this approach to the average bioequivalence setting and to 
 For the exchangeability distribution, parameters for the prior distributions for $\mu_{\alpha}$ and $\tau_{\alpha}$ will be constructed based on the available information from all the clinical trials where PK information is available on the reference drug formulation. For the non-exchangeable distribution, weakly informative prior could be envisaged. 
 The probability $\pi_{i}$ can either be fixed and will be updated during the estimation process or a prior distribution can be set on it, e.g. $\pi_{i} \sim \mathcal{Be}\left(a_{i}, b_{i}\right)$. In both situation, it will indicate how a priori the reference/new drug formulations are exchangeable.
 
-Supplementary material from @Neuenschwander2016 provides the WinBUGS code for the binary EXNEX model. This can easily be updated to the 2x2 crossover linear model.
+Supplementary material from @Neuenschwander2016 provides the WinBUGS [@Lunn2000] code for the binary EXNEX model. This can easily be updated to the 2x2 crossover linear model and over other software like Stan [@sdt2018].
 
 <br>
 

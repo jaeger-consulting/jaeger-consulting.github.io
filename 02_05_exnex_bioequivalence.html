@@ -375,14 +375,14 @@ $(document).ready(function () {
 <p>Let’s consider that a reference drug formulation has already been evaluated in multiple clinical trials. Pharamacokinetic (PK) profile is considered to be established and information on the main PK parameters, like the area under the plasma concentation time curve (<span class="math inline">\(AUC\)</span>), the peak drug concentration <span class="math inline">\(C_{max}\)</span> or the half-life <span class="math inline">\(t_{1/2}\)</span>, is readily available.</p>
 <p>Due to development constraints, like a modification of the manufacturing of the active ingredient, a process improvement for scaling-up the drug production or a new formulation to limit the food effect, a new formulation is to be evaluated for being used in all subsequent clinical trials.</p>
 <p>Bioequivalence between the reference drug formulation and the new drug formulation is generally left to the judgment of the sponsor. According to the FDA guidance on bioavailability and bioequivalence for studies submitted in NDAs or INDs, <em>bioequivalence means the absence of a significant difference in the rate and extent to which the active ingredient or active moiety in pharmaceutical equivalents or pharmaceutical alternatives become available at the site of drug action when administered at the same molar dose under similar conditions in an appropriately designed study</em> (see definition in see <span class="citation">U.S. Food &amp; Drug Administration - Center for Drug Evaluation and Research (2014)</span>).</p>
-<p>This blog post will evaluate the impact of the robust exchangeability approach introduced by <span class="citation">Neuenschwander et al. (2016)</span> when evaluating the average bioequivalence in a bioequivalence study.</p>
+<p>This blog post will assess the impact of the robust exchangeability approach introduced by <span class="citation">Neuenschwander et al. (2016)</span> when evaluating the average bioequivalence in a bioequivalence study.</p>
 <p><br></p>
 <div id="sec:proposed_approach" class="section level2">
 <h2>1. Proposed approach</h2>
 <p><br></p>
 <div id="average-bioequivalence" class="section level3">
 <h3>1.1. Average bioequivalence</h3>
-<p>The most commonly used statistical design for comparing a new drug formulation and a reference drug formulation for average bioequivalence is a crossover design with two sequences and two periods, called standard 2x2 crossover design. In this design, each subject is randomized and assigned to a sequence of formulations. Subjects assigned to reference formulation/new formulation (R/N) will receive R in the first dosing period and N in the second dosing period. Subjects assigned to new formulation/reference formulation (N/R) will receive N in the first dosing period and R in the second dosing period. A sufficiently long washout period is imposed between the two dosing periods.</p>
+<p>The most commonly used statistical design for comparing a new drug formulation and a reference drug formulation for average bioequivalence is a crossover design. At least two sequences and two periods have to be considered (standard 2x2 crossover design). In a standard 2x2 crossover design, each subject is randomized and assigned to a sequence of formulations. Subjects assigned to reference formulation/new formulation (R/N) will receive R in the first dosing period and N in the second dosing period. Subjects assigned to new formulation/reference formulation (N/R) will receive N in the first dosing period and R in the second dosing period. A sufficiently long washout period is to be imposed between the two dosing periods.</p>
 <center>
 <div>
 <p><img src="images/crossover_graph.png" alt = "2x2 crossover scheme" style = "margin-top: 10px; margin-bottom: 10px;"></p>
@@ -405,7 +405,7 @@ $(document).ready(function () {
 <li><span class="math inline">\(\gamma\)</span> is the carry-over effect;</li>
 <li><span class="math inline">\(\delta_{s_{n}}\)</span> is the random effect of the <span class="math inline">\(s_{n}\)</span>-th subject, normally distributed with mean 0 and variance <span class="math inline">\(\sigma_{s}^{2}\)</span>;</li>
 <li><span class="math inline">\(\epsilon_{n}\)</span> is the random error in observing <span class="math inline">\(y_{n}\)</span>, normally distributed with mean 0 and variance <span class="math inline">\(\sigma_{\epsilon,f_n}^{2}\)</span>;</li>
-<li><span class="math inline">\(\delta_{s_{n}}\)</span> and <span class="math inline">\(\epsilon_{n}\)</span> are mutually independent.</li>
+<li>the random effect and the random error are mutually independent.</li>
 </ul>
 <p>The average bioequivalence will be stated if the 90% credible interval for <span class="math inline">\(\alpha_{2} - \alpha_{1}\)</span> is contained in the interval <span class="math inline">\(\left[-\log\left(1.25\right); \log\left(1.25\right)\right]\)</span>.</p>
 <p><br></p>
@@ -427,7 +427,7 @@ $(document).ready(function () {
 </ul></li>
 </ul>
 <p>For the exchangeability distribution, parameters for the prior distributions for <span class="math inline">\(\mu_{\alpha}\)</span> and <span class="math inline">\(\tau_{\alpha}\)</span> will be constructed based on the available information from all the clinical trials where PK information is available on the reference drug formulation. For the non-exchangeable distribution, weakly informative prior could be envisaged. The probability <span class="math inline">\(\pi_{i}\)</span> can either be fixed and will be updated during the estimation process or a prior distribution can be set on it, e.g. <span class="math inline">\(\pi_{i} \sim \mathcal{Be}\left(a_{i}, b_{i}\right)\)</span>. In both situation, it will indicate how a priori the reference/new drug formulations are exchangeable.</p>
-<p>Supplementary material from <span class="citation">Neuenschwander et al. (2016)</span> provides the WinBUGS code for the binary EXNEX model. This can easily be updated to the 2x2 crossover linear model.</p>
+<p>Supplementary material from <span class="citation">Neuenschwander et al. (2016)</span> provides the WinBUGS <span class="citation">(Lunn et al. 2000)</span> code for the binary EXNEX model. This can easily be updated to the 2x2 crossover linear model and over other software like Stan <span class="citation">(Stan Development Team 2018)</span>.</p>
 <p><br></p>
 </div>
 </div>
@@ -485,8 +485,14 @@ $(document).ready(function () {
 <h1>References</h1>
 <p><small></p>
 <div id="refs" class="references">
+<div id="ref-Lunn2000">
+<p>Lunn, David, Andrew Thomas, Nicky Best, and David Spiegelhalter. 2000. “WinBUGS - a Bayesian Modelling Framework: Concepts, Structure, and Extensibility.” <em>Statistics and Computing</em> 10: 325–37. <a href="https://doi.org/10.1023/A:1008929526011">https://doi.org/10.1023/A:1008929526011</a>.</p>
+</div>
 <div id="ref-Neuenschwander2016">
 <p>Neuenschwander, Beat, Simon Wandel, Satrajit Roychoudhury, and Stuart Bailey. 2016. “Robust Exchangeability Designs for Early Phase Clinical Trials with Multiple Strata.” <em>Pharmaceutical Statistics</em> 15 (2): 123–34. <a href="https://doi.org/https://doi.org/10.1002/pst.1730">https://doi.org/https://doi.org/10.1002/pst.1730</a>.</p>
+</div>
+<div id="ref-sdt2018">
+<p>Stan Development Team. 2018. “RStan: The R Interface to Stan.” 2018. <a href="http://mc-stan.org">http://mc-stan.org</a>.</p>
 </div>
 <div id="ref-FDA2001">
 <p>U.S. Food &amp; Drug Administration - Center for Drug Evaluation and Research. 2001. “Statistical Approaches to Establishing Bioequivalence.” <a href="https://www.fda.gov/media/70958/download">https://www.fda.gov/media/70958/download</a>.</p>
