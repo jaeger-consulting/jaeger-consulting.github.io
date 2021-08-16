@@ -75,7 +75,7 @@ The average bioequivalence will be stated if the 90% credible interval for $\alp
 
 @Neuenschwander2016 have proposed a exchangeability–nonexchangeability (EXNEX) approach that can be seen as a robust mixture extension of the standard exchangeability approach. Each stratum-specific parameter can be exchangeable with other similar strata parameters or nonexchangeable with any of them.
 
-The idea is to adapt this approach to the average bioequivalence setting and to apply the EXNEX approach on being under the reference drug formulation or the new drug formulation. For formulation $i$, the fixed effect $\alpha_{i}$ is modeled by:
+The idea is to adapt this approach to the average bioequivalence setting and to apply the EXNEX approach on being under the reference drug formulation or the new drug formulation. For formulation $i$, the fixed effect $\alpha_{i}$ is modelled by:
 
 - Exchangeability component, with probability $\pi_{i}$:
   * $\alpha_{i}|\mu_{\alpha},\tau_{\alpha} \sim \mathcal{N}\left(\mu_{\alpha},\tau_{\alpha}^{2}\right)$;
@@ -138,7 +138,7 @@ Per data generation scenario, 10'000 datasets will be generated. Power for avera
 
 
 When data generation aligned with prior, robust approach work similarly to the exchangeable approach
-When data generation indicates average bioequivalence but is not aligned with the priors, robust approach work similarly to the weakly informative prior.
+When data generation indicates average bioequivalence but is not aligned with the priors, robust approach works similarly to the weakly informative prior.
 When data generation indicates no average bioequivalence, 
 
 Discuss about the possibility to have easily adaptive feature and predictive probability decision.

@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------------------------------------------------------#
 # R code for the function for the computation of power under non-informative linear 2x2 crossover model                    #
 # Created by: Jonathan Jaeger - Date: 2020-12-17                                                                           #
-# Last modified by: Jonathan Jaeger - Date: 2020-12-17                                                                     #
+# Last modified by: Jonathan Jaeger - Date: 2021-01-11                                                                     #
 #--------------------------------------------------------------------------------------------------------------------------#
 
 
@@ -121,6 +121,7 @@
                                                   index_formulation = data_int $ treatment,
                                                   period_covariate = data_int $ period,
                                                   index_subjid = data_int $ subjid)
+
                                 inits_list <- function() { list(mu = alpha,
                                                                 beta = beta,
                                                                 sigma_epsilon = sigma_epsilon,
@@ -145,7 +146,22 @@
 
                                 delta <- apply(X = fit_sample[, c('mu[1]', 'mu[2]')], MARGIN = 1, diff)
                                 CI_delta <- quantile(x = delta, probs = c(0.05, 0.95))
-                                (CI_delta[1] >= lb_threshold) & (CI_delta[2] <= ub_threshold)
+                                average_bioequivalence <- (CI_delta[1] >= lb_threshold) & (CI_delta[2] <= ub_threshold)
+
+
+                             #---------------------- Checking coverage mu[1] and mu[2] versus alpha -----------------------#
+
+                                CI_mu <- apply(X = fit_sample[, c('mu[1]', 'mu[2]')],
+                                               MARGIN = 2,
+                                               FUN = { function(x) quantile(x = x, probs = c(0.05, 0.95)) })
+                                coverage_mu_1 <- (CI_mu[1, 1] <= alpha[1]) & (CI_mu[2, 1] >= alpha[1])
+                                coverage_mu_2 <- (CI_mu[1, 2] <= alpha[2]) & (CI_mu[2, 2] >= alpha[2])
+
+
+                             #--------------------------------- Return relevant elements ----------------------------------#
+
+                                return(c(average_bioequivalence, coverage_mu_1, coverage_mu_2))
+
                              } })
 
 

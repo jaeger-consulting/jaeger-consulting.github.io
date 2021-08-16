@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------------------------------------------------------#
 # R code for generating power under multiple scenario for the linear 2x2 crossover model non informative                   #
 # Created by: Jonathan Jaeger - Date: 2020-12-17                                                                           #
-# Last modified by: Jonathan Jaeger - Date: 2020-12-18                                                                     #
+# Last modified by: Jonathan Jaeger - Date: 2021-01-11                                                                     #
 #--------------------------------------------------------------------------------------------------------------------------#
 
 
@@ -16,7 +16,7 @@
 
    system.time({
 
-      N_subjid_per_sequence <- 8
+      N_subjid_per_sequence <- 10
       alpha <- c(4, 4)
       beta <- 0
       sigma_s <- 0.25
@@ -30,11 +30,11 @@
                            'sigma_epsilon', sigma_epsilon,
                            sep = '_')
 
-      power_int <- simulation_linear_non_informative(R = 100,
+      power_int <- simulation_linear_non_informative(R = 500,
                                                      alpha = alpha, beta = beta,
                                                      sigma_s = sigma_s, sigma_epsilon = sigma_epsilon,
                                                      N_subjid_per_sequence = N_subjid_per_sequence,
-                                                     seed = 20201217)
+                                                     seed = 20210111)
       
       assign(x = name_object,
       		 value = power_int)

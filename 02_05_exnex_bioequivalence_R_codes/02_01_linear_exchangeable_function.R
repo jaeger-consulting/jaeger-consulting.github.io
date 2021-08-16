@@ -172,6 +172,7 @@
                              #--------------------------------- Return relevant elements ----------------------------------#
 
                                 return(c(average_bioequivalence, coverage_mu_1, coverage_mu_2))
+
                              } })
 
 
