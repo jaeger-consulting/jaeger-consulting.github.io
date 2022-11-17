@@ -16,6 +16,8 @@ navbar:
           href: 01_03_quantitative_decision_making.html
         - text: "Biometrics Services"
           href: 01_04_biometrics_services.html
+        - text: "R-based solutions for clinical reporting"
+          href: 01_05_r_clinical_reporting.html
     - text: "Blog"
       menu:
         - text: "Sample size, allocation ratio and prior information"

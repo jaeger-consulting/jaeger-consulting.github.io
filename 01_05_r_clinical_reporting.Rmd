@@ -1,0 +1,15 @@
+---
+pagetitle: "R-based solutions for clinical reporting"
+---
+
+Thanks to the R community, R-based solutions are ready to be used to support end-to-end clinical reporting.
+
+The following services are proposed for the implementation of R-based solutions for clinical reporting:
+
+- Project management for the implementation of R-based solution for clinical reporting
+- Support in setting up R framework for SDTM and ADaM datasets (specification, programming and reviewer's guide)
+- Creation of analysis data results
+- Outputing of analysis data results in pdf, rtf, docx, html
+- R tools to support submission of eCTD
+- Creation and maintenance of tools for metadata management
+- Utility function for log export and R environment setup

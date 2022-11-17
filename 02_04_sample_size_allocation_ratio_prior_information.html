@@ -13,8 +13,8 @@
 
 <title>Sample size, allocation ratio and prior information</title>
 
-<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -67,6 +67,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 /* for pandoc --citeproc since 2.11 */
 div.csl-bib-body { }
@@ -114,6 +115,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -171,11 +175,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -204,8 +212,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -213,16 +221,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -266,7 +267,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -282,7 +283,7 @@ $(document).ready(function () {
   <a href="index.html">Home</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Services
      
     <span class="caret"></span>
@@ -300,10 +301,13 @@ $(document).ready(function () {
     <li>
       <a href="01_04_biometrics_services.html">Biometrics Services</a>
     </li>
+    <li>
+      <a href="01_05_r_clinical_reporting.html">R-based solutions for clinical reporting</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Blog
      
     <span class="caret"></span>
@@ -346,108 +350,239 @@ $(document).ready(function () {
 </div>
 
 
-<div id="sample-size-allocation-ratio-and-prior-information" class="section level1">
+<div id="sample-size-allocation-ratio-and-prior-information"
+class="section level1">
 <h1>Sample size, allocation ratio and prior information</h1>
-<p>Goal of this blog post is to illustrate on the normal context the impact of prior information on the optimal sample size and allocation ratio between a control and an experimental arm to target specific set of operational characteristics in a superiority setting.</p>
-<p>The blog post will be structured as followed. First, sample size in a weakly informative setting with equal allocation will be presented in order to target some operational characteristics. Then, under the same overall sample size, varying allocation ratio between the control and the experimental arm will be evaluated in the same weakly informative setting and in presence of prior information for the control arm mean. Finally, overall sample size and allocation ratio will be optimized in presence of the same informative prior for the control arm mean.</p>
-<p>This blog post will not cover the concept of Bayesian assurance nor stress out techniques to handle potential data-prior conflict.</p>
+<p>Goal of this blog post is to illustrate on the normal context the
+impact of prior information on the optimal sample size and allocation
+ratio between a control and an experimental arm to target specific set
+of operational characteristics in a superiority setting.</p>
+<p>The blog post will be structured as followed. First, sample size in a
+weakly informative setting with equal allocation will be presented in
+order to target some operational characteristics. Then, under the same
+overall sample size, varying allocation ratio between the control and
+the experimental arm will be evaluated in the same weakly informative
+setting and in presence of prior information for the control arm mean.
+Finally, overall sample size and allocation ratio will be optimized in
+presence of the same informative prior for the control arm mean.</p>
+<p>This blog post will not cover the concept of Bayesian assurance nor
+stress out techniques to handle potential data-prior conflict.</p>
 <p><br></p>
 <div id="introduction" class="section level2">
 <h2>1. Introduction</h2>
 <div id="general-setting" class="section level3">
 <h3>1.1. General setting</h3>
-<p>Let’s assumed that we are interested in evaluating the benefit of being under an experimental product versus a control product on a normally distributed endpoint <span class="math inline">\(y\)</span>. To do so, participants will be randomized and assigned to receive either the control or the experimental product.</p>
-<p>In order to quantitatively evaluate the benefit of receiving the experimental product versus the control product, let’s consider the following model:</p>
+<p>Let’s assumed that we are interested in evaluating the benefit of
+being under an experimental product versus a control product on a
+normally distributed endpoint <span class="math inline">\(y\)</span>. To
+do so, participants will be randomized and assigned to receive either
+the control or the experimental product.</p>
+<p>In order to quantitatively evaluate the benefit of receiving the
+experimental product versus the control product, let’s consider the
+following model:</p>
 <p><span class="math display">\[
 \begin{eqnarray}
-y_{ij} | \mu_{i},\tau_{i} &amp;\sim&amp; \mathcal{N}\left(\mu_{i}, \tau_{i}^{-1}\right) \\
+y_{ij} | \mu_{i},\tau_{i} &amp;\sim&amp; \mathcal{N}\left(\mu_{i},
+\tau_{i}^{-1}\right) \\
 \mu_{i} &amp;\sim&amp; \mathcal{N}\left(m_{i},p_{i}^{-1}\right) \\
 \tau_{i} &amp;\sim&amp; \mathcal{Ga}\left(a_{i}, b_{i}\right)
 \end{eqnarray}
 \]</span> where:</p>
 <ul>
-<li><span class="math inline">\(y_{ij}\)</span> is the <span class="math inline">\(j\)</span>-th observation in the <span class="math inline">\(i\)</span>-th arm of the variable of interest, <span class="math inline">\(i=1\)</span> is for experimental arm and <span class="math inline">\(i=2\)</span> for the control arm, with <span class="math inline">\(j=1, ..., n_{i}\)</span> where <span class="math inline">\(n_{i}\)</span> is the number of observations in the <span class="math inline">\(i\)</span>-th arm;</li>
-<li><span class="math inline">\(\mu_{i}\)</span> and <span class="math inline">\(\tau_{i}\)</span> are the mean and precision (inverse-variance) in the <span class="math inline">\(i\)</span>-th arm of the normally distributed variable of interest;</li>
-<li><span class="math inline">\(m_{i}\)</span> and <span class="math inline">\(p_{i}\)</span> are the mean and precision of the normal prior distribution for the mean <span class="math inline">\(\mu_{i}\)</span>;</li>
-<li><span class="math inline">\(a_{i}\)</span> and <span class="math inline">\(b_{i}\)</span> are the shape and rate of the gamma prior distribution for the precision <span class="math inline">\(\tau_{i}\)</span>.</li>
+<li><span class="math inline">\(y_{ij}\)</span> is the <span
+class="math inline">\(j\)</span>-th observation in the <span
+class="math inline">\(i\)</span>-th arm of the variable of interest,
+<span class="math inline">\(i=1\)</span> is for experimental arm and
+<span class="math inline">\(i=2\)</span> for the control arm, with <span
+class="math inline">\(j=1, ..., n_{i}\)</span> where <span
+class="math inline">\(n_{i}\)</span> is the number of observations in
+the <span class="math inline">\(i\)</span>-th arm;</li>
+<li><span class="math inline">\(\mu_{i}\)</span> and <span
+class="math inline">\(\tau_{i}\)</span> are the mean and precision
+(inverse-variance) in the <span class="math inline">\(i\)</span>-th arm
+of the normally distributed variable of interest;</li>
+<li><span class="math inline">\(m_{i}\)</span> and <span
+class="math inline">\(p_{i}\)</span> are the mean and precision of the
+normal prior distribution for the mean <span
+class="math inline">\(\mu_{i}\)</span>;</li>
+<li><span class="math inline">\(a_{i}\)</span> and <span
+class="math inline">\(b_{i}\)</span> are the shape and rate of the gamma
+prior distribution for the precision <span
+class="math inline">\(\tau_{i}\)</span>.</li>
 </ul>
-<p>The choice of the prior distribution for the mean parameters <span class="math inline">\(\mu_{i}\)</span> and the precision parameters <span class="math inline">\(\tau_{i}\)</span> will not be discussed in this blog post. Values for those parameters will be set in each subsequent section.</p>
-<p>The posterior probability <span class="math inline">\(P\left(\delta = \mu_{1} - \mu_{2} \gt 0 | \mathcal{D}\right)\)</span> indicates the level of evidence that the mean parameter in the experimental arm is larger than the mean parameter in the control arm given the observed set of data <span class="math inline">\(\mathcal{D}\)</span>.</p>
+<p>The choice of the prior distribution for the mean parameters <span
+class="math inline">\(\mu_{i}\)</span> and the precision parameters
+<span class="math inline">\(\tau_{i}\)</span> will not be discussed in
+this blog post. Values for those parameters will be set in each
+subsequent section.</p>
+<p>The posterior probability <span class="math inline">\(P\left(\delta =
+\mu_{1} - \mu_{2} \gt 0 | \mathcal{D}\right)\)</span> indicates the
+level of evidence that the mean parameter in the experimental arm is
+larger than the mean parameter in the control arm given the observed set
+of data <span class="math inline">\(\mathcal{D}\)</span>.</p>
 <p><br></p>
 </div>
-<div id="sec:assumptions_target_operational_characteristics" class="section level3">
+<div id="sec:assumptions_target_operational_characteristics"
+class="section level3">
 <h3>1.2. Assumptions and target operational characteristics</h3>
-<p>Sample size and power calculation will be done via simulations. The following assumptions and target operational characteristics will be considered through the subsequent section:</p>
+<p>Sample size and power calculation will be done via simulations. The
+following assumptions and target operational characteristics will be
+considered through the subsequent section:</p>
 <ul>
-<li>A total of 20000 datasets will be generated for each simulation scenario;</li>
-<li>Normal data will be generated using the <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/Normal.html">rnorm</a> function, with:
+<li>A total of 20000 datasets will be generated for each simulation
+scenario;</li>
+<li>Normal data will be generated using the <a
+href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/Normal.html">rnorm</a>
+function, with:
 <ul>
 <li>mean set to 7 in the experimental arm and 5 in the control arm;</li>
-<li>standard deviation set to 2 in the experimental arm and 2 in the control arm;</li>
+<li>standard deviation set to 2 in the experimental arm and 2 in the
+control arm;</li>
 </ul></li>
-<li>For a given simulated dataset, experimental arm will be stated as superior to the control arm if <span class="math inline">\(P\left(\delta = \mu_{1} - \mu_{2} \gt 0 | \mathcal{D}\right)\)</span> is larger than 0.975;</li>
-<li>For a given sample size, power will be computed as the proportion over the 20000 simulated datasets for which superiority of the experimental arm over the control arm can be stated;</li>
-<li>When sample size is to be calculated for a target power (e.g. 80 %), it will represent the smallest sample size out of a search grid for which the power is above this target.</li>
+<li>For a given simulated dataset, experimental arm will be stated as
+superior to the control arm if <span class="math inline">\(P\left(\delta
+= \mu_{1} - \mu_{2} \gt 0 | \mathcal{D}\right)\)</span> is larger than
+0.975;</li>
+<li>For a given sample size, power will be computed as the proportion
+over the 20000 simulated datasets for which superiority of the
+experimental arm over the control arm can be stated;</li>
+<li>When sample size is to be calculated for a target power (e.g. 80 %),
+it will represent the smallest sample size out of a search grid for
+which the power is above this target.</li>
 </ul>
 <p><br></p>
 </div>
 <div id="sec:sample_size_equal_allocation_ratio" class="section level3">
-<h3>1.3. Sample size with equal allocation ratio with weakly informative priors</h3>
-<p>As mentioned in <a href="#sec:assumptions_target_operational_characteristics">Section 1.2</a>, sample size calculation is based on a search grid. With respect to the prior distribution for <span class="math inline">\(\mu_{i}\)</span> and <span class="math inline">\(\tau_{i}\)</span>, the following parameters are considered:</p>
+<h3>1.3. Sample size with equal allocation ratio with weakly informative
+priors</h3>
+<p>As mentioned in <a
+href="#sec:assumptions_target_operational_characteristics">Section
+1.2</a>, sample size calculation is based on a search grid. With respect
+to the prior distribution for <span
+class="math inline">\(\mu_{i}\)</span> and <span
+class="math inline">\(\tau_{i}\)</span>, the following parameters are
+considered:</p>
 <ul>
-<li><span class="math inline">\(m_{i} = 0\)</span> and <span class="math inline">\(p_{i} = 10^{-6}\)</span>, leading to a very flat normal prior for the mean parameter in the control and experimental arm;</li>
-<li><span class="math inline">\(a_{i} = b_{i} = 10^{-6}\)</span>, leading to a prior for the precision parameter with mean 1 and variance 10<sup>6</sup> in the control and experimental arm.</li>
+<li><span class="math inline">\(m_{i} = 0\)</span> and <span
+class="math inline">\(p_{i} = 10^{-6}\)</span>, leading to a very flat
+normal prior for the mean parameter in the control and experimental
+arm;</li>
+<li><span class="math inline">\(a_{i} = b_{i} = 10^{-6}\)</span>,
+leading to a prior for the precision parameter with mean 1 and variance
+10<sup>6</sup> in the control and experimental arm.</li>
 </ul>
-<p>Those parameters will lead to a weakly informative setting close to the Jeffreys priors.</p>
-<p>Given those assumptions and parameters, 18 subjects in the control arm and 18 subjects in the experimental arm corresponds to the smallest overall sample size in a 1:1 allocation ratio for which the estimated power is above the target of 80 %.</p>
+<p>Those parameters will lead to a weakly informative setting close to
+the Jeffreys priors.</p>
+<p>Given those assumptions and parameters, 18 subjects in the control
+arm and 18 subjects in the experimental arm corresponds to the smallest
+overall sample size in a 1:1 allocation ratio for which the estimated
+power is above the target of 80 %.</p>
 <p><br></p>
 </div>
 <div id="software" class="section level3">
 <h3>1.4. Software</h3>
-<p>Sample of the posterior distribution for the mean parameters have been obtained using package <a href="https://cran.r-project.org/web/packages/rstan/index.html">rstan</a> (Version 2.26.1, <span class="citation">Stan Development Team (2018)</span>).</p>
+<p>Sample of the posterior distribution for the mean parameters have
+been obtained using package <a
+href="https://cran.r-project.org/web/packages/rstan/index.html">rstan</a>
+(Version 2.21.7, <span class="citation">Stan Development Team
+(2018)</span>).</p>
 <p><br></p>
 </div>
 </div>
 <div id="sec:impact_allocation_ratio" class="section level2">
-<h2>2. Impact of allocation ratio with weakly informative and informative priors</h2>
-<p>In order to evaluate the impact of the allocation ratio, the overall sample size will be set to 36 subjects, but sample size in each arm will vary between 10 and 26 subjects.</p>
-<p>With respect to prior information, the followings will be considered:</p>
+<h2>2. Impact of allocation ratio with weakly informative and
+informative priors</h2>
+<p>In order to evaluate the impact of the allocation ratio, the overall
+sample size will be set to 36 subjects, but sample size in each arm will
+vary between 10 and 26 subjects.</p>
+<p>With respect to prior information, the followings will be
+considered:</p>
 <ul>
 <li>Weakly informative prior:
 <ul>
-<li><span class="math inline">\(m_{i} = 0\)</span> and <span class="math inline">\(p_{i} = 10^{-6}\)</span>, leading to a very flat normal prior for the mean parameter in the control and experimental arm;</li>
-<li><span class="math inline">\(a_{i} = b_{i} = 10^{-6}\)</span>, leading to a prior for the precision parameter with mean 1 and variance 10<sup>6</sup> in the control and experimental arm;</li>
+<li><span class="math inline">\(m_{i} = 0\)</span> and <span
+class="math inline">\(p_{i} = 10^{-6}\)</span>, leading to a very flat
+normal prior for the mean parameter in the control and experimental
+arm;</li>
+<li><span class="math inline">\(a_{i} = b_{i} = 10^{-6}\)</span>,
+leading to a prior for the precision parameter with mean 1 and variance
+10<sup>6</sup> in the control and experimental arm;</li>
 </ul></li>
 <li>Informative prior;
 <ul>
-<li><span class="math inline">\(m_{1} = 0\)</span> and <span class="math inline">\(p_{i} = 10^{-6}\)</span> for the prior distribution of the mean in the experimental arm;</li>
-<li><span class="math inline">\(m_{2} = 5\)</span> and <span class="math inline">\(p_{i} = 1.0\)</span> for the prior distribution of the mean in the control arm;</li>
-<li><span class="math inline">\(a_{i} = b_{i} = 10^{-6}\)</span>, leading to a prior for the precision parameter with mean 1 and variance 10<sup>6</sup> in the control and experimental arm.</li>
+<li><span class="math inline">\(m_{1} = 0\)</span> and <span
+class="math inline">\(p_{i} = 10^{-6}\)</span> for the prior
+distribution of the mean in the experimental arm;</li>
+<li><span class="math inline">\(m_{2} = 5\)</span> and <span
+class="math inline">\(p_{i} = 1.0\)</span> for the prior distribution of
+the mean in the control arm;</li>
+<li><span class="math inline">\(a_{i} = b_{i} = 10^{-6}\)</span>,
+leading to a prior for the precision parameter with mean 1 and variance
+10<sup>6</sup> in the control and experimental arm.</li>
 </ul></li>
 </ul>
-<p>Figure below shows for a fixed sample size of 36 subjects the power estimated via simulation against the number of subjects in the control and experimental arm.</p>
+<p>Figure below shows for a fixed sample size of 36 subjects the power
+estimated via simulation against the number of subjects in the control
+and experimental arm.</p>
 <p><br></p>
 <p><img src="02_04_sample_size_allocation_ratio_prior_information_files/figure-html/unnamed-chunk-1-1.png" width="960" /></p>
 <p><br></p>
-<p>In the weakly informative setting, the power curve increases until the control to experimental allocation probability is at 0.5 and then decreases back in a symmetrical shape. This is a known feature in standard frequentist sample size calculation where optimal sample size is achieved with a 1:1 allocation ratio.</p>
-<p>In the informative setting, the power curve is always above the power curve of the weakly informative setting. This shows that the informative prior for the mean parameter in the control arm allows to increase the chance to state that the experimental arm is superior to the control arm. This can be explained by the prior for the mean parameter in the control arm being aligned with the data generation process. In addition, the power curve is no more centered around the 0.5 allocation probability. Maximum power is attained with 15 and 21 subjects in the control and experimental arm. This illustrates the “data augmentation” that benefits directly to the control arm (via a narrower credible interval for the mean parameter) and then indirectly for the comparison against the experimental arm.</p>
+<p>In the weakly informative setting, the power curve increases until
+the control to experimental allocation probability is at 0.5 and then
+decreases back in a symmetrical shape. This is a known feature in
+standard frequentist sample size calculation where optimal sample size
+is achieved with a 1:1 allocation ratio.</p>
+<p>In the informative setting, the power curve is always above the power
+curve of the weakly informative setting. This shows that the informative
+prior for the mean parameter in the control arm allows to increase the
+chance to state that the experimental arm is superior to the control
+arm. This can be explained by the prior for the mean parameter in the
+control arm being aligned with the data generation process. In addition,
+the power curve is no more centered around the 0.5 allocation
+probability. Maximum power is attained with 15 and 21 subjects in the
+control and experimental arm. This illustrates the “data augmentation”
+that benefits directly to the control arm (via a narrower credible
+interval for the mean parameter) and then indirectly for the comparison
+against the experimental arm.</p>
 <p><br></p>
 </div>
-<div id="optimal-sample-size-and-allocation-ratio-with-informative-priors" class="section level2">
-<h2>3. Optimal sample size and allocation ratio with informative priors</h2>
-<p><a href="#sec:impact_allocation_ratio">Section 2</a> has shown that overpowered situation occurred in presence of the informative prior for the mean parameter in the control arm. In this section, the sample size will be proposed while targeting a power of 80 % with the same informative prior than the one used in the previous section.</p>
-<p>Figure below shows the power curve when overall sample size is set at 29 subjects against the number of subjects in the control and experimental arm.</p>
+<div
+id="optimal-sample-size-and-allocation-ratio-with-informative-priors"
+class="section level2">
+<h2>3. Optimal sample size and allocation ratio with informative
+priors</h2>
+<p><a href="#sec:impact_allocation_ratio">Section 2</a> has shown that
+overpowered situation occurred in presence of the informative prior for
+the mean parameter in the control arm. In this section, the sample size
+will be proposed while targeting a power of 80 % with the same
+informative prior than the one used in the previous section.</p>
+<p>Figure below shows the power curve when overall sample size is set at
+29 subjects against the number of subjects in the control and
+experimental arm.</p>
 <p><br></p>
 <p><img src="02_04_sample_size_allocation_ratio_prior_information_files/figure-html/unnamed-chunk-3-1.png" width="960" /></p>
 <p><br></p>
-<p>Versus overall sample size proposed in <a href="#sec:sample_size_equal_allocation_ratio">Section 1.3</a>, a decrease of 7 subjects can be obtained when integrating the prior information for the mean parameter in the control arm while still having the same target power. This represent a 19.4 % reduction in overall sample size. With 10 subjects in the control arm and 19 subjects in the experimental arm, power is maximal.</p>
+<p>Versus overall sample size proposed in <a
+href="#sec:sample_size_equal_allocation_ratio">Section 1.3</a>, a
+decrease of 7 subjects can be obtained when integrating the prior
+information for the mean parameter in the control arm while still having
+the same target power. This represent a 19.4 % reduction in overall
+sample size. With 10 subjects in the control arm and 19 subjects in the
+experimental arm, power is maximal.</p>
 <p><br></p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>4. Conclusion</h2>
-<p>In this blog post, we evaluated the impact of including prior information in the control arm on optimal overall sample size and allocation ratio in a superiority setting for normally distributed data. In absence of prior-data conflict, the introduction of prior information allows either to increase the power versus alternative approaches not considering this prior information or to decrease the overall sample size while still maintaining the same target power.</p>
+<p>In this blog post, we evaluated the impact of including prior
+information in the control arm on optimal overall sample size and
+allocation ratio in a superiority setting for normally distributed data.
+In absence of prior-data conflict, the introduction of prior information
+allows either to increase the power versus alternative approaches not
+considering this prior information or to decrease the overall sample
+size while still maintaining the same target power.</p>
 <p><br></p>
-<p><small><em>Post created on 2020-10-29. Last update on 2020-10-29.</em></small></p>
+<p><small><em>Post created on 2020-10-29. Last update on
+2020-10-29.</em></small></p>
 <hr />
 <p><br></p>
 </div>
@@ -457,7 +592,8 @@ y_{ij} | \mu_{i},\tau_{i} &amp;\sim&amp; \mathcal{N}\left(\mu_{i}, \tau_{i}^{-1}
 <p><small></p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-sdt2018" class="csl-entry">
-Stan Development Team. 2018. <span>“RStan: The r Interface to Stan.”</span> 2018. <a href="http://mc-stan.org">http://mc-stan.org</a>.
+Stan Development Team. 2018. <span>“RStan: The r Interface to
+Stan.”</span> 2018. <a href="http://mc-stan.org">http://mc-stan.org</a>.
 </div>
 </div>
 </div>

@@ -13,8 +13,8 @@
 
 <title>Robust exchangeability and bioequivalence studies</title>
 
-<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -67,6 +67,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 /* for pandoc --citeproc since 2.11 */
 div.csl-bib-body { }
@@ -114,6 +115,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -171,11 +175,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -204,8 +212,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -213,16 +221,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -266,7 +267,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -282,7 +283,7 @@ $(document).ready(function () {
   <a href="index.html">Home</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Services
      
     <span class="caret"></span>
@@ -300,10 +301,13 @@ $(document).ready(function () {
     <li>
       <a href="01_04_biometrics_services.html">Biometrics Services</a>
     </li>
+    <li>
+      <a href="01_05_r_clinical_reporting.html">R-based solutions for clinical reporting</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Blog
      
     <span class="caret"></span>
@@ -350,64 +354,167 @@ $(document).ready(function () {
     MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "all"} } });
 </script>
 <p><em>Under construction</em></p>
-<div id="robust-exchangeability-and-bioequivalence-studies" class="section level1">
+<div id="robust-exchangeability-and-bioequivalence-studies"
+class="section level1">
 <h1>Robust exchangeability and bioequivalence studies</h1>
-<p>Let’s consider that a reference drug formulation has already been evaluated in multiple clinical trials. Pharamacokinetic (PK) profile is considered to be established and information on the main PK parameters, like the area under the plasma concentation time curve (<span class="math inline">\(AUC\)</span>), the peak drug concentration <span class="math inline">\(C_{max}\)</span> or the half-life <span class="math inline">\(t_{1/2}\)</span>, is readily available.</p>
-<p>Due to development constraints, like a modification of the manufacturing of the active ingredient, a process improvement for scaling-up the drug production or a new formulation to limit the food effect, a new formulation is to be evaluated for being used in all subsequent clinical trials.</p>
-<p>Bioequivalence between the reference drug formulation and the new drug formulation is generally left to the judgment of the sponsor. According to the FDA guidance on bioavailability and bioequivalence for studies submitted in NDAs or INDs, <em>bioequivalence means the absence of a significant difference in the rate and extent to which the active ingredient or active moiety in pharmaceutical equivalents or pharmaceutical alternatives become available at the site of drug action when administered at the same molar dose under similar conditions in an appropriately designed study</em> (see definition in see <span class="citation">U.S. Food &amp; Drug Administration - Center for Drug Evaluation and Research (2014)</span>).</p>
-<p>This blog post will assess the impact of the robust exchangeability approach introduced by <span class="citation">Neuenschwander et al. (2016)</span> when evaluating the average bioequivalence in a bioequivalence study.</p>
+<p>Let’s consider that a reference drug formulation has already been
+evaluated in multiple clinical trials. Pharamacokinetic (PK) profile is
+considered to be established and information on the main PK parameters,
+like the area under the plasma concentation time curve (<span
+class="math inline">\(AUC\)</span>), the peak drug concentration <span
+class="math inline">\(C_{max}\)</span> or the half-life <span
+class="math inline">\(t_{1/2}\)</span>, is readily available.</p>
+<p>Due to development constraints, like a modification of the
+manufacturing of the active ingredient, a process improvement for
+scaling-up the drug production or a new formulation to limit the food
+effect, a new formulation is to be evaluated for being used in all
+subsequent clinical trials.</p>
+<p>Bioequivalence between the reference drug formulation and the new
+drug formulation is generally left to the judgment of the sponsor.
+According to the FDA guidance on bioavailability and bioequivalence for
+studies submitted in NDAs or INDs, <em>bioequivalence means the absence
+of a significant difference in the rate and extent to which the active
+ingredient or active moiety in pharmaceutical equivalents or
+pharmaceutical alternatives become available at the site of drug action
+when administered at the same molar dose under similar conditions in an
+appropriately designed study</em> (see definition in see <span
+class="citation">U.S. Food &amp; Drug Administration - Center for Drug
+Evaluation and Research (2014)</span>).</p>
+<p>This blog post will assess the impact of the robust exchangeability
+approach introduced by <span class="citation">Neuenschwander et al.
+(2016)</span> when evaluating the average bioequivalence in a
+bioequivalence study.</p>
 <p><br></p>
 <div id="sec:proposed_approach" class="section level2">
 <h2>1. Proposed approach</h2>
 <p><br></p>
 <div id="average-bioequivalence" class="section level3">
 <h3>1.1. Average bioequivalence</h3>
-<p>The most commonly used statistical design for comparing a new drug formulation and a reference drug formulation for average bioequivalence is a crossover design. At least two sequences and two periods have to be considered (standard 2x2 crossover design). In a standard 2x2 crossover design, each subject is randomized and assigned to a sequence of formulations. Subjects assigned to reference formulation/new formulation (R/N) will receive R in the first dosing period and N in the second dosing period. Subjects assigned to new formulation/reference formulation (N/R) will receive N in the first dosing period and R in the second dosing period. A sufficiently long washout period is to be imposed between the two dosing periods.</p>
+<p>The most commonly used statistical design for comparing a new drug
+formulation and a reference drug formulation for average bioequivalence
+is a crossover design. At least two sequences and two periods have to be
+considered (standard 2x2 crossover design). In a standard 2x2 crossover
+design, each subject is randomized and assigned to a sequence of
+formulations. Subjects assigned to reference formulation/new formulation
+(R/N) will receive R in the first dosing period and N in the second
+dosing period. Subjects assigned to new formulation/reference
+formulation (N/R) will receive N in the first dosing period and R in the
+second dosing period. A sufficiently long washout period is to be
+imposed between the two dosing periods.</p>
 <center>
 <div>
 <p><img src="images/crossover_graph.png" alt = "2x2 crossover scheme" style = "margin-top: 10px; margin-bottom: 10px;"></p>
 </div>
 </center>
-<p>Given that PK parameters are (usually) log-normally distributed, log-transformation of exposure measures before statistical analysis is recommended <span class="citation">(U.S. Food &amp; Drug Administration - Center for Drug Evaluation and Research 2001, 2014)</span>.</p>
-<p>Let <span class="math inline">\(y_{n}\)</span> be the log of <span class="math inline">\(n\)</span>-th measure of the PK parameter, <span class="math inline">\(n=1,\ldots,N\)</span>. The linear model under the 2x2 crossover design can be written as:</p>
+<p>Given that PK parameters are (usually) log-normally distributed,
+log-transformation of exposure measures before statistical analysis is
+recommended <span class="citation">(U.S. Food &amp; Drug Administration
+- Center for Drug Evaluation and Research 2001, 2014)</span>.</p>
+<p>Let <span class="math inline">\(y_{n}\)</span> be the log of <span
+class="math inline">\(n\)</span>-th measure of the PK parameter, <span
+class="math inline">\(n=1,\ldots,N\)</span>. The linear model under the
+2x2 crossover design can be written as:</p>
 <p><span class="math display">\[\begin{equation}
-  y_{n} = \alpha_{f_{n}} + \beta \times p_{n} + \gamma \times c_{n} + \delta_{s_{n}} + \epsilon_{n}
+  y_{n} = \alpha_{f_{n}} + \beta \times p_{n} + \gamma \times c_{n} +
+\delta_{s_{n}} + \epsilon_{n}
   \label{eq:equation1}
 \end{equation}\]</span></p>
 <p>where:</p>
 <ul>
-<li><span class="math inline">\(f_{n}\)</span> is the formulation indicator, i.e. <span class="math inline">\(1\)</span> or <span class="math inline">\(2\)</span> if the <span class="math inline">\(n\)</span>-th observation is under the reference or new formulation;</li>
-<li><span class="math inline">\(p_{n}\)</span> is the period covariate, i.e. <span class="math inline">\(-1\)</span> or <span class="math inline">\(+1\)</span> if the <span class="math inline">\(n\)</span>-th observation is under the period 1 or period 2;</li>
-<li><span class="math inline">\(c_{n}\)</span> is the carry-over covariate, i.e. <span class="math inline">\(0\)</span> if the <span class="math inline">\(n\)</span>-th observation is under period 1, <span class="math inline">\(-1\)</span> if the <span class="math inline">\(n\)</span>-th observation is under period 2 and the reference formulation or <span class="math inline">\(+1\)</span> if the <span class="math inline">\(n\)</span>-th observation is under period 2 and the new formulation;</li>
-<li><span class="math inline">\(s_{n}\)</span> is the subject indicator, i.e. the subject number associated with the <span class="math inline">\(n\)</span>-th observation;</li>
-<li><span class="math inline">\(\alpha_{1}\)</span> and <span class="math inline">\(\alpha_{2}\)</span> is the fixed effect for the reference formulation and the new formulation;</li>
-<li><span class="math inline">\(\beta\)</span> is the period effect;</li>
-<li><span class="math inline">\(\gamma\)</span> is the carry-over effect;</li>
-<li><span class="math inline">\(\delta_{s_{n}}\)</span> is the random effect of the <span class="math inline">\(s_{n}\)</span>-th subject, normally distributed with mean 0 and variance <span class="math inline">\(\sigma_{s}^{2}\)</span>;</li>
-<li><span class="math inline">\(\epsilon_{n}\)</span> is the random error in observing <span class="math inline">\(y_{n}\)</span>, normally distributed with mean 0 and variance <span class="math inline">\(\sigma_{\epsilon,f_n}^{2}\)</span>;</li>
-<li>the random effect and the random error are mutually independent.</li>
+<li><span class="math inline">\(f_{n}\)</span> is the formulation
+indicator, i.e. <span class="math inline">\(1\)</span> or <span
+class="math inline">\(2\)</span> if the <span
+class="math inline">\(n\)</span>-th observation is under the reference
+or new formulation;</li>
+<li><span class="math inline">\(p_{n}\)</span> is the period covariate,
+i.e. <span class="math inline">\(-1\)</span> or <span
+class="math inline">\(+1\)</span> if the <span
+class="math inline">\(n\)</span>-th observation is under the period 1 or
+period 2;</li>
+<li><span class="math inline">\(c_{n}\)</span> is the carry-over
+covariate, i.e. <span class="math inline">\(0\)</span> if the <span
+class="math inline">\(n\)</span>-th observation is under period 1, <span
+class="math inline">\(-1\)</span> if the <span
+class="math inline">\(n\)</span>-th observation is under period 2 and
+the reference formulation or <span class="math inline">\(+1\)</span> if
+the <span class="math inline">\(n\)</span>-th observation is under
+period 2 and the new formulation;</li>
+<li><span class="math inline">\(s_{n}\)</span> is the subject indicator,
+i.e. the subject number associated with the <span
+class="math inline">\(n\)</span>-th observation;</li>
+<li><span class="math inline">\(\alpha_{1}\)</span> and <span
+class="math inline">\(\alpha_{2}\)</span> is the fixed effect for the
+reference formulation and the new formulation;</li>
+<li><span class="math inline">\(\beta\)</span> is the period
+effect;</li>
+<li><span class="math inline">\(\gamma\)</span> is the carry-over
+effect;</li>
+<li><span class="math inline">\(\delta_{s_{n}}\)</span> is the random
+effect of the <span class="math inline">\(s_{n}\)</span>-th subject,
+normally distributed with mean 0 and variance <span
+class="math inline">\(\sigma_{s}^{2}\)</span>;</li>
+<li><span class="math inline">\(\epsilon_{n}\)</span> is the random
+error in observing <span class="math inline">\(y_{n}\)</span>, normally
+distributed with mean 0 and variance <span
+class="math inline">\(\sigma_{\epsilon,f_n}^{2}\)</span>;</li>
+<li>the random effect and the random error are mutually
+independent.</li>
 </ul>
-<p>The average bioequivalence will be stated if the 90% credible interval for <span class="math inline">\(\alpha_{2} - \alpha_{1}\)</span> is contained in the interval <span class="math inline">\(\left[-\log\left(1.25\right); \log\left(1.25\right)\right]\)</span>.</p>
+<p>The average bioequivalence will be stated if the 90% credible
+interval for <span class="math inline">\(\alpha_{2} -
+\alpha_{1}\)</span> is contained in the interval <span
+class="math inline">\(\left[-\log\left(1.25\right);
+\log\left(1.25\right)\right]\)</span>.</p>
 <p><br></p>
 </div>
 <div id="robust-exchangeability" class="section level3">
 <h3>1.2. Robust exchangeability</h3>
-<p><span class="citation">Neuenschwander et al. (2016)</span> have proposed a exchangeability–nonexchangeability (EXNEX) approach that can be seen as a robust mixture extension of the standard exchangeability approach. Each stratum-specific parameter can be exchangeable with other similar strata parameters or nonexchangeable with any of them.</p>
-<p>The idea is to adapt this approach to the average bioequivalence setting and to apply the EXNEX approach on being under the reference drug formulation or the new drug formulation. For formulation <span class="math inline">\(i\)</span>, the fixed effect <span class="math inline">\(\alpha_{i}\)</span> is modelled by:</p>
+<p><span class="citation">Neuenschwander et al. (2016)</span> have
+proposed a exchangeability–nonexchangeability (EXNEX) approach that can
+be seen as a robust mixture extension of the standard exchangeability
+approach. Each stratum-specific parameter can be exchangeable with other
+similar strata parameters or nonexchangeable with any of them.</p>
+<p>The idea is to adapt this approach to the average bioequivalence
+setting and to apply the EXNEX approach on being under the reference
+drug formulation or the new drug formulation. For formulation <span
+class="math inline">\(i\)</span>, the fixed effect <span
+class="math inline">\(\alpha_{i}\)</span> is modelled by:</p>
 <ul>
-<li>Exchangeability component, with probability <span class="math inline">\(\pi_{i}\)</span>:
+<li>Exchangeability component, with probability <span
+class="math inline">\(\pi_{i}\)</span>:
 <ul>
-<li><span class="math inline">\(\alpha_{i}|\mu_{\alpha},\tau_{\alpha} \sim \mathcal{N}\left(\mu_{\alpha},\tau_{\alpha}^{2}\right)\)</span>;</li>
-<li><span class="math inline">\(\mu_{\alpha} \sim \mathcal{N}\left(m_{\alpha},t_{\alpha}^{2}\right)\)</span>;</li>
-<li><span class="math inline">\(\tau_{\alpha} \sim \mathcal{HN}\left(0,\nu_{\alpha}^{2}\right)\)</span>;</li>
+<li><span class="math inline">\(\alpha_{i}|\mu_{\alpha},\tau_{\alpha}
+\sim
+\mathcal{N}\left(\mu_{\alpha},\tau_{\alpha}^{2}\right)\)</span>;</li>
+<li><span class="math inline">\(\mu_{\alpha} \sim
+\mathcal{N}\left(m_{\alpha},t_{\alpha}^{2}\right)\)</span>;</li>
+<li><span class="math inline">\(\tau_{\alpha} \sim
+\mathcal{HN}\left(0,\nu_{\alpha}^{2}\right)\)</span>;</li>
 </ul></li>
-<li>Non-exchangeability component, with probability <span class="math inline">\(1 - \pi_{i}\)</span>:
+<li>Non-exchangeability component, with probability <span
+class="math inline">\(1 - \pi_{i}\)</span>:
 <ul>
-<li><span class="math inline">\(\alpha_{i} \sim \mathcal{N}\left(m_{\alpha_{i}},t_{\alpha_{i}}^{2}\right)\)</span>.</li>
+<li><span class="math inline">\(\alpha_{i} \sim
+\mathcal{N}\left(m_{\alpha_{i}},t_{\alpha_{i}}^{2}\right)\)</span>.</li>
 </ul></li>
 </ul>
-<p>For the exchangeability distribution, parameters for the prior distributions for <span class="math inline">\(\mu_{\alpha}\)</span> and <span class="math inline">\(\tau_{\alpha}\)</span> will be constructed based on the available information from all the clinical trials where PK information is available on the reference drug formulation. For the non-exchangeable distribution, weakly informative prior could be envisaged. The probability <span class="math inline">\(\pi_{i}\)</span> can either be fixed and will be updated during the estimation process or a prior distribution can be set on it, e.g. <span class="math inline">\(\pi_{i} \sim \mathcal{Be}\left(a_{i}, b_{i}\right)\)</span>. In both situation, it will indicate how a priori the reference/new drug formulations are exchangeable.</p>
-<p>Supplementary material from <span class="citation">Neuenschwander et al. (2016)</span> provides the WinBUGS <span class="citation">(Lunn et al. 2000)</span> code for the binary EXNEX model. This can easily be updated to the 2x2 crossover linear model and over other software like Stan <span class="citation">(Stan Development Team 2018)</span>.</p>
+<p>For the exchangeability distribution, parameters for the prior
+distributions for <span class="math inline">\(\mu_{\alpha}\)</span> and
+<span class="math inline">\(\tau_{\alpha}\)</span> will be constructed
+based on the available information from all the clinical trials where PK
+information is available on the reference drug formulation. For the
+non-exchangeable distribution, weakly informative prior could be
+envisaged. The probability <span class="math inline">\(\pi_{i}\)</span>
+can either be fixed and will be updated during the estimation process or
+a prior distribution can be set on it, e.g. <span
+class="math inline">\(\pi_{i} \sim \mathcal{Be}\left(a_{i},
+b_{i}\right)\)</span>. In both situation, it will indicate how a priori
+the reference/new drug formulations are exchangeable.</p>
+<p>Supplementary material from <span class="citation">Neuenschwander et
+al. (2016)</span> provides the WinBUGS <span class="citation">(Lunn et
+al. 2000)</span> code for the binary EXNEX model. This can easily be
+updated to the 2x2 crossover linear model and over other software like
+Stan <span class="citation">(Stan Development Team 2018)</span>.</p>
 <p><br></p>
 </div>
 </div>
@@ -416,17 +523,28 @@ $(document).ready(function () {
 <p><br></p>
 <div id="simulation-scenarios" class="section level3">
 <h3>2.1. Simulation scenarios</h3>
-<p>In order to evaluate the characteristics for the proposed robust exchangeability approach versus alternative standard approaches, simulations will be performed over multiple scenarios.</p>
+<p>In order to evaluate the characteristics for the proposed robust
+exchangeability approach versus alternative standard approaches,
+simulations will be performed over multiple scenarios.</p>
 <p>The following models will be considered:</p>
 <ul>
-<li>Robust exchangeability approach presented in <a href="#sec:proposed_approach">Section 1</a>;</li>
-<li>Fully exchangeable approach for the prior for <span class="math inline">\(\alpha_{i}\)</span>;</li>
-<li>Weakly informative approach for the prior for <span class="math inline">\(\alpha_{i}\)</span>.</li>
+<li>Robust exchangeability approach presented in <a
+href="#sec:proposed_approach">Section 1</a>;</li>
+<li>Fully exchangeable approach for the prior for <span
+class="math inline">\(\alpha_{i}\)</span>;</li>
+<li>Weakly informative approach for the prior for <span
+class="math inline">\(\alpha_{i}\)</span>.</li>
 </ul>
-<p>For the exchangeability distribution, it will not be discussed on how to set the parameters of the priors for <span class="math inline">\(\mu_{\alpha}\)</span> and <span class="math inline">\(\tau_{\alpha}\)</span>. For the simulation, the followings is assumed:</p>
+<p>For the exchangeability distribution, it will not be discussed on how
+to set the parameters of the priors for <span
+class="math inline">\(\mu_{\alpha}\)</span> and <span
+class="math inline">\(\tau_{\alpha}\)</span>. For the simulation, the
+followings is assumed:</p>
 <ul>
-<li><span class="math inline">\(\mu_{\alpha} \sim \mathcal{N}\left(xx,yy^2\right)\)</span></li>
-<li><span class="math inline">\(\tau_{\alpha} \sim \mathcal{HN}\left(0,zz^2\right)\)</span>.</li>
+<li><span class="math inline">\(\mu_{\alpha} \sim
+\mathcal{N}\left(xx,yy^2\right)\)</span></li>
+<li><span class="math inline">\(\tau_{\alpha} \sim
+\mathcal{HN}\left(0,zz^2\right)\)</span>.</li>
 </ul>
 <p>The following data generation process will be considered:</p>
 <ul>
@@ -443,7 +561,12 @@ $(document).ready(function () {
 <li>Standard deviation for the random error;</li>
 <li>Twelve (12), 16 or 20 subjects.</li>
 </ul>
-<p>Per data generation scenario, 10’000 datasets will be generated. Power for average bioequivalence will be estimated as the proportion of cases where the 90% credible interval for <span class="math inline">\(\alpha_{2} - \alpha_{1}\)</span> is contained in the interval <span class="math inline">\(\left[-\log\left(1.25\right); \log\left(1.25\right)\right]\)</span>.</p>
+<p>Per data generation scenario, 10’000 datasets will be generated.
+Power for average bioequivalence will be estimated as the proportion of
+cases where the 90% credible interval for <span
+class="math inline">\(\alpha_{2} - \alpha_{1}\)</span> is contained in
+the interval <span class="math inline">\(\left[-\log\left(1.25\right);
+\log\left(1.25\right)\right]\)</span>.</p>
 <p><br></p>
 </div>
 </div>
@@ -453,10 +576,16 @@ $(document).ready(function () {
 </div>
 <div id="conclusion" class="section level2">
 <h2>3. Conclusion</h2>
-<p>When data generation aligned with prior, robust approach work similarly to the exchangeable approach When data generation indicates average bioequivalence but is not aligned with the priors, robust approach works similarly to the weakly informative prior. When data generation indicates no average bioequivalence,</p>
-<p>Discuss about the possibility to have easily adaptive feature and predictive probability decision.</p>
+<p>When data generation aligned with prior, robust approach work
+similarly to the exchangeable approach When data generation indicates
+average bioequivalence but is not aligned with the priors, robust
+approach works similarly to the weakly informative prior. When data
+generation indicates no average bioequivalence,</p>
+<p>Discuss about the possibility to have easily adaptive feature and
+predictive probability decision.</p>
 <p><br></p>
-<p><small><em>Post created on 2020-12-DD. Last update on 2020-12-DD.</em></small></p>
+<p><small><em>Post created on 2020-12-DD. Last update on
+2020-12-DD.</em></small></p>
 <hr />
 <p><br></p>
 </div>
@@ -466,19 +595,34 @@ $(document).ready(function () {
 <p><small></p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Lunn2000" class="csl-entry">
-Lunn, David, Andrew Thomas, Nicky Best, and David Spiegelhalter. 2000. <span>“<span>WinBUGS</span> - a Bayesian Modelling Framework: Concepts, Structure, and Extensibility.”</span> <em>Statistics and Computing</em> 10: 325–37. <a href="https://doi.org/10.1023/A:1008929526011">https://doi.org/10.1023/A:1008929526011</a>.
+Lunn, David, Andrew Thomas, Nicky Best, and David Spiegelhalter. 2000.
+<span>“<span>WinBUGS</span> - a Bayesian Modelling Framework: Concepts,
+Structure, and Extensibility.”</span> <em>Statistics and Computing</em>
+10: 325–37. <a
+href="https://doi.org/10.1023/A:1008929526011">https://doi.org/10.1023/A:1008929526011</a>.
 </div>
 <div id="ref-Neuenschwander2016" class="csl-entry">
-Neuenschwander, Beat, Simon Wandel, Satrajit Roychoudhury, and Stuart Bailey. 2016. <span>“Robust Exchangeability Designs for Early Phase Clinical Trials with Multiple Strata.”</span> <em>Pharmaceutical Statistics</em> 15 (2): 123–34. https://doi.org/<a href="https://doi.org/10.1002/pst.1730">https://doi.org/10.1002/pst.1730</a>.
+Neuenschwander, Beat, Simon Wandel, Satrajit Roychoudhury, and Stuart
+Bailey. 2016. <span>“Robust Exchangeability Designs for Early Phase
+Clinical Trials with Multiple Strata.”</span> <em>Pharmaceutical
+Statistics</em> 15 (2): 123–34. https://doi.org/<a
+href="https://doi.org/10.1002/pst.1730">https://doi.org/10.1002/pst.1730</a>.
 </div>
 <div id="ref-sdt2018" class="csl-entry">
-Stan Development Team. 2018. <span>“RStan: The r Interface to Stan.”</span> 2018. <a href="http://mc-stan.org">http://mc-stan.org</a>.
+Stan Development Team. 2018. <span>“RStan: The r Interface to
+Stan.”</span> 2018. <a href="http://mc-stan.org">http://mc-stan.org</a>.
 </div>
 <div id="ref-FDA2001" class="csl-entry">
-U.S. Food &amp; Drug Administration - Center for Drug Evaluation and Research. 2001. <span>“Statistical Approaches to Establishing Bioequivalence.”</span> <a href="https://www.fda.gov/media/70958/download">https://www.fda.gov/media/70958/download</a>.
+U.S. Food &amp; Drug Administration - Center for Drug Evaluation and
+Research. 2001. <span>“Statistical Approaches to Establishing
+Bioequivalence.”</span> <a
+href="https://www.fda.gov/media/70958/download">https://www.fda.gov/media/70958/download</a>.
 </div>
 <div id="ref-FDA2014" class="csl-entry">
-———. 2014. <span>“Bioavailability and Bioequivalence Studies Submitted in <span>NDAs</span> or <span>INDs</span> - General Considerations (Draft).”</span> <a href="https://www.fda.gov/media/88254/download">https://www.fda.gov/media/88254/download</a>.
+———. 2014. <span>“Bioavailability and Bioequivalence Studies Submitted
+in <span>NDAs</span> or <span>INDs</span> - General Considerations
+(Draft).”</span> <a
+href="https://www.fda.gov/media/88254/download">https://www.fda.gov/media/88254/download</a>.
 </div>
 </div>
 </div>

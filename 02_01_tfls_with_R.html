@@ -13,8 +13,8 @@
 
 <title>Tables, figures and listings with R</title>
 
-<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -67,6 +67,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 /* for pandoc --citeproc since 2.11 */
 div.csl-bib-body { }
@@ -114,6 +115,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -171,11 +175,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -204,8 +212,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -213,16 +221,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -266,7 +267,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -282,7 +283,7 @@ $(document).ready(function () {
   <a href="index.html">Home</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Services
      
     <span class="caret"></span>
@@ -300,10 +301,13 @@ $(document).ready(function () {
     <li>
       <a href="01_04_biometrics_services.html">Biometrics Services</a>
     </li>
+    <li>
+      <a href="01_05_r_clinical_reporting.html">R-based solutions for clinical reporting</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Blog
      
     <span class="caret"></span>
@@ -348,34 +352,66 @@ $(document).ready(function () {
 
 <div id="tables-figures-and-listings-with-r" class="section level1">
 <h1>Tables, figures and listings with R</h1>
-<p>R, combined with R Markdown <span class="citation">(Xie, Allaire, and Grolemund 2018; Allaire et al. 2020)</span> and other packages, is an alternative for creating fully traceable end-text tables, figures and listings for Section 14 and Section 16 of clinical study reports. A similar approach can be used to create in-text outputs.</p>
+<p>R, combined with R Markdown <span class="citation">(Xie, Allaire, and
+Grolemund 2018; Allaire et al. 2020)</span> and other packages, is an
+alternative for creating fully traceable end-text tables, figures and
+listings for Section 14 and Section 16 of clinical study reports. A
+similar approach can be used to create in-text outputs.</p>
 <p><br></p>
 <div id="setting-up-the-project-folder" class="section level2">
 <h2>1. Setting up the project folder</h2>
 <div id="project-folder" class="section level3">
 <h3>1.1. Project folder</h3>
-<p>Before being able to produce any output, it is recommended to set up the project folder. In my case, I’m creating the project folder using RStudio. Version control is ensured using a git repository.</p>
+<p>Before being able to produce any output, it is recommended to set up
+the project folder. In my case, I’m creating the project folder using
+RStudio. Version control is ensured using a git repository.</p>
 <p><br></p>
 </div>
-<div id="connect-your-local-repository-with-github" class="section level3">
+<div id="connect-your-local-repository-with-github"
+class="section level3">
 <h3>1.2. Connect your local repository with GitHub</h3>
-<p>If it is needed, the local repository can simply be connected with GitHub. Just create a personal token under <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> and the function use_github from the package <a href="https://cran.r-project.org/web/packages/usethis/">usethis</a>.</p>
+<p>If it is needed, the local repository can simply be connected with
+GitHub. Just create a personal token under
+<a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>
+and the function use_github from the package
+<a href="https://cran.r-project.org/web/packages/usethis/">usethis</a>.</p>
 <p><br></p>
 </div>
 </div>
-<div id="template-for-the-table-figure-or-listing" class="section level2">
+<div id="template-for-the-table-figure-or-listing"
+class="section level2">
 <h2>2. Template for the table, figure or listing</h2>
-<p>The template called in the YAML metadata is the backbone of the table, figure or listing output. Both the formatting and the fields will play a key role in the production of the output.</p>
+<p>The template called in the YAML metadata is the backbone of the
+table, figure or listing output. Both the formatting and the fields will
+play a key role in the production of the output.</p>
 <p><br></p>
 <div id="formatting-of-the-template" class="section level3">
 <h3>2.1. Formatting of the template</h3>
-<p>First, the formatting for the header, footer and main text zone of the template is to be chosen. In my case, the font is set at Courier New, style regular and size at 8pt. In addition, the spacing is set at 0 pt before and after each paragraph and with single line spacing within a paragraph.</p>
+<p>First, the formatting for the header, footer and main text zone of
+the template is to be chosen. In my case, the font is set at Courier
+New, style regular and size at 8pt. In addition, the spacing is set at 0
+pt before and after each paragraph and with single line spacing within a
+paragraph.</p>
 <p><br></p>
 </div>
 <div id="fields" class="section level3">
 <h3>2.2. Fields</h3>
-<p>The next important part is to specify fields that will contain the relevant information needed in the header and the footer. It is extremely important to liaise with the medical writers to ensure that all relevant information needed for the clinical study report is present in the template. Usually for the end-text outputs, the followings are present in the header: protocol name, company name, analysis name, page numbering and the title of the output. For the footer, the followings are present: the footnotes, the program path, the data source, the run datetime, the database extraction date and the database cut-off date. For in-text outputs, information might slightly differ.</p>
-<p>In the template, each information is a field. When the R Markdown will be knitted, information from the YAML metadata will be used. In the image below, the text “Protocol Number Missing” is in fact the following field { IF “{ DOCPROPERTY ProtocolNumber }” = “Error! Unknown document property name.” “Protocol Number Missing” “{ DOCPROPERTY ProtocolNumber }” }.</p>
+<p>The next important part is to specify fields that will contain the
+relevant information needed in the header and the footer. It is
+extremely important to liaise with the medical writers to ensure that
+all relevant information needed for the clinical study report is present
+in the template. Usually for the end-text outputs, the followings are
+present in the header: protocol name, company name, analysis name, page
+numbering and the title of the output. For the footer, the followings
+are present: the footnotes, the program path, the data source, the run
+datetime, the database extraction date and the database cut-off date.
+For in-text outputs, information might slightly differ.</p>
+<p>In the template, each information is a field. When the R Markdown
+will be knitted, information from the YAML metadata will be used. In the
+image below, the text “Protocol Number Missing” is in fact the following
+field { IF “{ DOCPROPERTY ProtocolNumber }” = “Error! Unknown document
+property name.” “Protocol Number Missing” “{ DOCPROPERTY ProtocolNumber
+}” }.</p>
 <center>
 <div>
 <p><img src="images/template_fields.png" alt = "Template with fields" style = "margin-top: 10px; margin-bottom: 10px;"></p>
@@ -384,11 +420,17 @@ $(document).ready(function () {
 <p><br></p>
 </div>
 </div>
-<div id="creating-the-output-using-an-r-markdown-file" class="section level2">
+<div id="creating-the-output-using-an-r-markdown-file"
+class="section level2">
 <h2>3. Creating the output using an R Markdown file</h2>
 <div id="setting-up-the-yaml-metadata" class="section level3">
 <h3>3.1 Setting up the YAML metadata</h3>
-<p>An R Markdown file, with default output set at Word document can now be created. The YAML metadata will inform the document properties of the output. In the below, the first 9 elements will be used for the header and the footer of the output. The last 3 elements are specifying that the output will be a Word document with the reference document being the template just created.</p>
+<p>An R Markdown file, with default output set at Word document can now
+be created. The YAML metadata will inform the document properties of the
+output. In the below, the first 9 elements will be used for the header
+and the footer of the output. The last 3 elements are specifying that
+the output will be a Word document with the reference document being the
+template just created.</p>
 <pre class="r"><code>---
 ProtocolNumber: &quot;Wonderful 1234&quot;
 CompanyName: &quot;Jaeger Consulting&quot;
@@ -407,19 +449,37 @@ output:
 </div>
 <div id="working-on-the-content-of-the-output" class="section level3">
 <h3>3.2 Working on the content of the output</h3>
-<p>The next steps are quite easy. It will just consist to create the R code to create the table, figure or listing of interest. Working with R Markdown will then ensure that the main content is within the body of the document.</p>
-<p>In my case, I was interested in creating a summary table for the treatment emergent adverse events by treatment and in total, per the system organ class and preferred term. To do so, I have:</p>
+<p>The next steps are quite easy. It will just consist to create the R
+code to create the table, figure or listing of interest. Working with R
+Markdown will then ensure that the main content is within the body of
+the document.</p>
+<p>In my case, I was interested in creating a summary table for the
+treatment emergent adverse events by treatment and in total, per the
+system organ class and preferred term. To do so, I have:</p>
 <ul>
-<li>downloaded the datasets adsl.xpt and adae.xpt available on the free repository <a href=https://bitbucket.cdisc.org/>https://bitbucket.cdisc.org/</a>;</li>
-<li>imported it in the environment of my R project using the function sasxport.get from the package <a href="https://cran.r-project.org/web/packages/Hmisc/">Hmisc</a>;</li>
-<li>worked on creating summary information (number of subjects with at least one event, percentage of subjects with at least one event and number of events) with standard ordering for adverse events summary tables;</li>
-<li>reported the table using the function flextable from the package <a href="https://cran.r-project.org/web/packages/flextable/">flextable</a>.</li>
+<li>downloaded the datasets adsl.xpt and adae.xpt available on the free
+repository
+<a href=https://bitbucket.cdisc.org/>https://bitbucket.cdisc.org/</a>;</li>
+<li>imported it in the environment of my R project using the function
+sasxport.get from the package
+<a href="https://cran.r-project.org/web/packages/Hmisc/">Hmisc</a>;</li>
+<li>worked on creating summary information (number of subjects with at
+least one event, percentage of subjects with at least one event and
+number of events) with standard ordering for adverse events summary
+tables;</li>
+<li>reported the table using the function flextable from the package
+<a href="https://cran.r-project.org/web/packages/flextable/">flextable</a>.</li>
 </ul>
 <p><br></p>
 </div>
 <div id="knit" class="section level3">
 <h3>3.3 Knit</h3>
-<p>Once the R Markdown file is ready, you can simply knit it using the shortcut Ctrl+Shift+K. In case the output is not expected to be created in the same folder than the R Markdown file, the function render from the package <a href="https://cran.r-project.org/web/packages/rmarkdown/">rmarkdown</a> can be used.</p>
+<p>Once the R Markdown file is ready, you can simply knit it using the
+shortcut Ctrl+Shift+K. In case the output is not expected to be created
+in the same folder than the R Markdown file, the function render from
+the package
+<a href="https://cran.r-project.org/web/packages/rmarkdown/">rmarkdown</a>
+can be used.</p>
 <p>The image below is a printscreen of the output created.</p>
 <center>
 <div>
@@ -427,7 +487,8 @@ output:
 </div>
 </center>
 <p><br></p>
-<p><small><em>Post created on 2020-06-16. Last update on 2020-06-23.</em></small></p>
+<p><small><em>Post created on 2020-06-16. Last update on
+2020-06-23.</em></small></p>
 <hr />
 <p><br></p>
 </div>
@@ -438,10 +499,15 @@ output:
 <p><small></p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Allaire2020" class="csl-entry">
-Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and Richard Iannone. 2020. <em>Rmarkdown: Dynamic Documents for r</em>. <a href="https://github.com/rstudio/rmarkdown">https://github.com/rstudio/rmarkdown</a>.
+Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin
+Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and
+Richard Iannone. 2020. <em>Rmarkdown: Dynamic Documents for r</em>. <a
+href="https://github.com/rstudio/rmarkdown">https://github.com/rstudio/rmarkdown</a>.
 </div>
 <div id="ref-Xie2018" class="csl-entry">
-Xie, Yihui, J. J. Allaire, and Garrett Grolemund. 2018. <em>R Markdown: The Definitive Guide</em>. Boca Raton, Florida: Chapman; Hall/CRC. <a href="https://bookdown.org/yihui/rmarkdown">https://bookdown.org/yihui/rmarkdown</a>.
+Xie, Yihui, J. J. Allaire, and Garrett Grolemund. 2018. <em>R Markdown:
+The Definitive Guide</em>. Boca Raton, Florida: Chapman; Hall/CRC. <a
+href="https://bookdown.org/yihui/rmarkdown">https://bookdown.org/yihui/rmarkdown</a>.
 </div>
 </div>
 </div>

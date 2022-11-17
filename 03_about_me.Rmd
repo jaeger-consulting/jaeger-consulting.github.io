@@ -11,7 +11,7 @@ bibliography: references.bib
 <img src="images/profile_picture_jonathan_jaeger.png" style="height: 220px; margin-right: 25px; margin-top: 10px;">
 </div>
 
-I'm a statistician with 10 years of experience in academia and the pharmaceutical industry. I specialized myself in applying Bayesian and adaptive statistical designs & strategies.
+I'm a statistician with more than 10 years of experience in academia and the pharmaceutical industry. I specialized myself in applying Bayesian and adaptive statistical designs & strategies.
 
 Early in my career, while I was under a PhD program, I developed a Bayesian penalized smoothing approach for solving differential equations with application to pharmacokinetic and recovery studies [see @Jaeger2013; @Jaeger2014; @Frasso2016; @Frasso2016a]. In addition, during this period, I have provided statistical consulting services, helping researchers in applying appropriate statistical methodologies. I had also the opportunity to give statistical trainings for statisticians and non-statisticians.
 
@@ -21,7 +21,9 @@ In 2016, I moved to the pharmaceutical industry where I was lead statistician in
 
 I have created Jaeger Consulting in 2020 with the goal to nurture early and late clinical development with statistical innovation. Bayesian approaches, adaptive design strategies and informed quantitative decision-making tools are the basis elements promoted for impacting and fastering the clinical development.
 
-Mid 2021, I have decided to put in hold the consulting activities and to join Tigen, aiming to bring effective cell therapies to patients. #FC!
+Mid 2021, I have decided to put in hold the consulting activities and to join Tigen, a company aiming to bring effective cell therapies to cancer patients. Within Tigen, I had the chance to be responsible for creating, implementing and maintaining the strategic direction for data continuity & statistically driven quantitative-based decision making across technical operations, scientific and translational development, clinical research & development, and business development.
+
+Starting from January 2023, I will be back full time in consulting, aiming even more to bring biometrics innovation and open-source solutions to support clinical development & operations. And always with one motto - Have fun & #FC!
 
 <br>
 

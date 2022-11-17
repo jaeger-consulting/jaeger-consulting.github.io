@@ -4,11 +4,18 @@ pagetitle: "Home"
 
 <center>
 
-Services proposed by Jaeger Consulting are on hold. However do not hesitate to contact me at [info@jaeger-consulting.io](mailto:info@jaeger-consulting.io?subject=Request for information) to refer you to another service provider.
+Jaeger Consulting proposes consulting services bringing **seamlessly statistical innovation** in the field of early and late clinical development.
 
 <br>
+
+**Bayesian approaches**, **adaptive designs**, **quantitative decision-making**, and **R-based solutions for end-to-end clinical reporting** are the backbone of the proposed solutions.
+
 <br>
 
-I will continue to post articles on the **blog** - Stay tune!
+Visit the **blog** to have access to open and specialized contents.
+
+<br>
+
+Please send your inquiry at [info@jaeger-consulting.io](mailto:info@jaeger-consulting.io?subject=Request for information) for more information.
 
 </center>
