@@ -6,4 +6,6 @@ Statistical analysis plan template (<a href="https://www.jaeger-consulting.io/do
 
 Tables, figures, and listings shells template (<a href="https://www.jaeger-consulting.io/documents/tables_figures_listings_shells_template.docx" download>link</a>).
 
+Data transfer specifications template (<a href="https://www.jaeger-consulting.io/documents/data_transfer_specifications_template.docx" download>link</a>).
+
 Protocol template (<a href="https://www.jaeger-consulting.io/documents/protocol_template.docx" download>link</a>).
