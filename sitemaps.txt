@@ -4,10 +4,13 @@ https://www.jaeger-consulting.io/01_01_bayesian_approach.html
 https://www.jaeger-consulting.io/01_02_adaptive_design.html
 https://www.jaeger-consulting.io/01_03_quantitative_decision_making.html
 https://www.jaeger-consulting.io/01_04_biometrics_services.html
-https://www.jaeger-consulting.io/02_04_sample_size_allocation_ratio_prior_information.html
-https://www.jaeger-consulting.io/02_03_delayed_treatment_effect_time_to_event_analyses.html
-https://www.jaeger-consulting.io/02_02_reproducible_reports_R.html
+https://www.jaeger-consulting.io/01_05_r_clinical_reporting.html
 https://www.jaeger-consulting.io/02_01_tfls_with_R.html
+https://www.jaeger-consulting.io/02_02_reproducible_reports_R.html
+https://www.jaeger-consulting.io/02_03_delayed_treatment_effect_time_to_event_analyses.html
+https://www.jaeger-consulting.io/02_04_sample_size_allocation_ratio_prior_information.html
 https://www.jaeger-consulting.io/03_about_me.html
 https://www.jaeger-consulting.io/04_ressources.html
 https://www.jaeger-consulting.io/05_contact.html
+https://www.jaeger-consulting.io/documents/statistical_analysis_plan_template.docx
+https://www.jaeger-consulting.io/documents/tables_figures_listings_shells_template.docx
