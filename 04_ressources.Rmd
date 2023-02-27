@@ -2,10 +2,19 @@
 pagetitle: "Ressources"
 ---
 
-Statistical analysis plan template (<a href="https://www.jaeger-consulting.io/documents/statistical_analysis_plan_template.docx" download>link</a>).
+<u>**Data management**</u>
 
-Tables, figures, and listings shells template (<a href="https://www.jaeger-consulting.io/documents/tables_figures_listings_shells_template.docx" download>link</a>).
+- Data transfer specifications template (<a href="https://www.jaeger-consulting.io/documents/data_transfer_specifications_template.docx" download>link</a>).
 
-Data transfer specifications template (<a href="https://www.jaeger-consulting.io/documents/data_transfer_specifications_template.docx" download>link</a>).
+<u>**Programming**</u>
 
-Protocol template (<a href="https://www.jaeger-consulting.io/documents/protocol_template.docx" download>link</a>).
+- CDISC SDTM datasets specification template (<a href="https://www.jaeger-consulting.io/documents/sdtm_specifications_template.xlsm" download>link</a>).
+
+<u>**Statistics**</u>
+
+- Statistical analysis plan template (<a href="https://www.jaeger-consulting.io/documents/statistical_analysis_plan_template.docx" download>link</a>).
+- Tables, figures, and listings shells template (<a href="https://www.jaeger-consulting.io/documents/tables_figures_listings_shells_template.docx" download>link</a>).
+
+<u>**Misc**</u>
+
+- Protocol template (<a href="https://www.jaeger-consulting.io/documents/protocol_template.docx" download>link</a>).
