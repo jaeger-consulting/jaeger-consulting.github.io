@@ -1,0 +1,38 @@
+---
+pagetitle: "Prior and posterior predictive probability of success"
+bibliography: references.bib
+---
+
+*¡Under construction!*
+
+# Prior and posterior predictive probability of success
+
+## 1. Section 1
+
+<br>
+
+### 1.1. Section 1.1
+
+<br>
+
+## 2. Section 2
+
+<br>
+
+### 2.1. Section 2.1
+
+<br>
+
+## 3. Section 3
+
+<br>
+
+<small>*Post created on 2023-04-DD. Last update on 2023-04-DD.*</small>
+
+------------------------------------------------------------------------
+
+<br>
+
+# References
+
+<small>

@@ -156,4 +156,13 @@
   doi     = {10.1023/A:1008929526011},
 }
 
+@Book{rosenbaum2016,
+  author    = {Rosenbaum, S.E.},
+  publisher = {Wiley},
+  title     = {Basic Pharmacokinetics and Pharmacodynamics: An Integrated Textbook and Computer Simulations},
+  year      = {2016},
+  isbn      = {9781119143154},
+  lccn      = {2016031846},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

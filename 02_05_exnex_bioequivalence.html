@@ -353,7 +353,7 @@ $(document).ready(function () {
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "all"} } });
 </script>
-<p><em>Under construction</em></p>
+<p><em>¡Under construction!</em></p>
 <div id="robust-exchangeability-and-bioequivalence-studies"
 class="section level1">
 <h1>Robust exchangeability and bioequivalence studies</h1>
@@ -409,7 +409,10 @@ imposed between the two dosing periods.</p>
 <p>Given that PK parameters are (usually) log-normally distributed,
 log-transformation of exposure measures before statistical analysis is
 recommended <span class="citation">(U.S. Food &amp; Drug Administration
-- Center for Drug Evaluation and Research 2001, 2014)</span>.</p>
+- Center for Drug Evaluation and Research 2001, 2014)</span>. We are
+here not discussing how those PK parameters are derived. Please refer to
+<span class="citation">Rosenbaum (2016)</span> for a general
+introduction on pharmacokinetics.</p>
 <p>Let <span class="math inline">\(y_{n}\)</span> be the log of <span
 class="math inline">\(n\)</span>-th measure of the PK parameter, <span
 class="math inline">\(n=1,\ldots,N\)</span>. The linear model under the
@@ -524,8 +527,11 @@ Stan <span class="citation">(Stan Development Team 2018)</span>.</p>
 <div id="simulation-scenarios" class="section level3">
 <h3>2.1. Simulation scenarios</h3>
 <p>In order to evaluate the characteristics for the proposed robust
-exchangeability approach versus alternative standard approaches,
-simulations will be performed over multiple scenarios.</p>
+exchangeability approach, simulations will be performed over multiple
+scenarios. Without loss of generality, an approach without period
+effect, nor carry-over effect will be considered. In addition,
+homoscedasticity across the formulations will be considered for the
+error term <span class="math inline">\(\epsilon_{n}\)</span>.</p>
 <p>The following models will be considered:</p>
 <ul>
 <li>Robust exchangeability approach presented in <a
@@ -542,23 +548,28 @@ class="math inline">\(\tau_{\alpha}\)</span>. For the simulation, the
 followings is assumed:</p>
 <ul>
 <li><span class="math inline">\(\mu_{\alpha} \sim
-\mathcal{N}\left(xx,yy^2\right)\)</span></li>
+\mathcal{N}\left(1,0.1^2\right)\)</span></li>
 <li><span class="math inline">\(\tau_{\alpha} \sim
-\mathcal{HN}\left(0,zz^2\right)\)</span>.</li>
+\mathcal{HN}\left(0,0.2^2\right)\)</span>.</li>
 </ul>
+<p>For the exchangeability probability <span
+class="math inline">\(\pi_{i}\)</span>, a beta distribution with shape
+parameters at 3 and 1 is considered. Mode is at 1, but probability of
+that <span class="math inline">\(\pi_{i}\)</span> is below 0.5 is equal
+to 0.125, indicating confidence on the exchangeability and</p>
 <p>The following data generation process will be considered:</p>
 <ul>
 <li>Fixed effect for the reference formulation and the new formulation:
 <ul>
-<li>;</li>
-<li>;</li>
-<li>;</li>
-<li>;</li>
+<li><span class="math inline">\(\alpha_{1}\)</span> set at 1;</li>
+<li><span class="math inline">\(\alpha_{2}\)</span> set at 0.5, 1 and
+2;</li>
 </ul></li>
-<li>Period effect</li>
-<li>Carry-over effect;</li>
-<li>Standard deviation for the subject random effect;</li>
-<li>Standard deviation for the random error;</li>
+<li>No period effect;</li>
+<li>No carry-over effect;</li>
+<li>Standard deviation for the subject random effect set at 0.1;</li>
+<li>Standard deviation for the random error set at 0.2 (no formulation
+specific standard deviation);</li>
 <li>Twelve (12), 16 or 20 subjects.</li>
 </ul>
 <p>Per data generation scenario, 10’000 datasets will be generated.
@@ -607,6 +618,10 @@ Bailey. 2016. <span>“Robust Exchangeability Designs for Early Phase
 Clinical Trials with Multiple Strata.”</span> <em>Pharmaceutical
 Statistics</em> 15 (2): 123–34. https://doi.org/<a
 href="https://doi.org/10.1002/pst.1730">https://doi.org/10.1002/pst.1730</a>.
+</div>
+<div id="ref-rosenbaum2016" class="csl-entry">
+Rosenbaum, S. E. 2016. <em>Basic Pharmacokinetics and Pharmacodynamics:
+An Integrated Textbook and Computer Simulations</em>. Wiley.
 </div>
 <div id="ref-sdt2018" class="csl-entry">
 Stan Development Team. 2018. <span>“RStan: The r Interface to

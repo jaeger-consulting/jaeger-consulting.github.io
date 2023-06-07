@@ -18,3 +18,4 @@ pagetitle: "Ressources"
 <u>**Misc**</u>
 
 - Protocol template (<a href="https://www.jaeger-consulting.io/documents/protocol_template.docx" download>link</a>).
+- Data monitoring committee template (<a href="https://www.jaeger-consulting.io/documents/data_monitoring_committee_charter_template.docx" download>link</a>).
