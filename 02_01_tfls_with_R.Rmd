@@ -80,7 +80,7 @@ The next steps are quite easy. It will just consist to create the R code to crea
 
 In my case, I was interested in creating a summary table for the treatment emergent adverse events by treatment and in total, per the system organ class and preferred term. To do so, I have:
 
-* downloaded the datasets adsl.xpt and adae.xpt available on the free repository <a href=https://bitbucket.cdisc.org/>https://bitbucket.cdisc.org/</a>;
+* downloaded the datasets adsl.xpt and adae.xpt available on the free repository <a href=https://github.com/cdisc-org/sdtm-adam-pilot-project/</a>;
 * imported it in the environment of my R project using the function sasxport.get from the package <a href="https://cran.r-project.org/web/packages/Hmisc/">Hmisc</a>;
 * worked on creating summary information (number of subjects with at least one event, percentage of subjects with at least one event and number of events) with standard ordering for adverse events summary tables;
 * reported the table using the function flextable from the package <a href="https://cran.r-project.org/web/packages/flextable/">flextable</a>.
@@ -101,7 +101,7 @@ The image below is a printscreen of the output created.
 
 <br>
 
-<small>*Post created on 2020-06-16. Last update on 2020-06-23.*</small>
+<small>*Post created on 2020-06-16. Last update on 2023-08-30.*</small>
 
 ---
 
